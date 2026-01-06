@@ -1,14 +1,31 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { Header } from '@/components/store/Header';
+import { HeroBanner } from '@/components/store/HeroBanner';
+import { MiniBanners } from '@/components/store/MiniBanners';
+import { PromoAlert } from '@/components/store/PromoAlert';
+import { ProductGrid } from '@/components/store/ProductGrid';
+import { Footer } from '@/components/store/Footer';
 
-const Index = () => {
+// Promo end date - 7 days from now
+const promoEndDate = new Date();
+promoEndDate.setDate(promoEndDate.getDate() + 7);
+
+export default function Index() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <Header />
+      
+      <PromoAlert 
+        message="FRETE GRÁTIS A PARTIR DE 3 PEÇAS" 
+        endDate={promoEndDate}
+      />
+      
+      <main>
+        <HeroBanner />
+        <MiniBanners />
+        <ProductGrid />
+      </main>
+
+      <Footer />
     </div>
   );
-};
-
-export default Index;
+}

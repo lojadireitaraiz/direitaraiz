@@ -1,0 +1,97 @@
+import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
+import { ShopifyProduct, formatPrice, calculateDiscount, calculateInstallments } from '@/lib/shopify';
+import { useCartStore } from '@/stores/cartStore';
+
+interface ProductCardProps {
+  product: ShopifyProduct;
+}
+
+export function ProductCard({ product }: ProductCardProps) {
+  const { addItem, setOpen } = useCartStore();
+  const { node } = product;
+  
+  const firstVariant = node.variants.edges[0]?.node;
+  const price = parseFloat(node.priceRange.minVariantPrice.amount);
+  const compareAtPrice = firstVariant?.compareAtPrice ? parseFloat(firstVariant.compareAtPrice.amount) : null;
+  const discount = compareAtPrice ? calculateDiscount(compareAtPrice.toString(), price.toString()) : 0;
+  
+  const imageUrl = node.images.edges[0]?.node.url;
+  const currencyCode = node.priceRange.minVariantPrice.currencyCode;
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!firstVariant) {
+      toast.error('Produto indisponível');
+      return;
+    }
+
+    addItem({
+      product,
+      variantId: firstVariant.id,
+      variantTitle: firstVariant.title,
+      price: firstVariant.price,
+      quantity: 1,
+      selectedOptions: firstVariant.selectedOptions,
+    });
+
+    toast.success('Produto adicionado ao carrinho!', {
+      position: 'top-center',
+    });
+    setOpen(true);
+  };
+
+  return (
+    <Link to={`/produto/${node.handle}`} className="product-card group">
+      <div className="product-card-image">
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={node.images.edges[0]?.node.altText || node.title}
+            loading="lazy"
+          />
+        ) : (
+          <div className="w-full h-full bg-muted flex items-center justify-center text-muted-foreground">
+            Sem imagem
+          </div>
+        )}
+        
+        {discount > 0 && (
+          <span className="product-card-badge bg-store-danger">
+            {discount}% OFF
+          </span>
+        )}
+
+        {/* Quick add button on hover */}
+        <button
+          onClick={handleAddToCart}
+          className="absolute bottom-0 left-0 right-0 bg-primary text-primary-foreground py-3 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        >
+          Adicionar ao carrinho
+        </button>
+      </div>
+
+      <div className="product-card-info">
+        <h3 className="product-card-title">{node.title}</h3>
+        
+        <div className="product-card-prices">
+          {compareAtPrice && discount > 0 && (
+            <span className="product-card-original-price">
+              {formatPrice(compareAtPrice.toString(), currencyCode)}
+            </span>
+          )}
+          <span className="product-card-price">
+            {compareAtPrice && discount > 0 ? '| ' : ''}
+            {formatPrice(price.toString(), currencyCode)}
+          </span>
+        </div>
+
+        <p className="product-card-installments">
+          3x de {calculateInstallments(price.toString())} sem juros
+        </p>
+      </div>
+    </Link>
+  );
+}
