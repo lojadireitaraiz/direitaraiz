@@ -20,10 +20,10 @@ export function Logo({ className = "" }: { className?: string }) {
       {/* DIREITA text */}
       <text
         x="100"
-        y="34"
+        y="30"
         textAnchor="middle"
         fontFamily="Arial Black, sans-serif"
-        fontSize="38"
+        fontSize="24"
         fontWeight="900"
         fill="#1a1a1a"
       >
