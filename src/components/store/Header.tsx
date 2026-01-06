@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, Search, ShoppingCart, User, ChevronDown, CreditCard, Package } from 'lucide-react';
+import { Menu, X, Search, ShoppingCart, User, ChevronDown, CreditCard, Package, Truck } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
 import { CartDrawer } from './CartDrawer';
 import {
@@ -22,24 +22,39 @@ const collections = [
   { name: 'Nação Raiz', href: '/colecao/nacao-raiz' },
 ];
 
+const benefitsMessages = [
+  { icon: CreditCard, text: 'Parcele em até 3x sem juros' },
+  { icon: Package, text: 'Primeira troca sem custo' },
+  { icon: Truck, text: 'Frete grátis a partir de 3 peças' },
+];
+
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [currentBenefitIndex, setCurrentBenefitIndex] = useState(0);
   const { setOpen: setCartOpen } = useCartStore();
   const totalItems = useCartStore((state) => state.getTotalItems());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentBenefitIndex((prev) => (prev + 1) % benefitsMessages.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const CurrentIcon = benefitsMessages[currentBenefitIndex].icon;
 
   return (
     <>
       <header className="sticky top-0 z-50 bg-black text-white">
         {/* Benefits Bar */}
-        <div className="bg-neutral-900 text-white py-2.5 px-4 text-sm flex items-center justify-center gap-8 flex-wrap">
-          <span className="flex items-center gap-2 text-xs md:text-sm font-medium">
-            <CreditCard className="w-4 h-4" />
-            Parcele em até 3x sem juros
-          </span>
-          <span className="hidden md:flex items-center gap-2 text-xs md:text-sm font-medium">
-            <Package className="w-4 h-4" />
-            Primeira troca sem custo
+        <div className="bg-neutral-900 text-white py-2.5 px-4 text-sm flex items-center justify-center overflow-hidden h-10">
+          <span 
+            key={currentBenefitIndex}
+            className="flex items-center gap-2 text-xs md:text-sm font-medium animate-fade-in"
+          >
+            <CurrentIcon className="w-4 h-4" />
+            {benefitsMessages[currentBenefitIndex].text}
           </span>
         </div>
 
