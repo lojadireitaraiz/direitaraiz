@@ -1,7 +1,7 @@
 export function Logo({ className = "" }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 200 60"
+      viewBox="0 0 200 80"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
@@ -15,15 +15,15 @@ export function Logo({ className = "" }: { className?: string }) {
       </defs>
       
       {/* Top section with gradient background */}
-      <rect x="0" y="0" width="200" height="30" fill="url(#greenYellowGradient)" />
+      <rect x="0" y="0" width="200" height="40" fill="url(#greenYellowGradient)" />
       
       {/* DIREITA text */}
       <text
         x="100"
-        y="23"
+        y="32"
         textAnchor="middle"
         fontFamily="Arial Black, sans-serif"
-        fontSize="25"
+        fontSize="30"
         fontWeight="900"
         fill="#1a1a1a"
       >
@@ -31,15 +31,15 @@ export function Logo({ className = "" }: { className?: string }) {
       </text>
       
       {/* Bottom section with black background */}
-      <rect x="0" y="30" width="200" height="30" fill="#000000" />
+      <rect x="0" y="40" width="200" height="40" fill="#000000" />
       
       {/* RAIZ text */}
       <text
         x="100"
-        y="56"
+        y="83"
         textAnchor="middle"
         fontFamily="Arial Black, sans-serif"
-        fontSize="44"
+        fontSize="49"
         fontWeight="900"
         fill="#FFFFFF"
       >
