@@ -30,21 +30,21 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-background">
+      <header className="sticky top-0 z-50 bg-black text-white">
         {/* Benefits Bar */}
-        <div className="benefits-bar">
-          <span>
+        <div className="bg-neutral-900 text-white py-2.5 px-4 text-sm flex items-center justify-center gap-8 flex-wrap">
+          <span className="flex items-center gap-2 text-xs md:text-sm font-medium">
             <CreditCard className="w-4 h-4" />
             Parcele em até 3x sem juros
           </span>
-          <span className="hidden md:flex">
+          <span className="hidden md:flex items-center gap-2 text-xs md:text-sm font-medium">
             <Package className="w-4 h-4" />
             Primeira troca sem custo
           </span>
         </div>
 
         {/* Main Navbar */}
-        <nav className="navbar">
+        <nav className="bg-black border-b border-neutral-800 px-4 md:px-10 py-4">
           <div className="flex items-center justify-between max-w-7xl mx-auto w-full">
             {/* Mobile Menu Button */}
             <button 
@@ -66,7 +66,7 @@ export function Header() {
                   Produtos
                   <ChevronDown className="w-4 h-4" />
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-background border-border">
+                <DropdownMenuContent className="bg-black border-neutral-800 text-white">
                   {categories.map((category) => (
                     <DropdownMenuItem key={category.name} asChild>
                       <Link to={category.href} className="cursor-pointer">
@@ -82,7 +82,7 @@ export function Header() {
                   Categorias
                   <ChevronDown className="w-4 h-4" />
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-background border-border">
+                <DropdownMenuContent className="bg-black border-neutral-800 text-white">
                   {collections.map((collection) => (
                     <DropdownMenuItem key={collection.name} asChild>
                       <Link to={collection.href} className="cursor-pointer">
@@ -106,25 +106,25 @@ export function Header() {
             {/* Right Actions */}
             <div className="flex items-center gap-4">
               <button 
-                className="p-2 hover:bg-secondary rounded-full transition-colors"
+                className="p-2 hover:bg-neutral-800 rounded-full transition-colors"
                 onClick={() => setSearchOpen(!searchOpen)}
                 aria-label="Pesquisar"
               >
                 <Search className="w-5 h-5" />
               </button>
 
-              <Link to="/conta" className="hidden md:block p-2 hover:bg-secondary rounded-full transition-colors">
+              <Link to="/conta" className="hidden md:block p-2 hover:bg-neutral-800 rounded-full transition-colors">
                 <User className="w-5 h-5" />
               </Link>
 
               <button 
-                className="p-2 hover:bg-secondary rounded-full transition-colors relative"
+                className="p-2 hover:bg-neutral-800 rounded-full transition-colors relative"
                 onClick={() => setCartOpen(true)}
                 aria-label="Carrinho"
               >
                 <ShoppingCart className="w-5 h-5" />
                 {totalItems > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs w-5 h-5 rounded-full flex items-center justify-center font-medium">
+                  <span className="absolute -top-1 -right-1 bg-white text-black text-xs w-5 h-5 rounded-full flex items-center justify-center font-medium">
                     {totalItems}
                   </span>
                 )}
@@ -138,7 +138,7 @@ export function Header() {
               <input
                 type="search"
                 placeholder="Pesquisar..."
-                className="w-full px-4 py-3 bg-secondary border border-border rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full px-4 py-3 bg-neutral-900 border border-neutral-700 rounded-full text-sm text-white focus:outline-none focus:ring-2 focus:ring-white"
                 autoFocus
               />
             </div>
@@ -147,13 +147,13 @@ export function Header() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-background border-b border-border animate-slide-in">
+          <div className="lg:hidden bg-black border-b border-neutral-800 animate-slide-in">
             <div className="px-4 py-6 space-y-4">
               <Link to="/" className="block text-base font-medium" onClick={() => setMobileMenuOpen(false)}>
                 Loja
               </Link>
               <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">Produtos</p>
+                <p className="text-sm text-neutral-400">Produtos</p>
                 {categories.map((category) => (
                   <Link
                     key={category.name}
@@ -166,7 +166,7 @@ export function Header() {
                 ))}
               </div>
               <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">Categorias</p>
+                <p className="text-sm text-neutral-400">Categorias</p>
                 {collections.map((collection) => (
                   <Link
                     key={collection.name}
@@ -181,7 +181,7 @@ export function Header() {
               <Link to="/sobre" className="block text-base font-medium" onClick={() => setMobileMenuOpen(false)}>
                 Sobre
               </Link>
-              <div className="pt-4 border-t border-border space-y-3">
+              <div className="pt-4 border-t border-neutral-800 space-y-3">
                 <Link to="/conta" className="flex items-center gap-3 text-sm" onClick={() => setMobileMenuOpen(false)}>
                   <User className="w-5 h-5" />
                   Entrar
