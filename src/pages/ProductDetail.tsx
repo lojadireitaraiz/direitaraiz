@@ -317,10 +317,10 @@ export default function ProductDetail() {
 
             {/* Payment Icons */}
             <div className="flex gap-3 mt-2">
-              <div className="w-14 h-9 bg-gray-100 rounded flex items-center justify-center text-xs font-bold text-gray-600">VISA</div>
-              <div className="w-14 h-9 bg-gray-100 rounded flex items-center justify-center text-xs font-bold text-gray-600">MC</div>
-              <div className="w-14 h-9 bg-gray-100 rounded flex items-center justify-center text-xs font-bold text-gray-600">ELO</div>
-              <div className="w-14 h-9 bg-gray-100 rounded flex items-center justify-center text-xs font-bold text-gray-600">PIX</div>
+              <img src="https://d2u4gk28rgr5ys.cloudfront.net/assets/icons/cards/visa-4c562b0e312e36ce0daadaf465d3759ca162cb39c6a828454a5cfb2c95f8e26a.svg" alt="Visa" className="w-14 h-9" />
+              <img src="https://d2u4gk28rgr5ys.cloudfront.net/assets/icons/cards/master-f27cb6ce5923f7f52ceded3fdc486079492ac922931c00db634211bb5453b11c.svg" alt="Mastercard" className="w-14 h-9" />
+              <img src="https://d2u4gk28rgr5ys.cloudfront.net/assets/icons/cards/elo-c40efbc3640e09e5b4acd03ee7f09dd31d521959516adf224f007458739d77e3.svg" alt="Elo" className="w-14 h-9" />
+              <img src="https://d2u4gk28rgr5ys.cloudfront.net/assets/icons/cards/pix-39099f2f23f9b0fcc7e66c2759d247b7f04e7bd44b8b8f1103aaa2ee28c0f86d.svg" alt="Pix" className="w-14 h-9" />
             </div>
           </section>
         </div>
