@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Menu, X, Search, ShoppingCart, User, ChevronDown, CreditCard, Package, Truck } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
 import { CartDrawer } from './CartDrawer';
+import { Logo } from './Logo';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -115,7 +116,7 @@ export function Header() {
 
             {/* Logo - Center */}
             <Link to="/" className="navbar-brand">
-              <span className="text-2xl font-bold tracking-tight">NAÇÃO RAIZ</span>
+              <Logo className="h-12 w-auto" />
             </Link>
 
             {/* Right Actions */}
