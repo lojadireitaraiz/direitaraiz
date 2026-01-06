@@ -20,7 +20,7 @@ export function Logo({ className = "" }: { className?: string }) {
       {/* DIREITA text */}
       <text
         x="100"
-        y="32"
+        y="28"
         textAnchor="middle"
         fontFamily="Arial Black, sans-serif"
         fontSize="30"
@@ -36,7 +36,7 @@ export function Logo({ className = "" }: { className?: string }) {
       {/* RAIZ text */}
       <text
         x="100"
-        y="83"
+        y="79"
         textAnchor="middle"
         fontFamily="Arial Black, sans-serif"
         fontSize="49"
