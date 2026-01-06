@@ -1,7 +1,7 @@
 export function Logo({ className = "" }: { className?: string }) {
   return (
     <svg
-      viewBox="0 -5 200 80"
+      viewBox="0 0 200 80"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
@@ -20,7 +20,7 @@ export function Logo({ className = "" }: { className?: string }) {
       {/* DIREITA text */}
       <text
         x="100"
-        y="28"
+        y="32"
         textAnchor="middle"
         fontFamily="Arial Black, sans-serif"
         fontSize="30"
@@ -36,7 +36,7 @@ export function Logo({ className = "" }: { className?: string }) {
       {/* RAIZ text */}
       <text
         x="100"
-        y="79"
+        y="83"
         textAnchor="middle"
         fontFamily="Arial Black, sans-serif"
         fontSize="49"
