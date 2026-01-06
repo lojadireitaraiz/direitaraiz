@@ -36,10 +36,10 @@ export function Logo({ className = "" }: { className?: string }) {
       {/* RAIZ text */}
       <text
         x="100"
-        y="72"
+        y="73"
         textAnchor="middle"
         fontFamily="Arial Black, sans-serif"
-        fontSize="34"
+        fontSize="39"
         fontWeight="900"
         fill="#FFFFFF"
       >
