@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import heroBannerImage from '@/assets/hero-banner.png';
 
 interface Banner {
   id: string;
@@ -16,8 +17,8 @@ interface HeroBannerProps {
 const defaultBanners: Banner[] = [
   {
     id: '1',
-    imageUrl: '/placeholder.svg',
-    altText: 'Banner Principal',
+    imageUrl: heroBannerImage,
+    altText: 'Liberdade é a Nossa Bandeira - Camisetas 100% algodão premium',
     link: '/produtos',
   },
 ];
