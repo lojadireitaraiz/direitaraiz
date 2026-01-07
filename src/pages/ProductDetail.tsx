@@ -50,9 +50,15 @@ export default function ProductDetail() {
       setLoading(true);
       const data = await fetchProductByHandle(handle);
       setProduct(data);
-      // Não pré-selecionar variante - usuário deve escolher
-      setSelectedVariant(null);
-      setSelectedOptions({});
+      if (data?.variants.edges[0]) {
+        setSelectedVariant(data.variants.edges[0].node.id);
+        // Initialize selected options from first variant
+        const initialOptions: Record<string, string> = {};
+        data.variants.edges[0].node.selectedOptions.forEach(opt => {
+          initialOptions[opt.name] = opt.value;
+        });
+        setSelectedOptions(initialOptions);
+      }
       setLoading(false);
     }
     loadProduct();
@@ -71,9 +77,7 @@ export default function ProductDetail() {
 
   const handleAddToCart = () => {
     if (!product || !selectedVariant) {
-      toast.info('Por favor, selecione as opções do produto', {
-        position: 'top-center',
-      });
+      toast.error('Selecione uma variante');
       return;
     }
 
