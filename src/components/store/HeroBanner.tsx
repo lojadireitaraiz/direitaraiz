@@ -1,10 +1,12 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import heroBannerImage from '@/assets/hero-banner.png';
+import heroBannerMobileImage from '@/assets/hero-banner-mobile.png';
 
 interface Banner {
   id: string;
   imageUrl: string;
+  mobileImageUrl?: string;
   altText: string;
   link?: string;
 }
@@ -18,6 +20,7 @@ const defaultBanners: Banner[] = [
   {
     id: '1',
     imageUrl: heroBannerImage,
+    mobileImageUrl: heroBannerMobileImage,
     altText: 'Liberdade é a Nossa Bandeira - Camisetas 100% algodão premium',
     link: '/produtos',
   },
@@ -55,18 +58,28 @@ export function HeroBanner({ banners = defaultBanners }: HeroBannerProps) {
           <div key={banner.id} className="w-full h-full flex-shrink-0">
             {banner.link ? (
               <a href={banner.link} className="block w-full h-full">
+                <picture className="w-full h-full">
+                  {banner.mobileImageUrl && (
+                    <source media="(max-width: 767px)" srcSet={banner.mobileImageUrl} />
+                  )}
+                  <img
+                    src={banner.imageUrl}
+                    alt={banner.altText}
+                    className="w-full h-full object-cover"
+                  />
+                </picture>
+              </a>
+            ) : (
+              <picture className="w-full h-full">
+                {banner.mobileImageUrl && (
+                  <source media="(max-width: 767px)" srcSet={banner.mobileImageUrl} />
+                )}
                 <img
                   src={banner.imageUrl}
                   alt={banner.altText}
                   className="w-full h-full object-cover"
                 />
-              </a>
-            ) : (
-              <img
-                src={banner.imageUrl}
-                alt={banner.altText}
-                className="w-full h-full object-cover"
-              />
+              </picture>
             )}
           </div>
         ))}
