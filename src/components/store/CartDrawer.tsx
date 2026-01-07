@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Minus, Plus, Loader2, ShoppingBag, ArrowRight, Truck } from 'lucide-react';
+import { Minus, Plus, Loader2, ShoppingBag, ArrowRight, Truck, X } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
 import { formatPrice } from '@/lib/shopify';
 import { Button } from '@/components/ui/button';
@@ -20,7 +20,8 @@ export function CartDrawer() {
   } = useCartStore();
   const [couponCode, setCouponCode] = useState('');
   const [cepCode, setCepCode] = useState('');
-  const [discount, setDiscount] = useState(0);
+  const [appliedCoupon, setAppliedCoupon] = useState<string | null>(null);
+  const [couponError, setCouponError] = useState('');
   const [loadingCep, setLoadingCep] = useState(false);
   const [cepError, setCepError] = useState('');
   const [shippingInfo, setShippingInfo] = useState<{
@@ -44,9 +45,25 @@ export function CartDrawer() {
   };
 
   const handleApplyCoupon = () => {
-    if (couponCode.toUpperCase() === 'DESCONTO10') {
-      setDiscount(10);
+    setCouponError('');
+    const code = couponCode.toUpperCase().trim();
+    
+    // RAIZ10: 10% de desconto, mínimo 2 itens
+    if (code === 'RAIZ10') {
+      if (totalItems >= 2) {
+        setAppliedCoupon('RAIZ10');
+        setCouponCode('');
+      } else {
+        setCouponError('Mínimo de 2 itens para usar este cupom');
+      }
+    } else if (code !== '') {
+      setCouponError('Cupom inválido');
     }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponError('');
   };
 
   const formatCep = (value: string) => {
@@ -129,6 +146,9 @@ export function CartDrawer() {
   
   // Valor do frete (R$ 19,59 conforme imagem, grátis com 2+ itens)
   const shippingCost = hasFreeShipping ? 0 : 19.59;
+  
+  // Desconto do cupom RAIZ10 (10%)
+  const discount = appliedCoupon === 'RAIZ10' ? subtotal * 0.10 : 0;
   
   const totalPrice = subtotal - discount + shippingCost;
 
@@ -220,14 +240,36 @@ export function CartDrawer() {
                 )}
 
                 {/* Cupom */}
-                <div className="flex items-center justify-between px-4 py-3">
-                  <span className="text-sm font-medium text-foreground">Cupom</span>
-                  <div className="flex items-center gap-2">
-                    <Input type="text" placeholder="CUPOM" value={couponCode} onChange={e => setCouponCode(e.target.value)} className="w-32 h-7 text-center text-xs border-border rounded-full" />
-                    <button onClick={handleApplyCoupon} className="p-2 hover:bg-muted rounded-full transition-colors">
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
+                <div className="flex flex-col px-4 py-3 gap-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-foreground">Cupom</span>
+                    {appliedCoupon ? (
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded">
+                          {appliedCoupon} aplicado
+                        </span>
+                        <button onClick={handleRemoveCoupon} className="p-1 hover:bg-muted rounded-full transition-colors text-muted-foreground">
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <Input 
+                          type="text" 
+                          placeholder="CUPOM" 
+                          value={couponCode} 
+                          onChange={e => setCouponCode(e.target.value.toUpperCase())} 
+                          className="w-32 h-7 text-center text-xs border-border rounded-full" 
+                        />
+                        <button onClick={handleApplyCoupon} className="p-2 hover:bg-muted rounded-full transition-colors">
+                          <ArrowRight className="w-4 h-4" />
+                        </button>
+                      </div>
+                    )}
                   </div>
+                  {couponError && (
+                    <p className="text-xs text-destructive text-right">{couponError}</p>
+                  )}
                 </div>
 
                 {/* Frete */}
