@@ -56,7 +56,7 @@ export function ProductCard({
       </div>
 
       <div className="product-card-info">
-        <h3 className="product-card-title">{node.title}</h3>
+        <h3 className="product-card-title text-secondary">{node.title}</h3>
         
         <div className="product-card-prices">
           {compareAtPrice && discount > 0 && <span className="product-card-original-price">
