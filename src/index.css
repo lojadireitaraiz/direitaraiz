@@ -4,6 +4,8 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
 @layer base {
   :root {
     /* Light background with dark accents */
@@ -54,6 +56,7 @@
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 0 0% 20%;
     --sidebar-ring: 0 0% 100%;
+    --font-sans: Roboto, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   }
 
   .dark {
@@ -84,7 +87,7 @@
     --border: 0 0% 20%;
     --input: 0 0% 20%;
     --ring: 0 0% 100%;
-    
+
     --sidebar-background: 0 0% 5%;
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 0 0% 100%;
@@ -93,6 +96,7 @@
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 0 0% 20%;
     --sidebar-ring: 0 0% 100%;
+    --font-sans: Roboto, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   }
 }
 
