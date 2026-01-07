@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, Loader2, Minus, Plus, ShoppingCart, Truck, S
 import { toast } from 'sonner';
 import { Header } from '@/components/store/Header';
 import { Footer } from '@/components/store/Footer';
+import { PromoAlert } from '@/components/store/PromoAlert';
 import { Button } from '@/components/ui/button';
 import { fetchProductByHandle, formatPrice, calculateDiscount, calculateInstallments, ShopifyProduct } from '@/lib/shopify';
 import { useCartStore } from '@/stores/cartStore';
@@ -124,8 +125,16 @@ export default function ProductDetail() {
   const compareAtPrice = currentVariant?.compareAtPrice ? parseFloat(currentVariant.compareAtPrice.amount) : null;
   const discount = compareAtPrice ? calculateDiscount(compareAtPrice.toString(), price.toString()) : 0;
 
+  // Promo end date - 7 days from now
+  const promoEndDate = new Date();
+  promoEndDate.setDate(promoEndDate.getDate() + 7);
+
   return (
     <div className="min-h-screen bg-white">
+      <PromoAlert 
+        message="FRETE GRÁTIS A PARTIR DE 3 PEÇAS" 
+        endDate={promoEndDate}
+      />
       <Header />
       
       <main className="max-w-7xl mx-auto px-4 py-6">
