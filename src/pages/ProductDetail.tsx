@@ -245,7 +245,7 @@ export default function ProductDetail() {
         {/* Mobile Header */}
         <header className="flex flex-col gap-2 mb-6 lg:hidden">
           <p className="text-gray-400 text-sm uppercase">CAMISETA</p>
-          <h1 className="font-medium text-2xl">{product.title}</h1>
+          <h1 className="font-bold text-2xl">{product.title}</h1>
           <div className="inline-flex items-center gap-2">
             <div className="flex text-yellow-400">
               {[...Array(5)].map((_, i) => (
@@ -332,7 +332,7 @@ export default function ProductDetail() {
             {/* Desktop Header */}
             <header className="hidden lg:flex flex-col gap-2 mt-8">
               <p className="text-gray-400 text-sm uppercase">CAMISETA</p>
-              <h1 className="font-medium text-2xl">{product.title}</h1>
+              <h1 className="font-bold text-2xl">{product.title}</h1>
               <div className="inline-flex items-center gap-2">
                 <div className="flex text-yellow-400">
                   {[...Array(5)].map((_, i) => (
