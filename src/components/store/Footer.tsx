@@ -37,12 +37,27 @@ export function Footer() {
             <div>
               <h3 className="font-semibold mb-4 text-white">Selos e certificações</h3>
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-neutral-800 rounded flex items-center justify-center">
-                  <span className="text-xs text-neutral-400">SSL</span>
-                </div>
-                <div className="w-12 h-12 bg-neutral-800 rounded flex items-center justify-center">
-                  <span className="text-xs text-neutral-400">Safe</span>
-                </div>
+                <a 
+                  href="https://www.reclameaqui.com.br/empresa/yampi/?utm_source=referral&utm_medium=embbed&utm_campaign=ra_verificada&utm_term=horizontal"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Selo RA Verificada"
+                  className="flex items-center gap-2 bg-white rounded px-2 py-1"
+                >
+                  <img 
+                    src="https://s3.amazonaws.com/raichu-beta/ra-verified/assets/images/verified.svg" 
+                    alt="Selo RA Verificada" 
+                    className="w-9 h-9"
+                  />
+                  <div className="flex flex-col">
+                    <span className="text-[10px] text-neutral-500">Verificada por</span>
+                    <img 
+                      src="https://s3.amazonaws.com/raichu-beta/ra-verified/assets/images/ra-logo.svg" 
+                      alt="Reclame Aqui" 
+                      className="w-[74px] h-[14px]"
+                    />
+                  </div>
+                </a>
               </div>
             </div>
 
