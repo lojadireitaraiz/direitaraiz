@@ -71,7 +71,9 @@ export default function ProductDetail() {
 
   const handleAddToCart = () => {
     if (!product || !selectedVariant) {
-      toast.error('Selecione uma variante');
+      toast.info('Por favor, selecione as opções do produto', {
+        position: 'top-center',
+      });
       return;
     }
 
