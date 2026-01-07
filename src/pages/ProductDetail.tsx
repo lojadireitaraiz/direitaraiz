@@ -400,7 +400,7 @@ export default function ProductDetail() {
             {/* Options */}
             {product.options.map((option) => (
               <div key={option.name} className="flex flex-col items-start gap-2">
-                <span className="font-medium text-gray-900">{option.name}</span>
+                <span className="font-bold text-gray-900">{option.name}</span>
                 <div className="flex flex-wrap gap-3">
                   {option.values.map((value) => {
                     const variant = product.variants.edges.find(v => 
@@ -429,7 +429,7 @@ export default function ProductDetail() {
 
             {/* Quantity */}
             <div className="flex flex-col items-start gap-2">
-              <span className="font-medium text-gray-900">Quantidade</span>
+              <span className="font-bold text-gray-900">Quantidade</span>
               <div className="flex items-center border border-gray-300 rounded-full overflow-hidden">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
