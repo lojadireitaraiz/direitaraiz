@@ -438,7 +438,7 @@ export default function ProductDetail() {
 
               const getColorHex = (colorName: string) => {
                 const lowerName = colorName.toLowerCase();
-                return colorMap[lowerName] || '#9ca3af';
+                return colorMap[lowerName] || '#222E4B';
               };
 
               return (
