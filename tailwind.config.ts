@@ -15,7 +15,7 @@ export default {
   	extend: {
   		fontFamily: {
   			sans: [
-  				'Roboto',
+  				'Open Sans',
   				'ui-sans-serif',
   				'system-ui',
   				'sans-serif',
@@ -77,19 +77,19 @@ export default {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
   			},
-			store: {
-				primary: 'hsl(var(--store-primary))',
-				'primary-foreground': 'hsl(var(--store-primary-foreground))',
-				accent: 'hsl(var(--store-accent))',
-				danger: 'hsl(var(--store-danger))',
-				success: 'hsl(var(--store-success))',
-				warning: 'hsl(var(--store-warning))',
-				'badge-discount': 'hsl(var(--store-badge-discount))'
-			},
-			emerald: {
-				500: '#0E9F81',
-				600: '#50B150'
-			},
+  			store: {
+  				primary: 'hsl(var(--store-primary))',
+  				'primary-foreground': 'hsl(var(--store-primary-foreground))',
+  				accent: 'hsl(var(--store-accent))',
+  				danger: 'hsl(var(--store-danger))',
+  				success: 'hsl(var(--store-success))',
+  				warning: 'hsl(var(--store-warning))',
+  				'badge-discount': 'hsl(var(--store-badge-discount))'
+  			},
+  			emerald: {
+  				'500': '#0E9F81',
+  				'600': '#50B150'
+  			},
   			sidebar: {
   				DEFAULT: 'hsl(var(--sidebar-background))',
   				foreground: 'hsl(var(--sidebar-foreground))',
