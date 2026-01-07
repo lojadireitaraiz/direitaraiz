@@ -114,7 +114,7 @@ export function CartDrawer() {
               {/* Footer Section */}
               <div className="flex-shrink-0 border-t border-border bg-background">
                 {/* Cupom */}
-                <div className="flex items-center justify-between p-4 border-b border-border">
+                <div className="flex items-center justify-between px-4 py-3">
                   <span className="text-sm font-medium text-foreground">Cupom</span>
                   <div className="flex items-center gap-2">
                     <Input type="text" placeholder="CUPOM" value={couponCode} onChange={e => setCouponCode(e.target.value)} className="w-32 h-9 text-center text-sm border-border rounded-full" />
@@ -125,7 +125,7 @@ export function CartDrawer() {
                 </div>
 
                 {/* Frete */}
-                <div className="flex items-center justify-between p-4 border-b border-border">
+                <div className="flex items-center justify-between px-4 py-3">
                   <span className="text-sm font-medium text-foreground">Frete</span>
                   <div className="flex items-center gap-2">
                     <Input type="text" placeholder="Insira seu CEP" value={cepCode} onChange={e => setCepCode(e.target.value)} className="w-32 h-9 text-center text-sm border-border rounded-full" />
@@ -148,7 +148,7 @@ export function CartDrawer() {
                   </div>}
 
                 {/* Total */}
-                <div className="flex items-center justify-between px-4 py-3 border-t border-border">
+                <div className="flex items-center justify-between px-4 py-3">
                   <span className="text-base font-semibold text-foreground">Total</span>
                   <div className="text-right">
                     <p className="text-lg font-bold text-foreground">{formatPrice(totalPrice.toString())}</p>
