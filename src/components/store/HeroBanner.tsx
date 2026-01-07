@@ -48,7 +48,7 @@ export function HeroBanner({ banners = defaultBanners }: HeroBannerProps) {
   };
 
   return (
-    <section className="relative w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden bg-muted">
+    <section className="relative w-full aspect-[4/5] md:aspect-[21/9] overflow-hidden bg-muted">
       {/* Banner Images */}
       <div 
         className="flex transition-transform duration-500 ease-out h-full"
