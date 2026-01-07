@@ -60,7 +60,7 @@ export function Header() {
         </div>
 
         {/* Main Navbar */}
-        <nav className="bg-black border-b border-neutral-800 px-4 md:px-10 py-4">
+        <nav className="bg-black border-b border-neutral-800 px-4 md:px-10 py-5 md:py-4">
           <div className="flex items-center justify-between max-w-7xl mx-auto w-full">
             {/* Mobile Menu Button */}
             <button 
