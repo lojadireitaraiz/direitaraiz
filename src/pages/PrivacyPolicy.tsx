@@ -20,7 +20,7 @@ export default function PrivacyPolicy() {
               Informações do Usuário
             </h2>
             <p className="leading-relaxed">
-              A Nação Raiz coleta as informações do Usuário, via formulários e cookies para poder prover um melhor serviço tanto como personalização da página como recomendações de produtos.
+              A Direita Raiz coleta as informações do Usuário, via formulários e cookies para poder prover um melhor serviço tanto como personalização da página como recomendações de produtos.
             </p>
             <p className="leading-relaxed mt-4">
               Informações sobre a sua visita ao nosso site, incluindo cookies, poderão ser utilizadas por terceiros, tais como o Google e Meta (antigo Facebook), para facilitar a apresentação de publicidade do tipo remarketing em outros sites da internet. Tais informações não incluem informações pessoais e confidenciais.
@@ -33,10 +33,10 @@ export default function PrivacyPolicy() {
               Privacidade dos dados do Usuário
             </h2>
             <p className="leading-relaxed">
-              Os dados pessoais dos usuários poderão ser repassados aos parceiros quando você realiza a compra em uma de suas lojas. Isso ocorre porque a plataforma da Nação Raiz operacionaliza lojas de parceiros e, ao adquirir um produto, o parceiro dono da loja precisa dos dados para controle de venda, conhecimento do seu núcleo consumidor e estratégias de marketing.
+              Os dados pessoais dos usuários poderão ser repassados aos parceiros quando você realiza a compra em uma de suas lojas. Isso ocorre porque a plataforma da Direita Raiz operacionaliza lojas de parceiros e, ao adquirir um produto, o parceiro dono da loja precisa dos dados para controle de venda, conhecimento do seu núcleo consumidor e estratégias de marketing.
             </p>
             <p className="leading-relaxed mt-4">
-              Assim, você deve ter ciência que ao adquirir um produto, suas informações de compra (como nome, e-mail, endereço) serão informadas tanto à Nação Raiz para produção e envio dos pedidos, quanto aos parceiros responsáveis pelas lojas, respeitando toda legislação aplicável.
+              Assim, você deve ter ciência que ao adquirir um produto, suas informações de compra (como nome, e-mail, endereço) serão informadas tanto à Direita Raiz para produção e envio dos pedidos, quanto aos parceiros responsáveis pelas lojas, respeitando toda legislação aplicável.
             </p>
             <p className="leading-relaxed mt-4">
               Além desse caso, nossa política de privacidade assegura a garantia de que quaisquer informações relativas aos Usuários, fornecidas por estes, não serão fornecidas, publicadas ou comercializadas a terceiros que não os citados previamente.
@@ -95,7 +95,7 @@ export default function PrivacyPolicy() {
               Nosso site é construído de modo a garantir a segurança dos dados dos Usuários, incluindo informações pessoais e de pagamento. Os dados do cartão de crédito são utilizados somente para a comunicação com as operadoras do cartão. Toda navegação por nosso site é feita via SSL (Secure Sockets Layer), o que garante que seus dados estão sendo criptografados.
             </p>
             <p className="leading-relaxed mt-4">
-              Além da criptografia, outro fator de segurança é a automática destruição dos dados relativos ao número do cartão de crédito. A Nação Raiz utiliza o número do cartão somente no processamento da compra e, tão logo ocorra a confirmação pela Administradora do cartão, o número é automaticamente destruído, não sendo, de nenhuma forma, guardado em nossa base de dados.
+              Além da criptografia, outro fator de segurança é a automática destruição dos dados relativos ao número do cartão de crédito. A Direita Raiz utiliza o número do cartão somente no processamento da compra e, tão logo ocorra a confirmação pela Administradora do cartão, o número é automaticamente destruído, não sendo, de nenhuma forma, guardado em nossa base de dados.
             </p>
           </section>
 

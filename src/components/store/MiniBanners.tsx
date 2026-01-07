@@ -21,7 +21,7 @@ const defaultBanners: MiniBanner[] = [
   {
     id: '2',
     imageUrl: '/placeholder.svg',
-    altText: 'Nação Raiz',
+    altText: 'Direita Raiz',
     link: '/colecao/nacao-raiz',
   },
 ];
