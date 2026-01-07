@@ -398,34 +398,103 @@ export default function ProductDetail() {
             </div>
 
             {/* Options */}
-            {product.options.map((option) => (
-              <div key={option.name} className="flex flex-col items-start gap-2">
-                <span className="font-bold text-gray-900">{option.name}</span>
-                <div className="flex flex-wrap gap-3">
-                  {option.values.map((value) => {
-                    const variant = product.variants.edges.find(v => 
-                      v.node.selectedOptions.some(o => o.name === option.name && o.value === value)
-                    );
-                    const isSelected = variant?.node.id === selectedVariant;
-                    
-                    return (
-                      <button
-                        key={value}
-                        onClick={() => variant && setSelectedVariant(variant.node.id)}
-                        className={`px-4 py-2 border rounded-full text-sm font-medium transition-colors ${
-                          isSelected 
-                            ? 'border-black bg-black text-white' 
-                            : 'border-gray-300 hover:border-black bg-white text-gray-900'
-                        } ${!variant?.node.availableForSale ? 'opacity-50 cursor-not-allowed line-through' : ''}`}
-                        disabled={!variant?.node.availableForSale}
-                      >
-                        {value}
-                      </button>
-                    );
-                  })}
+            {product.options.map((option) => {
+              const isColorOption = option.name.toLowerCase() === 'cor' || option.name.toLowerCase() === 'color';
+              
+              // Get selected color name for color options
+              const selectedColorName = isColorOption 
+                ? currentVariant?.selectedOptions.find(o => o.name === option.name)?.value 
+                : null;
+
+              // Color mapping for visual color circles
+              const colorMap: Record<string, string> = {
+                'preto': '#000000',
+                'black': '#000000',
+                'marinho': '#1e3a5f',
+                'navy': '#1e3a5f',
+                'azul': '#2563eb',
+                'blue': '#2563eb',
+                'verde': '#166534',
+                'green': '#166534',
+                'amarelo': '#ca8a04',
+                'yellow': '#ca8a04',
+                'vermelho': '#dc2626',
+                'red': '#dc2626',
+                'branco': '#ffffff',
+                'white': '#ffffff',
+                'cinza': '#6b7280',
+                'gray': '#6b7280',
+                'rosa': '#ec4899',
+                'pink': '#ec4899',
+                'laranja': '#ea580c',
+                'orange': '#ea580c',
+                'roxo': '#7c3aed',
+                'purple': '#7c3aed',
+                'bege': '#d4a574',
+                'beige': '#d4a574',
+                'marrom': '#78350f',
+                'brown': '#78350f',
+              };
+
+              const getColorHex = (colorName: string) => {
+                const lowerName = colorName.toLowerCase();
+                return colorMap[lowerName] || '#9ca3af';
+              };
+
+              return (
+                <div key={option.name} className="flex flex-col items-start gap-2">
+                  <span className="font-bold text-gray-900">
+                    {option.name}{isColorOption && selectedColorName ? `: ${selectedColorName}` : ''}
+                  </span>
+                  <div className="flex flex-wrap gap-3">
+                    {option.values.map((value) => {
+                      const variant = product.variants.edges.find(v => 
+                        v.node.selectedOptions.some(o => o.name === option.name && o.value === value)
+                      );
+                      const isSelected = variant?.node.id === selectedVariant;
+                      
+                      if (isColorOption) {
+                        const colorHex = getColorHex(value);
+                        const isWhite = colorHex.toLowerCase() === '#ffffff';
+                        
+                        return (
+                          <button
+                            key={value}
+                            onClick={() => variant && setSelectedVariant(variant.node.id)}
+                            className={`w-9 h-9 rounded-full transition-all ${
+                              isSelected 
+                                ? 'ring-2 ring-offset-2 ring-gray-900' 
+                                : 'hover:ring-2 hover:ring-offset-2 hover:ring-gray-400'
+                            } ${!variant?.node.availableForSale ? 'opacity-50 cursor-not-allowed' : ''} ${
+                              isWhite ? 'border border-gray-300' : ''
+                            }`}
+                            style={{ backgroundColor: colorHex }}
+                            disabled={!variant?.node.availableForSale}
+                            title={value}
+                            aria-label={value}
+                          />
+                        );
+                      }
+                      
+                      return (
+                        <button
+                          key={value}
+                          onClick={() => variant && setSelectedVariant(variant.node.id)}
+                          className={`px-4 py-2 border rounded-full text-sm font-medium transition-colors ${
+                            isSelected 
+                              ? 'border-black bg-black text-white' 
+                              : 'border-gray-300 hover:border-black bg-white text-gray-900'
+                          } ${!variant?.node.availableForSale ? 'opacity-50 cursor-not-allowed line-through' : ''}`}
+                          disabled={!variant?.node.availableForSale}
+                        >
+                          {value}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
 
             {/* Quantity */}
             <div className="flex flex-col items-start gap-2">
