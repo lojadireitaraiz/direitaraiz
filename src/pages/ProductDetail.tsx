@@ -230,7 +230,7 @@ export default function ProductDetail() {
     <div className="min-h-screen bg-white">
       <Header />
       <PromoAlert 
-        message="FRETE GRÁTIS A PARTIR DE 3 PEÇAS" 
+        message="FRETE GRÁTIS A PARTIR DE 2 PEÇAS" 
         endDate={promoEndDate}
       />
       
