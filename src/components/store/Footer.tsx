@@ -48,11 +48,12 @@ export function Footer() {
             <div>
               <h3 className="font-semibold mb-4 text-white">Formas de Pagamento</h3>
               <div className="flex flex-wrap gap-2">
-                {['Visa', 'Master', 'Elo', 'Amex', 'Pix'].map((card) => (
-                  <div key={card} className="px-3 py-1 bg-neutral-800 rounded text-xs text-neutral-400">
-                    {card}
-                  </div>
-                ))}
+                <img src="https://d2u4gk28rgr5ys.cloudfront.net/assets/icons/cards/visa-4c562b0e312e36ce0daadaf465d3759ca162cb39c6a828454a5cfb2c95f8e26a.svg" alt="Visa" className="w-10 h-6" />
+                <img src="https://d2u4gk28rgr5ys.cloudfront.net/assets/icons/cards/master-f27cb6ce5923f7f52ceded3fdc486079492ac922931c00db634211bb5453b11c.svg" alt="Mastercard" className="w-10 h-6" />
+                <img src="https://d2u4gk28rgr5ys.cloudfront.net/assets/icons/cards/elo-c40efbc3640e09e5b4acd03ee7f09dd31d521959516adf224f007458739d77e3.svg" alt="Elo" className="w-10 h-6" />
+                <img src="https://d2u4gk28rgr5ys.cloudfront.net/assets/icons/cards/amex-6f16117e3c9e8a546737b6951c187f2014009b8b40e374dc0c846561ea66c663.svg" alt="Amex" className="w-10 h-6" />
+                <img src="https://d2u4gk28rgr5ys.cloudfront.net/assets/icons/cards/dinners-32c627a8ea96ce8e10b78feafe65bb95ae948af63539dcb9fea45a8c376a419f.svg" alt="Diners" className="w-10 h-6" />
+                <img src="https://d2u4gk28rgr5ys.cloudfront.net/assets/icons/cards/pix-39099f2f23f9b0fcc7e66c2759d247b7f04e7bd44b8b8f1103aaa2ee28c0f86d.svg" alt="Pix" className="w-10 h-6" />
               </div>
             </div>
 
