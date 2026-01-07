@@ -469,7 +469,8 @@ export default function ProductDetail() {
               <div key={coupon.code} className="border border-gray-200 rounded-lg p-4 bg-white">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <span className="text-green-600 font-medium">✦ {coupon.code}</span>
+                    <Tag className="w-4 h-4 text-green-600" />
+                    <span className="text-green-600 font-medium">{coupon.code}</span>
                   </div>
                   <button 
                     onClick={() => {
