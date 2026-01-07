@@ -42,7 +42,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   title="Selo RA Verificada"
-                  className="flex items-center gap-2 bg-white rounded px-2 py-1"
+                  className="flex items-center gap-1.5 bg-white rounded px-1.5 py-1 scale-90"
                 >
                   <img 
                     src="https://s3.amazonaws.com/raichu-beta/ra-verified/assets/images/verified.svg" 
