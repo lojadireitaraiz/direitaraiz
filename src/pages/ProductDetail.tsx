@@ -484,7 +484,7 @@ export default function ProductDetail() {
                 <p className="text-sm text-gray-700">
                   Você economiza <span className="text-green-600 font-medium">{formatPrice((price * coupon.discountPercent / 100).toString())}</span> na compra
                 </p>
-                <ul className="mt-2 text-sm text-gray-600 space-y-1">
+                <ul className="mt-2 text-sm text-gray-900 space-y-1">
                   <li>• {coupon.discountPercent}% OFF</li>
                   <li>• Mínimo do carrinho: {coupon.minItems} itens</li>
                 </ul>
