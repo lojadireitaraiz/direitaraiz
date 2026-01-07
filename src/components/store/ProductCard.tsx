@@ -52,9 +52,7 @@ export function ProductCard({
           </span>}
 
         {/* Quick add button on hover */}
-        <button onClick={handleAddToCart} className="absolute bottom-0 left-0 right-0 bg-primary text-primary-foreground py-3 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          Adicionar ao carrinho
-        </button>
+        
       </div>
 
       <div className="product-card-info">
