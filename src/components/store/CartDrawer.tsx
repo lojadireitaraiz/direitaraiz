@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Minus, Plus, Loader2, ShoppingBag, ArrowRight } from 'lucide-react';
+import { Minus, Plus, Loader2, ShoppingBag, ArrowRight, Truck } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
 import { formatPrice } from '@/lib/shopify';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+
 export function CartDrawer() {
   const {
     items,
@@ -20,6 +21,15 @@ export function CartDrawer() {
   const [couponCode, setCouponCode] = useState('');
   const [cepCode, setCepCode] = useState('');
   const [discount, setDiscount] = useState(0);
+  const [loadingCep, setLoadingCep] = useState(false);
+  const [cepError, setCepError] = useState('');
+  const [shippingInfo, setShippingInfo] = useState<{
+    city: string;
+    state: string;
+    deliveryDateStart: string;
+    deliveryDateEnd: string;
+  } | null>(null);
+
   const handleCheckout = async () => {
     try {
       await createCheckout();
@@ -32,15 +42,86 @@ export function CartDrawer() {
       console.error('Checkout failed:', error);
     }
   };
+
   const handleApplyCoupon = () => {
-    // Placeholder for coupon logic
     if (couponCode.toUpperCase() === 'DESCONTO10') {
       setDiscount(10);
     }
   };
+
+  const formatCep = (value: string) => {
+    const numbers = value.replace(/\D/g, '');
+    if (numbers.length <= 5) return numbers;
+    return `${numbers.slice(0, 5)}-${numbers.slice(5, 8)}`;
+  };
+
+  const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatCep(e.target.value);
+    setCepCode(formatted);
+    setCepError('');
+    if (formatted.length < 9) {
+      setShippingInfo(null);
+    }
+  };
+
+  const calculateDeliveryDates = () => {
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() + 9);
+    
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + 12);
+    
+    const formatDate = (date: Date) => {
+      return date.toLocaleDateString('pt-BR', { 
+        day: 'numeric', 
+        month: 'short' 
+      });
+    };
+    
+    return {
+      start: formatDate(startDate),
+      end: formatDate(endDate),
+    };
+  };
+
+  const fetchCepInfo = async () => {
+    const cleanCep = cepCode.replace(/\D/g, '');
+    if (cleanCep.length !== 8) {
+      setCepError('CEP inválido');
+      return;
+    }
+
+    setLoadingCep(true);
+    setCepError('');
+
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${cleanCep}/json/`);
+      const data = await response.json();
+
+      if (data.erro) {
+        setCepError('CEP não encontrado');
+        setShippingInfo(null);
+      } else {
+        const dates = calculateDeliveryDates();
+        setShippingInfo({
+          city: data.localidade,
+          state: data.uf,
+          deliveryDateStart: dates.start,
+          deliveryDateEnd: dates.end,
+        });
+      }
+    } catch (error) {
+      setCepError('Erro ao buscar CEP');
+      setShippingInfo(null);
+    } finally {
+      setLoadingCep(false);
+    }
+  };
+
   const totalItems = getTotalItems();
   const subtotal = getTotalPrice();
   const totalPrice = subtotal - discount;
+
   return <Sheet open={isOpen} onOpenChange={setOpen}>
       <SheetContent className="w-full sm:max-w-md flex flex-col h-full bg-background border-border p-0">
         {/* Header */}
@@ -125,14 +206,39 @@ export function CartDrawer() {
                 </div>
 
                 {/* Frete */}
-                <div className="flex items-center justify-between px-4 py-3">
-                  <span className="text-sm font-medium text-foreground">Frete</span>
-                  <div className="flex items-center gap-2">
-                    <Input type="text" placeholder="Insira seu CEP" value={cepCode} onChange={e => setCepCode(e.target.value)} className="w-32 h-7 text-center text-xs border-border rounded-full" />
-                    <button className="p-2 hover:bg-muted rounded-full transition-colors">
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
+                <div className="flex flex-col px-4 py-3 gap-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-foreground">Frete</span>
+                    <div className="flex items-center gap-2">
+                      <Input 
+                        type="text" 
+                        placeholder="00000-000" 
+                        value={cepCode} 
+                        onChange={handleCepChange} 
+                        maxLength={9}
+                        className="w-28 h-7 text-center text-xs border-border rounded-full" 
+                      />
+                      <button 
+                        onClick={fetchCepInfo} 
+                        disabled={loadingCep}
+                        className="p-2 hover:bg-muted rounded-full transition-colors"
+                      >
+                        {loadingCep ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
+                      </button>
+                    </div>
                   </div>
+                  {cepError && (
+                    <p className="text-xs text-destructive text-right">{cepError}</p>
+                  )}
+                  {shippingInfo && (
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground bg-muted/50 rounded-md px-2 py-1.5">
+                      <Truck className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+                      <span>
+                        <span className="text-foreground font-medium">{shippingInfo.city}/{shippingInfo.state}</span>
+                        {' - '}Entrega: {shippingInfo.deliveryDateStart} a {shippingInfo.deliveryDateEnd}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Subtotal */}
