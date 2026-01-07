@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Loader2, Minus, Plus, ShoppingCart, Truck, Star, CreditCard, Shield, RefreshCw, MapPin } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2, Minus, Plus, ShoppingCart, Truck, Star, CreditCard, Shield, RefreshCw, MapPin, Tag, X, Copy } from 'lucide-react';
 import { toast } from 'sonner';
 import { Header } from '@/components/store/Header';
 import { Footer } from '@/components/store/Footer';
@@ -8,6 +8,17 @@ import { Button } from '@/components/ui/button';
 import { fetchProductByHandle, formatPrice, calculateDiscount, calculateInstallments, ShopifyProduct } from '@/lib/shopify';
 import { useCartStore } from '@/stores/cartStore';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+
+// Mock coupon data
+const availableCoupons = [
+  {
+    code: 'RAIZ10',
+    discount: '10% OFF',
+    savings: 'R$12,99',
+    minItems: 2,
+  },
+];
 
 export default function ProductDetail() {
   const { handle } = useParams<{ handle: string }>();
@@ -17,6 +28,7 @@ export default function ProductDetail() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [showMobileCart, setShowMobileCart] = useState(false);
+  const [couponSheetOpen, setCouponSheetOpen] = useState(false);
   
   const { addItem, setOpen } = useCartStore();
 
@@ -249,6 +261,23 @@ export default function ProductDetail() {
               Calcule o prazo de entrega
             </button>
 
+            {/* Coupon Section */}
+            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200 mt-2">
+              <Tag className="w-5 h-5 text-gray-700" />
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-gray-900">Cupom</span>
+                  <button 
+                    onClick={() => setCouponSheetOpen(true)}
+                    className="text-blue-600 hover:underline text-sm font-normal"
+                  >
+                    Ver cupons disponíveis
+                  </button>
+                </div>
+                <p className="text-sm text-gray-500">{availableCoupons.length} cupom disponível para esse produto</p>
+              </div>
+            </div>
+
             {/* Options */}
             {product.options.map((option) => (
               <div key={option.name} className="flex flex-col items-start gap-2">
@@ -420,6 +449,51 @@ export default function ProductDetail() {
       <div className="pb-20 lg:pb-0">
         <Footer />
       </div>
+
+      {/* Coupon Sheet */}
+      <Sheet open={couponSheetOpen} onOpenChange={setCouponSheetOpen}>
+        <SheetContent 
+          side="bottom" 
+          className="h-[50vh] rounded-t-2xl px-6 pt-6"
+        >
+          <SheetHeader className="flex flex-row items-center justify-between pb-4">
+            <SheetTitle className="text-xl font-semibold">Cupons</SheetTitle>
+          </SheetHeader>
+          
+          <div className="space-y-4">
+            <p className="text-gray-500 text-sm">
+              Cupons disponíveis para esse produto.<br />
+              Você pode apenas aplicar um cupom por compra.
+            </p>
+            
+            {availableCoupons.map((coupon) => (
+              <div key={coupon.code} className="border border-gray-200 rounded-lg p-4 bg-white">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-green-600 font-medium">✦ {coupon.code}</span>
+                  </div>
+                  <button 
+                    onClick={() => {
+                      navigator.clipboard.writeText(coupon.code);
+                      toast.success('Cupom copiado!');
+                    }}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    <Copy className="w-4 h-4" />
+                  </button>
+                </div>
+                <p className="text-sm text-gray-700">
+                  Você economiza <span className="text-green-600 font-medium">{coupon.savings}</span> na compra
+                </p>
+                <ul className="mt-2 text-sm text-gray-600 space-y-1">
+                  <li>• {coupon.discount}</li>
+                  <li>• Mínimo do carrinho: {coupon.minItems} itens</li>
+                </ul>
+              </div>
+            ))}
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }
