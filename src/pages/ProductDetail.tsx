@@ -33,7 +33,8 @@ export default function ProductDetail() {
   const [shippingInfo, setShippingInfo] = useState<{
     city: string;
     state: string;
-    deliveryDate: string;
+    deliveryDateStart: string;
+    deliveryDateEnd: string;
   } | null>(null);
   const [loadingCep, setLoadingCep] = useState(false);
   const [cepError, setCepError] = useState('');
@@ -105,14 +106,41 @@ export default function ProductDetail() {
     }
   };
 
-  const calculateDeliveryDate = () => {
-    const date = new Date();
-    date.setDate(date.getDate() + 9);
-    return date.toLocaleDateString('pt-BR', { 
-      weekday: 'long', 
-      day: 'numeric', 
-      month: 'long' 
-    });
+  const calculateDeliveryDates = () => {
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() + 9);
+    
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + 12);
+    
+    const formatDate = (date: Date) => {
+      return date.toLocaleDateString('pt-BR', { 
+        weekday: 'long', 
+        day: 'numeric', 
+        month: 'long' 
+      });
+    };
+    
+    return {
+      start: formatDate(startDate),
+      end: formatDate(endDate),
+    };
+  };
+
+  const getTimeUntilCutoff = () => {
+    const now = new Date();
+    const cutoff = new Date();
+    cutoff.setHours(18, 0, 0, 0); // 18:00 cutoff
+    
+    if (now > cutoff) {
+      cutoff.setDate(cutoff.getDate() + 1);
+    }
+    
+    const diff = cutoff.getTime() - now.getTime();
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    
+    return { hours, minutes };
   };
 
   const fetchCepInfo = async () => {
@@ -133,10 +161,12 @@ export default function ProductDetail() {
         setCepError('CEP não encontrado');
         setShippingInfo(null);
       } else {
+        const dates = calculateDeliveryDates();
         setShippingInfo({
           city: data.localidade,
           state: data.uf,
-          deliveryDate: calculateDeliveryDate(),
+          deliveryDateStart: dates.start,
+          deliveryDateEnd: dates.end,
         });
       }
     } catch (error) {
@@ -331,14 +361,14 @@ export default function ProductDetail() {
 
             {/* Delivery Estimate */}
             {shippingInfo ? (
-              <div className="flex mt-2 gap-2 items-center p-3 bg-green-50 rounded-lg border border-green-200">
-                <Truck className="w-5 h-5 text-green-600" />
+              <div className="flex mt-2 gap-2 items-start p-3 bg-green-50 rounded-lg border border-green-200">
+                <Truck className="w-5 h-5 text-green-600 mt-0.5" />
                 <div className="flex-1">
                   <p className="text-sm text-gray-700">
-                    <span className="font-medium text-green-600">Frete Grátis</span> para {shippingInfo.city}, {shippingInfo.state}
+                    Entrega entre <span className="font-medium text-green-600">{shippingInfo.deliveryDateStart}</span> e <span className="font-medium text-green-600">{shippingInfo.deliveryDateEnd}</span>.
                   </p>
-                  <p className="text-sm text-gray-600">
-                    Receba até <span className="font-medium">{shippingInfo.deliveryDate}</span>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Comprando dentro das próximas <span className="font-medium text-green-600">{getTimeUntilCutoff().hours} horas e {getTimeUntilCutoff().minutes} minutos</span>.
                   </p>
                 </div>
                 <button 
@@ -644,11 +674,12 @@ export default function ProductDetail() {
                   <Truck className="w-6 h-6 text-green-600" />
                   <div className="flex-1">
                     <p className="font-medium text-green-600">Frete Grátis</p>
-                    <p className="text-sm text-gray-600">Prazo de 9 dias úteis</p>
+                    <p className="text-sm text-gray-600">Prazo de 9 a 12 dias úteis</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm text-gray-500">Receba até</p>
-                    <p className="font-medium text-gray-900">{shippingInfo.deliveryDate}</p>
+                    <p className="text-sm text-gray-500">Receba entre</p>
+                    <p className="font-medium text-gray-900 text-sm">{shippingInfo.deliveryDateStart}</p>
+                    <p className="font-medium text-gray-900 text-sm">e {shippingInfo.deliveryDateEnd}</p>
                   </div>
                 </div>
               </div>
