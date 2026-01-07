@@ -204,21 +204,20 @@ export function CartDrawer() {
 
               {/* Footer Section */}
               <div className="flex-shrink-0 border-t border-border bg-background">
-                {/* Barra de Progresso Frete Grátis */}
-                <div className="px-4 py-3">
-                  <div className="relative h-1.5 bg-muted rounded-full overflow-hidden">
-                    <div 
-                      className={`absolute left-0 top-0 h-full transition-all duration-500 ${hasFreeShipping ? 'bg-emerald-500' : 'bg-emerald-500'}`}
-                      style={{ width: `${progressPercent}%` }}
-                    />
+                {/* Barra de Progresso Frete Grátis - só mostra se ainda não atingiu */}
+                {!hasFreeShipping && (
+                  <div className="px-4 py-3">
+                    <div className="relative h-1.5 bg-muted rounded-full overflow-hidden">
+                      <div 
+                        className="absolute left-0 top-0 h-full transition-all duration-500 bg-emerald-500"
+                        style={{ width: `${progressPercent}%` }}
+                      />
+                    </div>
+                    <p className="text-center text-sm mt-2 text-foreground">
+                      Faltam {itemsRemaining} {itemsRemaining === 1 ? 'item' : 'itens'} para o frete grátis.
+                    </p>
                   </div>
-                  <p className={`text-center text-sm mt-2 ${hasFreeShipping ? 'text-emerald-600 font-medium' : 'text-foreground'}`}>
-                    {hasFreeShipping 
-                      ? '🎉 Parabéns! Você ganhou frete grátis!'
-                      : `Faltam ${itemsRemaining} ${itemsRemaining === 1 ? 'item' : 'itens'} para o frete grátis.`
-                    }
-                  </p>
-                </div>
+                )}
 
                 {/* Cupom */}
                 <div className="flex items-center justify-between px-4 py-3">
@@ -265,7 +264,7 @@ export function CartDrawer() {
                         </span>
                       </div>
                       <span className={`font-semibold ${hasFreeShipping ? 'text-emerald-600' : 'text-foreground'}`}>
-                        {hasFreeShipping ? 'Grátis' : formatPrice(shippingCost.toString())}
+                        {formatPrice(shippingCost.toString())}
                       </span>
                     </div>
                   )}
