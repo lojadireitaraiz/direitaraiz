@@ -404,14 +404,14 @@ export default function ProductDetail() {
               </div>
             </div>
 
-            {/* Options */}
-            {product.options.map((option) => {
-              const isColorOption = option.name.toLowerCase() === 'cor' || option.name.toLowerCase() === 'color';
-              
-              // Get selected color name for color options
-              const selectedColorName = isColorOption 
-                ? selectedOptions[option.name]
-                : null;
+            {/* Options - Modelo and Cor on same row */}
+            {(() => {
+              const modeloOption = product.options.find(o => o.name.toLowerCase() === 'modelo' || o.name.toLowerCase() === 'model');
+              const corOption = product.options.find(o => o.name.toLowerCase() === 'cor' || o.name.toLowerCase() === 'color');
+              const tamanhoOption = product.options.find(o => o.name.toLowerCase() === 'tamanho' || o.name.toLowerCase() === 'size');
+              const otherOptions = product.options.filter(o => 
+                !['modelo', 'model', 'cor', 'color', 'tamanho', 'size'].includes(o.name.toLowerCase())
+              );
 
               // Color mapping for visual color circles
               const colorMap: Record<string, string> = {
@@ -448,101 +448,120 @@ export default function ProductDetail() {
                 return colorMap[lowerName] || '#222E4B';
               };
 
-              return (
-                <div key={option.name} className="flex flex-col items-start gap-2">
-                  <span className="font-bold text-gray-900">
-                    {option.name}{isColorOption && selectedColorName ? `: ${selectedColorName}` : ''}
-                  </span>
-                  <div className="flex flex-wrap gap-3">
-                    {option.values.map((value) => {
-                      // Check if this value is currently selected for this option
-                      const isSelected = selectedOptions[option.name] === value;
-                      
-                      // Find variant availability - check if any variant with this option value exists
-                      const variantWithValue = product.variants.edges.find(v => 
-                        v.node.selectedOptions.some(o => o.name === option.name && o.value === value)
-                      );
-                      const isAvailable = variantWithValue?.node.availableForSale ?? false;
+              const renderOption = (option: typeof product.options[0]) => {
+                const isColorOption = option.name.toLowerCase() === 'cor' || option.name.toLowerCase() === 'color';
+                const selectedColorName = isColorOption ? selectedOptions[option.name] : null;
 
-                      const handleOptionSelect = () => {
-                        // Update selected options
-                        const newSelectedOptions = { ...selectedOptions, [option.name]: value };
-                        setSelectedOptions(newSelectedOptions);
-                        
-                        // Find variant that matches all selected options
-                        const matchingVariant = product.variants.edges.find(v => 
-                          v.node.selectedOptions.every(opt => 
-                            newSelectedOptions[opt.name] === opt.value
-                          )
+                return (
+                  <div key={option.name} className="flex flex-col items-start gap-2 flex-1">
+                    <span className="font-bold text-gray-900">
+                      {option.name}{isColorOption && selectedColorName ? `: ${selectedColorName}` : ''}
+                    </span>
+                    <div className="flex flex-wrap gap-3">
+                      {option.values.map((value) => {
+                        const isSelected = selectedOptions[option.name] === value;
+                        const variantWithValue = product.variants.edges.find(v => 
+                          v.node.selectedOptions.some(o => o.name === option.name && o.value === value)
                         );
-                        
-                        if (matchingVariant) {
-                          setSelectedVariant(matchingVariant.node.id);
+                        const isAvailable = variantWithValue?.node.availableForSale ?? false;
+
+                        const handleOptionSelect = () => {
+                          const newSelectedOptions = { ...selectedOptions, [option.name]: value };
+                          setSelectedOptions(newSelectedOptions);
+                          const matchingVariant = product.variants.edges.find(v => 
+                            v.node.selectedOptions.every(opt => 
+                              newSelectedOptions[opt.name] === opt.value
+                            )
+                          );
+                          if (matchingVariant) {
+                            setSelectedVariant(matchingVariant.node.id);
+                          }
+                        };
+
+                        if (isColorOption) {
+                          const colorHex = getColorHex(value);
+                          const isWhite = colorHex.toLowerCase() === '#ffffff';
+                          return (
+                            <button
+                              key={value}
+                              onClick={handleOptionSelect}
+                              className={`w-9 h-9 rounded-full transition-all ${
+                                isSelected 
+                                  ? 'ring-2 ring-offset-2 ring-gray-900' 
+                                  : 'hover:ring-2 hover:ring-offset-2 hover:ring-gray-400'
+                              } ${!isAvailable ? 'opacity-50 cursor-not-allowed' : ''} ${
+                                isWhite ? 'border border-gray-300' : ''
+                              }`}
+                              style={{ backgroundColor: colorHex }}
+                              disabled={!isAvailable}
+                              title={value}
+                              aria-label={value}
+                            />
+                          );
                         }
-                      };
-                      
-                      if (isColorOption) {
-                        const colorHex = getColorHex(value);
-                        const isWhite = colorHex.toLowerCase() === '#ffffff';
-                        
+
                         return (
                           <button
                             key={value}
                             onClick={handleOptionSelect}
-                            className={`w-9 h-9 rounded-full transition-all ${
+                            className={`px-4 py-2 border rounded-full text-sm font-medium transition-colors ${
                               isSelected 
-                                ? 'ring-2 ring-offset-2 ring-gray-900' 
-                                : 'hover:ring-2 hover:ring-offset-2 hover:ring-gray-400'
-                            } ${!isAvailable ? 'opacity-50 cursor-not-allowed' : ''} ${
-                              isWhite ? 'border border-gray-300' : ''
-                            }`}
-                            style={{ backgroundColor: colorHex }}
+                                ? 'border-[#111928] bg-[#111928] text-white' 
+                                : 'border-gray-300 hover:border-[#111928] bg-white text-gray-900'
+                            } ${!isAvailable ? 'opacity-50 cursor-not-allowed line-through' : ''}`}
                             disabled={!isAvailable}
-                            title={value}
-                            aria-label={value}
-                          />
+                          >
+                            {value}
+                          </button>
                         );
-                      }
-                      
-                      return (
-                        <button
-                          key={value}
-                          onClick={handleOptionSelect}
-                          className={`px-4 py-2 border rounded-full text-sm font-medium transition-colors ${
-                            isSelected 
-                              ? 'border-[#111928] bg-[#111928] text-white' 
-                              : 'border-gray-300 hover:border-[#111928] bg-white text-gray-900'
-                          } ${!isAvailable ? 'opacity-50 cursor-not-allowed line-through' : ''}`}
-                          disabled={!isAvailable}
-                        >
-                          {value}
-                        </button>
-                      );
-                    })}
+                      })}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              };
 
-            {/* Quantity */}
-            <div className="flex flex-col items-start gap-2">
-              <span className="font-bold text-gray-900">Quantidade</span>
-              <div className="flex items-center border border-gray-300 rounded-full overflow-hidden">
-                <button
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="p-3 hover:bg-gray-100 transition-colors"
-                >
-                  <Minus className="w-4 h-4" />
-                </button>
-                <span className="w-12 text-center font-medium">{quantity}</span>
-                <button
-                  onClick={() => setQuantity(quantity + 1)}
-                  className="p-3 hover:bg-gray-100 transition-colors"
-                >
-                  <Plus className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
+              return (
+                <>
+                  {/* Row 1: Modelo and Cor */}
+                  {(modeloOption || corOption) && (
+                    <div className="flex flex-col sm:flex-row gap-5">
+                      {modeloOption && renderOption(modeloOption)}
+                      {corOption && renderOption(corOption)}
+                    </div>
+                  )}
+
+                  {/* Row 2: Tamanho and Quantidade */}
+                  {(tamanhoOption || true) && (
+                    <div className="flex flex-col sm:flex-row gap-5">
+                      {tamanhoOption && renderOption(tamanhoOption)}
+                      
+                      {/* Quantity */}
+                      <div className="flex flex-col items-start gap-2 flex-1">
+                        <span className="font-bold text-gray-900">Quantidade</span>
+                        <div className="flex items-center border border-gray-300 rounded-full overflow-hidden">
+                          <button
+                            onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                            className="p-3 hover:bg-gray-100 transition-colors"
+                          >
+                            <Minus className="w-4 h-4" />
+                          </button>
+                          <span className="w-12 text-center font-medium">{quantity}</span>
+                          <button
+                            onClick={() => setQuantity(quantity + 1)}
+                            className="p-3 hover:bg-gray-100 transition-colors"
+                          >
+                            <Plus className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Other options */}
+                  {otherOptions.map(option => renderOption(option))}
+                </>
+              );
+            })()}
 
             {/* Add to Cart Button */}
             <Button
