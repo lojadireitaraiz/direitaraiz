@@ -36,11 +36,35 @@ export function Footer() {
             <div>
               <h3 className="font-semibold mb-4 text-white">Selos e certificações</h3>
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-neutral-800 rounded flex items-center justify-center">
-                  <span className="text-xs text-neutral-400">SSL</span>
+                {/* SSL Secure */}
+                <div className="w-16 h-12 bg-white rounded flex items-center justify-center p-1">
+                  <svg viewBox="0 0 48 48" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 4L6 12V22C6 33.1 13.8 43.3 24 46C34.2 43.3 42 33.1 42 22V12L24 4Z" fill="#4CAF50"/>
+                    <path d="M20 32L12 24L14.8 21.2L20 26.4L33.2 13.2L36 16L20 32Z" fill="white"/>
+                  </svg>
                 </div>
-                <div className="w-12 h-12 bg-neutral-800 rounded flex items-center justify-center">
-                  <span className="text-xs text-neutral-400">Safe</span>
+                {/* Compra Segura */}
+                <div className="w-16 h-12 bg-white rounded flex items-center justify-center p-1">
+                  <svg viewBox="0 0 48 48" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="8" y="20" width="32" height="24" rx="2" fill="#1565C0"/>
+                    <path d="M16 20V14C16 9.58 19.58 6 24 6C28.42 6 32 9.58 32 14V20" stroke="#1565C0" strokeWidth="4" fill="none"/>
+                    <circle cx="24" cy="32" r="3" fill="white"/>
+                    <path d="M24 35V38" stroke="white" strokeWidth="2"/>
+                  </svg>
+                </div>
+                {/* Google Safe */}
+                <div className="w-16 h-12 bg-white rounded flex items-center justify-center p-1">
+                  <svg viewBox="0 0 48 48" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 4C12.96 4 4 12.96 4 24C4 35.04 12.96 44 24 44C35.04 44 44 35.04 44 24C44 12.96 35.04 4 24 4ZM20 34L10 24L12.82 21.18L20 28.34L35.18 13.16L38 16L20 34Z" fill="#34A853"/>
+                  </svg>
+                </div>
+                {/* Site Blindado */}
+                <div className="w-16 h-12 bg-white rounded flex items-center justify-center p-1">
+                  <svg viewBox="0 0 48 48" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 2L4 10V22C4 34.56 12.64 46.28 24 50C35.36 46.28 44 34.56 44 22V10L24 2Z" fill="#FFC107"/>
+                    <path d="M24 8L10 14V22C10 31.7 16.48 40.74 24 44C31.52 40.74 38 31.7 38 22V14L24 8Z" fill="#FF9800"/>
+                    <path d="M24 14L16 18V24C16 29.52 19.52 34.58 24 36C28.48 34.58 32 29.52 32 24V18L24 14Z" fill="#F57C00"/>
+                  </svg>
                 </div>
               </div>
             </div>
