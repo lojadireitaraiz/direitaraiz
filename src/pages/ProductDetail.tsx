@@ -510,8 +510,8 @@ export default function ProductDetail() {
                           onClick={handleOptionSelect}
                           className={`px-4 py-2 border rounded-full text-sm font-medium transition-colors ${
                             isSelected 
-                              ? 'border-black bg-black text-white' 
-                              : 'border-gray-300 hover:border-black bg-white text-gray-900'
+                              ? 'border-[#111928] bg-[#111928] text-white' 
+                              : 'border-gray-300 hover:border-[#111928] bg-white text-gray-900'
                           } ${!isAvailable ? 'opacity-50 cursor-not-allowed line-through' : ''}`}
                           disabled={!isAvailable}
                         >
