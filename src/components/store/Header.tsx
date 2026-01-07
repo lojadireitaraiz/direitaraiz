@@ -26,7 +26,7 @@ const collections = [
 const benefitsMessages = [
   { icon: CreditCard, text: 'Parcele em até 3x sem juros' },
   { icon: Package, text: 'Primeira troca sem custo' },
-  { icon: Truck, text: 'Frete grátis a partir de 3 peças' },
+  { icon: Truck, text: 'Frete grátis a partir de 2 peças' },
 ];
 
 export function Header() {
