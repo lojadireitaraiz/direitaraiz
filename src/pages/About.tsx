@@ -1,10 +1,8 @@
 import { Header } from '@/components/store/Header';
 import { Footer } from '@/components/store/Footer';
 import { Instagram, Globe } from 'lucide-react';
-
 export default function About() {
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <Header />
       
       <main className="max-w-4xl mx-auto px-4 py-12 md:py-16">
@@ -13,24 +11,7 @@ export default function About() {
             DIREITA RAIZ
           </h1>
           
-          <div className="flex justify-center gap-4 mb-8">
-            <a 
-              href="https://instagram.com/direitaraizbrasil" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="p-3 bg-muted rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
-            >
-              <Instagram className="w-5 h-5" />
-            </a>
-            <a 
-              href="https://www.direitaraiz.com.br" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="p-3 bg-muted rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
-            >
-              <Globe className="w-5 h-5" />
-            </a>
-          </div>
+          
         </div>
         
         <div className="space-y-6 text-muted-foreground text-center max-w-2xl mx-auto">
@@ -52,26 +33,15 @@ export default function About() {
         </div>
 
         <div className="flex justify-center gap-4 mt-12">
-          <a 
-            href="https://instagram.com/direitaraizbrasil" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="p-3 bg-muted rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
-          >
+          <a href="https://instagram.com/direitaraizbrasil" target="_blank" rel="noopener noreferrer" className="p-3 bg-muted rounded-full hover:bg-primary hover:text-primary-foreground transition-colors">
             <Instagram className="w-5 h-5" />
           </a>
-          <a 
-            href="https://www.direitaraiz.com.br" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="p-3 bg-muted rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
-          >
+          <a href="https://www.direitaraiz.com.br" target="_blank" rel="noopener noreferrer" className="p-3 bg-muted rounded-full hover:bg-primary hover:text-primary-foreground transition-colors">
             <Globe className="w-5 h-5" />
           </a>
         </div>
       </main>
 
       <Footer />
-    </div>
-  );
+    </div>;
 }
