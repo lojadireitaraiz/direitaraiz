@@ -15,7 +15,7 @@ export default function About() {
         </div>
         
         <div className="text-muted-foreground text-center max-w-2xl mx-auto">
-          <p className="text-lg leading-relaxed text-primary">
+          <p className="text-lg leading-relaxed text-primary text-center">
             A Direita Raiz nasceu da vontade de vestir o Brasil de verdade — o povo que acorda cedo, fala o que pensa e tem orgulho de suas origens. Aqui, cada camiseta carrega atitude, liberdade e identidade, sem filtros e sem frescura. Somos mais que uma marca: somos a voz de quem não se dobra, de quem carrega no peito a força, a garra e o humor do brasileiro raiz. Nossas peças são criadas pra quem vive com propósito, pra quem acredita que o estilo também é uma forma de expressão.
           </p>
         </div>
