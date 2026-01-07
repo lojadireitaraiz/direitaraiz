@@ -410,8 +410,8 @@ export default function ProductDetail() {
               const colorMap: Record<string, string> = {
                 'preto': '#000000',
                 'black': '#000000',
-                'marinho': '#0f172a',
-                'navy': '#0f172a',
+                'marinho': '#1e3a5f',
+                'navy': '#1e3a5f',
                 'azul': '#1e3a8a',
                 'blue': '#1e3a8a',
                 'verde': '#14532d',
