@@ -20,7 +20,7 @@ const categories = [
 
 const collections = [
   { name: 'Nação Kids', href: '/colecao/nacao-kids' },
-  { name: 'Direita Raiz', href: '/colecao/direita-raiz' },
+  { name: 'Direita Raiz', href: '/colecao' },
 ];
 
 const benefitsMessages = [
