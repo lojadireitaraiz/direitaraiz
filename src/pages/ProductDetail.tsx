@@ -26,6 +26,7 @@ export default function ProductDetail() {
   const [product, setProduct] = useState<ShopifyProduct['node'] | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [showMobileCart, setShowMobileCart] = useState(false);
@@ -51,6 +52,12 @@ export default function ProductDetail() {
       setProduct(data);
       if (data?.variants.edges[0]) {
         setSelectedVariant(data.variants.edges[0].node.id);
+        // Initialize selected options from first variant
+        const initialOptions: Record<string, string> = {};
+        data.variants.edges[0].node.selectedOptions.forEach(opt => {
+          initialOptions[opt.name] = opt.value;
+        });
+        setSelectedOptions(initialOptions);
       }
       setLoading(false);
     }
@@ -403,7 +410,7 @@ export default function ProductDetail() {
               
               // Get selected color name for color options
               const selectedColorName = isColorOption 
-                ? currentVariant?.selectedOptions.find(o => o.name === option.name)?.value 
+                ? selectedOptions[option.name]
                 : null;
 
               // Color mapping for visual color circles
@@ -448,10 +455,31 @@ export default function ProductDetail() {
                   </span>
                   <div className="flex flex-wrap gap-3">
                     {option.values.map((value) => {
-                      const variant = product.variants.edges.find(v => 
+                      // Check if this value is currently selected for this option
+                      const isSelected = selectedOptions[option.name] === value;
+                      
+                      // Find variant availability - check if any variant with this option value exists
+                      const variantWithValue = product.variants.edges.find(v => 
                         v.node.selectedOptions.some(o => o.name === option.name && o.value === value)
                       );
-                      const isSelected = variant?.node.id === selectedVariant;
+                      const isAvailable = variantWithValue?.node.availableForSale ?? false;
+
+                      const handleOptionSelect = () => {
+                        // Update selected options
+                        const newSelectedOptions = { ...selectedOptions, [option.name]: value };
+                        setSelectedOptions(newSelectedOptions);
+                        
+                        // Find variant that matches all selected options
+                        const matchingVariant = product.variants.edges.find(v => 
+                          v.node.selectedOptions.every(opt => 
+                            newSelectedOptions[opt.name] === opt.value
+                          )
+                        );
+                        
+                        if (matchingVariant) {
+                          setSelectedVariant(matchingVariant.node.id);
+                        }
+                      };
                       
                       if (isColorOption) {
                         const colorHex = getColorHex(value);
@@ -460,16 +488,16 @@ export default function ProductDetail() {
                         return (
                           <button
                             key={value}
-                            onClick={() => variant && setSelectedVariant(variant.node.id)}
+                            onClick={handleOptionSelect}
                             className={`w-9 h-9 rounded-full transition-all ${
                               isSelected 
                                 ? 'ring-2 ring-offset-2 ring-gray-900' 
                                 : 'hover:ring-2 hover:ring-offset-2 hover:ring-gray-400'
-                            } ${!variant?.node.availableForSale ? 'opacity-50 cursor-not-allowed' : ''} ${
+                            } ${!isAvailable ? 'opacity-50 cursor-not-allowed' : ''} ${
                               isWhite ? 'border border-gray-300' : ''
                             }`}
                             style={{ backgroundColor: colorHex }}
-                            disabled={!variant?.node.availableForSale}
+                            disabled={!isAvailable}
                             title={value}
                             aria-label={value}
                           />
@@ -479,13 +507,13 @@ export default function ProductDetail() {
                       return (
                         <button
                           key={value}
-                          onClick={() => variant && setSelectedVariant(variant.node.id)}
+                          onClick={handleOptionSelect}
                           className={`px-4 py-2 border rounded-full text-sm font-medium transition-colors ${
                             isSelected 
                               ? 'border-black bg-black text-white' 
                               : 'border-gray-300 hover:border-black bg-white text-gray-900'
-                          } ${!variant?.node.availableForSale ? 'opacity-50 cursor-not-allowed line-through' : ''}`}
-                          disabled={!variant?.node.availableForSale}
+                          } ${!isAvailable ? 'opacity-50 cursor-not-allowed line-through' : ''}`}
+                          disabled={!isAvailable}
                         >
                           {value}
                         </button>
