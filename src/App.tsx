@@ -10,6 +10,7 @@ import About from "./pages/About";
 import TermsOfUse from "./pages/TermsOfUse";
 import FAQ from "./pages/FAQ";
 import ExchangesReturns from "./pages/ExchangesReturns";
+import Collection from "./pages/Collection";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/termos" element={<TermsOfUse />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/trocas" element={<ExchangesReturns />} />
+          <Route path="/colecao" element={<Collection />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
