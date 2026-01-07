@@ -361,22 +361,13 @@ export default function ProductDetail() {
 
             {/* Delivery Estimate */}
             {shippingInfo ? (
-              <div className="flex mt-2 gap-2 items-start p-3 bg-green-50 rounded-lg border border-green-200">
-                <Truck className="w-5 h-5 text-green-600 mt-0.5" />
-                <div className="flex-1">
-                  <p className="text-sm text-gray-700">
-                    Entrega entre <span className="font-medium text-green-600">{shippingInfo.deliveryDateStart}</span> e <span className="font-medium text-green-600">{shippingInfo.deliveryDateEnd}</span>.
-                  </p>
-                  <p className="text-sm text-gray-500 mt-1">
-                    Comprando dentro das próximas <span className="font-medium text-green-600">{getTimeUntilCutoff().hours} horas e {getTimeUntilCutoff().minutes} minutos</span>.
-                  </p>
-                </div>
-                <button 
-                  onClick={() => setShippingSheetOpen(true)}
-                  className="text-blue-600 hover:underline text-sm"
-                >
-                  Alterar
-                </button>
+              <div className="mt-3">
+                <p className="text-sm text-gray-700">
+                  Entrega entre <span className="font-medium text-green-600">{shippingInfo.deliveryDateStart}</span> e <span className="font-medium text-green-600">{shippingInfo.deliveryDateEnd}</span>.
+                </p>
+                <p className="text-sm text-gray-500 mt-1">
+                  Comprando dentro das próximas <span className="font-medium text-green-600">{getTimeUntilCutoff().hours} horas e {getTimeUntilCutoff().minutes} minutos</span>.
+                </p>
               </div>
             ) : (
               <button 
