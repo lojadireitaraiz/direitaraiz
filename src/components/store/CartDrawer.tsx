@@ -241,7 +241,7 @@ export function CartDrawer() {
                         value={cepCode} 
                         onChange={handleCepChange} 
                         maxLength={9}
-                        className="w-28 h-7 text-center text-xs border-border rounded-full" 
+                        className="w-32 h-7 text-center text-xs border-border rounded-full" 
                       />
                       <button 
                         onClick={fetchCepInfo} 
