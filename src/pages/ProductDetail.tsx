@@ -131,11 +131,11 @@ export default function ProductDetail() {
 
   return (
     <div className="min-h-screen bg-white">
+      <Header />
       <PromoAlert 
         message="FRETE GRÁTIS A PARTIR DE 3 PEÇAS" 
         endDate={promoEndDate}
       />
-      <Header />
       
       <main className="max-w-7xl mx-auto px-4 py-6">
         {/* Mobile Header */}
