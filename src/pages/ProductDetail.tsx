@@ -363,7 +363,7 @@ export default function ProductDetail() {
                 </div>
               </span>
               <p className="font-medium text-base">
-                ou em até <span className="text-green-500">3x de {calculateInstallments(price.toString())} sem juros</span>
+                ou em até <span className="text-emerald-500">3x de {calculateInstallments(price.toString())} sem juros</span>
               </p>
             </div>
 
@@ -576,16 +576,16 @@ export default function ProductDetail() {
             {/* Trust Badges */}
             <div className="flex flex-col gap-4 mt-2">
               <div className="flex gap-2 items-start">
-                <RefreshCw className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                <RefreshCw className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
                 <span className="leading-5 text-gray-500 text-sm">
-                  <em className="text-green-500 not-italic font-medium">Primeira troca grátis.</em>{' '}
+                  <em className="text-emerald-500 not-italic font-medium">Primeira troca grátis.</em>{' '}
                   Você tem até 30 dias para trocar o produto.
                 </span>
               </div>
               <div className="flex gap-2 items-start">
-                <Shield className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                <Shield className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
                 <span className="leading-5 text-gray-500 text-sm">
-                  <em className="text-green-500 not-italic font-medium">Compra segura.</em>{' '}
+                  <em className="text-emerald-500 not-italic font-medium">Compra segura.</em>{' '}
                   Site construído para a sua segurança.
                 </span>
               </div>

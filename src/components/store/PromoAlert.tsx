@@ -52,19 +52,19 @@ export function PromoAlert({ message, endDate }: PromoAlertProps) {
             <span className="text-sm text-neutral-400">A promoção termina em:</span>
             <div className="flex items-center gap-3">
               <div className="promo-countdown-item">
-                <span className="promo-countdown-value text-green-500">{String(timeLeft.days).padStart(2, '0')}</span>
+                <span className="promo-countdown-value text-emerald-500">{String(timeLeft.days).padStart(2, '0')}</span>
                 <span className="promo-countdown-label text-neutral-400">dias</span>
               </div>
               <div className="promo-countdown-item">
-                <span className="promo-countdown-value text-green-500">{String(timeLeft.hours).padStart(2, '0')}</span>
+                <span className="promo-countdown-value text-emerald-500">{String(timeLeft.hours).padStart(2, '0')}</span>
                 <span className="promo-countdown-label text-neutral-400">horas</span>
               </div>
               <div className="promo-countdown-item">
-                <span className="promo-countdown-value text-green-500">{String(timeLeft.minutes).padStart(2, '0')}</span>
+                <span className="promo-countdown-value text-emerald-500">{String(timeLeft.minutes).padStart(2, '0')}</span>
                 <span className="promo-countdown-label text-neutral-400">min</span>
               </div>
               <div className="promo-countdown-item">
-                <span className="promo-countdown-value text-green-500">{String(timeLeft.seconds).padStart(2, '0')}</span>
+                <span className="promo-countdown-value text-emerald-500">{String(timeLeft.seconds).padStart(2, '0')}</span>
                 <span className="promo-countdown-label text-neutral-400">seg</span>
               </div>
             </div>
