@@ -195,7 +195,7 @@ export default function Collection() {
 
         <div className="flex gap-8">
           {/* Desktop Sidebar Filters */}
-          <aside className="hidden lg:block w-64 flex-shrink-0">
+          <aside className="hidden lg:block w-52 flex-shrink-0">
             <div className="sticky top-24 bg-card border border-border rounded-lg p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="font-semibold text-lg text-foreground">Filtros</h2>
