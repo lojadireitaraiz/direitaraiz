@@ -58,6 +58,17 @@ export function Footer() {
                     />
                   </div>
                 </a>
+                <div className="bg-white rounded px-2 py-1.5 flex items-center justify-center">
+                  <img 
+                    src="https://d2u4gk28rgr5ys.cloudfront.net/assets/icons/stamps/pci-dss-4d1e0a0b3c2e0c5d6f7a8b9c0d1e2f3a.svg" 
+                    alt="Selo PCI" 
+                    className="h-8"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      e.currentTarget.parentElement!.innerHTML = '<span class="text-xs font-semibold text-neutral-700">PCI DSS</span>';
+                    }}
+                  />
+                </div>
               </div>
             </div>
 
