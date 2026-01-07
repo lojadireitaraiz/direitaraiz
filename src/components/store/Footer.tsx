@@ -99,7 +99,7 @@ export function Footer() {
 
         {/* Copyright */}
         <div className="mt-12 pt-6 border-t border-neutral-800 text-center text-sm text-neutral-400">
-          <p>© 2026 NAÇÃO RAIZ | 63.195.375/0001-74</p>
+          <p>© 2026 DIREITA RAIZ | 63.195.375/0001-74</p>
         </div>
       </div>
     </footer>
