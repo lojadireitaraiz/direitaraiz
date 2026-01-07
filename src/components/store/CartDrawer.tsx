@@ -128,7 +128,7 @@ export function CartDrawer() {
                 <div className="flex items-center justify-between px-4 py-3">
                   <span className="text-sm font-medium text-foreground">Frete</span>
                   <div className="flex items-center gap-2">
-                    <Input type="text" placeholder="Insira seu CEP" value={cepCode} onChange={e => setCepCode(e.target.value)} className="w-32 h-9 text-center text-sm border-border rounded-full" />
+                    <Input type="text" placeholder="Insira seu CEP" value={cepCode} onChange={e => setCepCode(e.target.value)} className="w-32 h-7 text-center text-xs border-border rounded-full" />
                     <button className="p-2 hover:bg-muted rounded-full transition-colors">
                       <ArrowRight className="w-4 h-4" />
                     </button>
