@@ -74,10 +74,10 @@ export default function PrivacyPolicy() {
             <p className="leading-relaxed">
               Os usuários têm o direito de solicitar a exclusão de seus dados pessoais a qualquer momento. Para isso, basta enviar um e-mail para{' '}
               <a 
-                href="mailto:nacaoraizbrasil@gmail.com" 
+                href="mailto:suporte@direitaraiz.com" 
                 className="text-foreground underline hover:no-underline"
               >
-                nacaoraizbrasil@gmail.com
+                suporte@direitaraiz.com
               </a>{' '}
               com o assunto "Solicitação de Exclusão de Dados".
             </p>
@@ -107,10 +107,10 @@ export default function PrivacyPolicy() {
             <p className="leading-relaxed">
               Caso tenha qualquer dúvida ou sugestão sobre segurança e privacidade ou sobre qualquer outro assunto entre em contato direto com a nossa equipe através do e-mail{' '}
               <a 
-                href="mailto:nacaoraizbrasil@gmail.com" 
+                href="mailto:suporte@direitaraiz.com" 
                 className="text-foreground underline hover:no-underline"
               >
-                nacaoraizbrasil@gmail.com
+                suporte@direitaraiz.com
               </a>
             </p>
           </section>
