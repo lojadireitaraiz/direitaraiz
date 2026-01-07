@@ -363,7 +363,7 @@ export default function ProductDetail() {
             {shippingInfo ? (
               <div className="mt-3">
                 <p className="text-sm text-gray-700">
-                  Entrega entre <span className="font-medium text-green-600">{shippingInfo.deliveryDateStart}</span> e <span className="font-medium text-green-600">{shippingInfo.deliveryDateEnd}</span>.
+                  Entrega entre <span className="font-bold text-gray-900">{shippingInfo.deliveryDateStart}</span> e <span className="font-bold text-gray-900">{shippingInfo.deliveryDateEnd}</span>.
                 </p>
                 <p className="text-sm text-gray-500 mt-1">
                   Comprando dentro das próximas <span className="font-medium text-green-600">{getTimeUntilCutoff().hours} horas e {getTimeUntilCutoff().minutes} minutos</span>.
