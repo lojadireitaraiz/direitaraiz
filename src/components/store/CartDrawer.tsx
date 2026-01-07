@@ -120,7 +120,17 @@ export function CartDrawer() {
 
   const totalItems = getTotalItems();
   const subtotal = getTotalPrice();
-  const totalPrice = subtotal - discount;
+  
+  // Regra: 2+ itens = frete grátis
+  const hasFreeShipping = totalItems >= 2;
+  const itemsForFreeShipping = 2;
+  const itemsRemaining = Math.max(0, itemsForFreeShipping - totalItems);
+  const progressPercent = Math.min(100, (totalItems / itemsForFreeShipping) * 100);
+  
+  // Valor do frete (R$ 19,59 conforme imagem, grátis com 2+ itens)
+  const shippingCost = hasFreeShipping ? 0 : 19.59;
+  
+  const totalPrice = subtotal - discount + shippingCost;
 
   return <Sheet open={isOpen} onOpenChange={setOpen}>
       <SheetContent className="w-full sm:max-w-md flex flex-col h-full bg-background border-border p-0">
@@ -194,6 +204,22 @@ export function CartDrawer() {
 
               {/* Footer Section */}
               <div className="flex-shrink-0 border-t border-border bg-background">
+                {/* Barra de Progresso Frete Grátis */}
+                <div className="px-4 py-3">
+                  <div className="relative h-1.5 bg-muted rounded-full overflow-hidden">
+                    <div 
+                      className={`absolute left-0 top-0 h-full transition-all duration-500 ${hasFreeShipping ? 'bg-emerald-500' : 'bg-emerald-500'}`}
+                      style={{ width: `${progressPercent}%` }}
+                    />
+                  </div>
+                  <p className={`text-center text-sm mt-2 ${hasFreeShipping ? 'text-emerald-600 font-medium' : 'text-foreground'}`}>
+                    {hasFreeShipping 
+                      ? '🎉 Parabéns! Você ganhou frete grátis!'
+                      : `Faltam ${itemsRemaining} ${itemsRemaining === 1 ? 'item' : 'itens'} para o frete grátis.`
+                    }
+                  </p>
+                </div>
+
                 {/* Cupom */}
                 <div className="flex items-center justify-between px-4 py-3">
                   <span className="text-sm font-medium text-foreground">Cupom</span>
@@ -231,11 +257,15 @@ export function CartDrawer() {
                     <p className="text-xs text-destructive text-right">{cepError}</p>
                   )}
                   {shippingInfo && (
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground bg-muted/50 rounded-md px-2 py-1.5">
-                      <Truck className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                      <span>
-                        <span className="text-foreground font-medium">{shippingInfo.city}/{shippingInfo.state}</span>
-                        {' - '}Entrega: {shippingInfo.deliveryDateStart} a {shippingInfo.deliveryDateEnd}
+                    <div className="flex items-center justify-between text-xs bg-muted/50 rounded-md px-3 py-2">
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Truck className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+                        <span>
+                          Até {shippingInfo.deliveryDateEnd}. <span className="underline cursor-pointer">{cepCode}</span>
+                        </span>
+                      </div>
+                      <span className={`font-semibold ${hasFreeShipping ? 'text-emerald-600' : 'text-foreground'}`}>
+                        {hasFreeShipping ? 'Grátis' : formatPrice(shippingCost.toString())}
                       </span>
                     </div>
                   )}
