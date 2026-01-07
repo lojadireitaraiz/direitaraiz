@@ -10,12 +10,11 @@ import { useCartStore } from '@/stores/cartStore';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 
-// Mock coupon data
+// Coupon data (discount percentage is used for dynamic calculation)
 const availableCoupons = [
   {
     code: 'RAIZ10',
-    discount: '10% OFF',
-    savings: 'R$12,99',
+    discountPercent: 10,
     minItems: 2,
   },
 ];
@@ -483,10 +482,10 @@ export default function ProductDetail() {
                   </button>
                 </div>
                 <p className="text-sm text-gray-700">
-                  Você economiza <span className="text-green-600 font-medium">{coupon.savings}</span> na compra
+                  Você economiza <span className="text-green-600 font-medium">{formatPrice((price * coupon.discountPercent / 100).toString())}</span> na compra
                 </p>
                 <ul className="mt-2 text-sm text-gray-600 space-y-1">
-                  <li>• {coupon.discount}</li>
+                  <li>• {coupon.discountPercent}% OFF</li>
                   <li>• Mínimo do carrinho: {coupon.minItems} itens</li>
                 </ul>
               </div>
