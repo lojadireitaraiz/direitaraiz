@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Loader2, Minus, Plus, ShoppingCart, Truck, Star, CreditCard, Shield, RefreshCw, MapPin, Tag, X, Copy, Check } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2, Minus, Plus, Truck, Star, CreditCard, Shield, RefreshCw, MapPin, Tag, X, Copy, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { Header } from '@/components/store/Header';
 import { Footer } from '@/components/store/Footer';
@@ -13,16 +13,17 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { ProductReviews } from '@/components/store/ProductReviews';
 
 // Coupon data (discount percentage is used for dynamic calculation)
-const availableCoupons = [
-  {
-    code: 'RAIZ10',
-    discountPercent: 10,
-    minItems: 2,
-  },
-];
-
+const availableCoupons = [{
+  code: 'RAIZ10',
+  discountPercent: 10,
+  minItems: 2
+}];
 export default function ProductDetail() {
-  const { handle } = useParams<{ handle: string }>();
+  const {
+    handle
+  } = useParams<{
+    handle: string;
+  }>();
   const [product, setProduct] = useState<ShopifyProduct['node'] | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
@@ -41,9 +42,10 @@ export default function ProductDetail() {
   const [loadingCep, setLoadingCep] = useState(false);
   const [cepError, setCepError] = useState('');
   const [shippingSheetOpen, setShippingSheetOpen] = useState(false);
-  
-  const { addItem, setOpen } = useCartStore();
-
+  const {
+    addItem,
+    setOpen
+  } = useCartStore();
   useEffect(() => {
     async function loadProduct() {
       if (!handle) return;
@@ -63,48 +65,42 @@ export default function ProductDetail() {
     }
     loadProduct();
   }, [handle]);
-
   useEffect(() => {
     const handleScroll = () => {
       const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = (window.scrollY / scrollHeight) * 100;
+      const scrollPercent = window.scrollY / scrollHeight * 100;
       setShowMobileCart(scrollPercent >= 65);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
   const handleAddToCart = () => {
     if (!product || !selectedVariant) {
       toast.error('Selecione uma variante');
       return;
     }
-
     const variant = product.variants.edges.find(v => v.node.id === selectedVariant)?.node;
     if (!variant) return;
-
     addItem({
-      product: { node: product },
+      product: {
+        node: product
+      },
       variantId: variant.id,
       variantTitle: variant.title,
       price: variant.price,
       quantity,
-      selectedOptions: variant.selectedOptions,
+      selectedOptions: variant.selectedOptions
     });
-
     toast.success('Produto adicionado ao carrinho!', {
-      position: 'top-center',
+      position: 'top-center'
     });
     setOpen(true);
   };
-
   const formatCep = (value: string) => {
     const numbers = value.replace(/\D/g, '');
     if (numbers.length <= 5) return numbers;
     return `${numbers.slice(0, 5)}-${numbers.slice(5, 8)}`;
   };
-
   const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatCep(e.target.value);
     setCep(formatted);
@@ -113,58 +109,50 @@ export default function ProductDetail() {
       setShippingInfo(null);
     }
   };
-
   const calculateDeliveryDates = () => {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() + 9);
-    
     const endDate = new Date();
     endDate.setDate(endDate.getDate() + 12);
-    
     const formatDate = (date: Date) => {
-      return date.toLocaleDateString('pt-BR', { 
-        weekday: 'long', 
-        day: 'numeric', 
-        month: 'long' 
+      return date.toLocaleDateString('pt-BR', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long'
       });
     };
-    
     return {
       start: formatDate(startDate),
-      end: formatDate(endDate),
+      end: formatDate(endDate)
     };
   };
-
   const getTimeUntilCutoff = () => {
     const now = new Date();
     const cutoff = new Date();
     cutoff.setHours(18, 0, 0, 0); // 18:00 cutoff
-    
+
     if (now > cutoff) {
       cutoff.setDate(cutoff.getDate() + 1);
     }
-    
     const diff = cutoff.getTime() - now.getTime();
     const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    
-    return { hours, minutes };
+    const minutes = Math.floor(diff % (1000 * 60 * 60) / (1000 * 60));
+    return {
+      hours,
+      minutes
+    };
   };
-
   const fetchCepInfo = async () => {
     const cleanCep = cep.replace(/\D/g, '');
     if (cleanCep.length !== 8) {
       setCepError('CEP inválido');
       return;
     }
-
     setLoadingCep(true);
     setCepError('');
-
     try {
       const response = await fetch(`https://viacep.com.br/ws/${cleanCep}/json/`);
       const data = await response.json();
-
       if (data.erro) {
         setCepError('CEP não encontrado');
         setShippingInfo(null);
@@ -174,7 +162,7 @@ export default function ProductDetail() {
           city: data.localidade,
           state: data.uf,
           deliveryDateStart: dates.start,
-          deliveryDateEnd: dates.end,
+          deliveryDateEnd: dates.end
         });
       }
     } catch (error) {
@@ -184,34 +172,27 @@ export default function ProductDetail() {
       setLoadingCep(false);
     }
   };
-
   const nextImage = () => {
     if (product) {
-      setSelectedImage((prev) => (prev + 1) % product.images.edges.length);
+      setSelectedImage(prev => (prev + 1) % product.images.edges.length);
     }
   };
-
   const prevImage = () => {
     if (product) {
-      setSelectedImage((prev) => (prev - 1 + product.images.edges.length) % product.images.edges.length);
+      setSelectedImage(prev => (prev - 1 + product.images.edges.length) % product.images.edges.length);
     }
   };
-
   if (loading) {
-    return (
-      <div className="min-h-screen bg-background">
+    return <div className="min-h-screen bg-background">
         <Header />
         <div className="flex items-center justify-center py-20">
           <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
         </div>
         <Footer />
-      </div>
-    );
+      </div>;
   }
-
   if (!product) {
-    return (
-      <div className="min-h-screen bg-background">
+    return <div className="min-h-screen bg-background">
         <Header />
         <div className="flex flex-col items-center justify-center py-20">
           <p className="text-xl text-muted-foreground mb-4">Produto não encontrado</p>
@@ -220,10 +201,8 @@ export default function ProductDetail() {
           </Link>
         </div>
         <Footer />
-      </div>
-    );
+      </div>;
   }
-
   const currentVariant = product.variants.edges.find(v => v.node.id === selectedVariant)?.node;
   const price = currentVariant ? parseFloat(currentVariant.price.amount) : 0;
   const compareAtPrice = currentVariant?.compareAtPrice ? parseFloat(currentVariant.compareAtPrice.amount) : null;
@@ -232,14 +211,9 @@ export default function ProductDetail() {
   // Promo end date - 7 days from now
   const promoEndDate = new Date();
   promoEndDate.setDate(promoEndDate.getDate() + 7);
-
-  return (
-    <div className="min-h-screen bg-white">
+  return <div className="min-h-screen bg-white">
       <Header />
-      <PromoAlert 
-        message="FRETE GRÁTIS A PARTIR DE 2 PEÇAS" 
-        endDate={promoEndDate}
-      />
+      <PromoAlert message="FRETE GRÁTIS A PARTIR DE 2 PEÇAS" endDate={promoEndDate} />
       
       <main className="max-w-7xl mx-auto px-4 py-6">
         {/* Mobile Header */}
@@ -248,9 +222,7 @@ export default function ProductDetail() {
           <h1 className="font-bold text-2xl">{product.title}</h1>
           <div className="inline-flex items-center gap-2">
             <div className="flex text-yellow-400">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-5 h-5 fill-current" />
-              ))}
+              {[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5 fill-current" />)}
             </div>
             <span className="font-medium text-yellow-500">(42 avaliações)</span>
           </div>
@@ -260,71 +232,30 @@ export default function ProductDetail() {
           {/* Product Images - Carousel */}
           <section className="relative">
             <div className="relative w-full aspect-square max-w-[740px] mx-auto overflow-hidden rounded-lg bg-gray-100">
-              {product.images.edges[selectedImage]?.node && (
-                <img
-                  src={product.images.edges[selectedImage].node.url}
-                  alt={product.images.edges[selectedImage].node.altText || product.title}
-                  className="w-full h-full object-cover"
-                />
-              )}
+              {product.images.edges[selectedImage]?.node && <img src={product.images.edges[selectedImage].node.url} alt={product.images.edges[selectedImage].node.altText || product.title} className="w-full h-full object-cover" />}
               
               {/* Navigation Arrows */}
-              {product.images.edges.length > 1 && (
-                <>
-                  <button
-                    onClick={prevImage}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-black text-white rounded-full w-11 h-11 flex items-center justify-center z-10 hover:bg-black/80 transition-colors"
-                    aria-label="Imagem anterior"
-                  >
+              {product.images.edges.length > 1 && <>
+                  <button onClick={prevImage} className="absolute left-2 top-1/2 -translate-y-1/2 bg-black text-white rounded-full w-11 h-11 flex items-center justify-center z-10 hover:bg-black/80 transition-colors" aria-label="Imagem anterior">
                     <ChevronLeft className="w-5 h-5" />
                   </button>
-                  <button
-                    onClick={nextImage}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-black text-white rounded-full w-11 h-11 flex items-center justify-center z-10 hover:bg-black/80 transition-colors"
-                    aria-label="Próxima imagem"
-                  >
+                  <button onClick={nextImage} className="absolute right-2 top-1/2 -translate-y-1/2 bg-black text-white rounded-full w-11 h-11 flex items-center justify-center z-10 hover:bg-black/80 transition-colors" aria-label="Próxima imagem">
                     <ChevronRight className="w-5 h-5" />
                   </button>
-                </>
-              )}
+                </>}
 
               {/* Dots Indicator */}
-              {product.images.edges.length > 1 && (
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                  {product.images.edges.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedImage(index)}
-                      className={`w-3 h-3 rounded-full transition-colors ${
-                        selectedImage === index ? 'bg-gray-800' : 'bg-gray-300'
-                      }`}
-                      aria-label={`Imagem ${index + 1}`}
-                    />
-                  ))}
-                </div>
-              )}
+              {product.images.edges.length > 1 && <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                  {product.images.edges.map((_, index) => <button key={index} onClick={() => setSelectedImage(index)} className={`w-3 h-3 rounded-full transition-colors ${selectedImage === index ? 'bg-gray-800' : 'bg-gray-300'}`} aria-label={`Imagem ${index + 1}`} />)}
+                </div>}
             </div>
 
             {/* Thumbnails - Desktop */}
-            {product.images.edges.length > 1 && (
-              <div className="hidden lg:flex gap-2 mt-4 overflow-x-auto no-scrollbar">
-                {product.images.edges.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors ${
-                      selectedImage === index ? 'border-black' : 'border-transparent'
-                    }`}
-                  >
-                    <img
-                      src={image.node.url}
-                      alt={image.node.altText || `${product.title} ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
+            {product.images.edges.length > 1 && <div className="hidden lg:flex gap-2 mt-4 overflow-x-auto no-scrollbar">
+                {product.images.edges.map((image, index) => <button key={index} onClick={() => setSelectedImage(index)} className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors ${selectedImage === index ? 'border-black' : 'border-transparent'}`}>
+                    <img src={image.node.url} alt={image.node.altText || `${product.title} ${index + 1}`} className="w-full h-full object-cover" />
+                  </button>)}
+              </div>}
           </section>
 
           {/* Product Details */}
@@ -335,9 +266,7 @@ export default function ProductDetail() {
               <h1 className="font-bold text-2xl">{product.title}</h1>
               <div className="inline-flex items-center gap-2">
                 <div className="flex text-yellow-400">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-current" />
-                  ))}
+                  {[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5 fill-current" />)}
                 </div>
                 <span className="font-medium text-yellow-500">(42 avaliações)</span>
               </div>
@@ -346,20 +275,16 @@ export default function ProductDetail() {
             {/* Price Section */}
             <div className="flex flex-col items-start gap-1 font-medium mt-5 lg:mt-0">
               <span className="flex flex-col justify-center flex-wrap gap-1 font-semibold">
-                {compareAtPrice && discount > 0 && (
-                  <del className="text-gray-500">
+                {compareAtPrice && discount > 0 && <del className="text-gray-500">
                     <p className="text-lg font-medium text-gray-500">
                       {formatPrice(compareAtPrice.toString())}
                     </p>
-                  </del>
-                )}
+                  </del>}
                 <div className="flex items-center gap-2">
                   <p className="text-4xl font-bold">{formatPrice(price.toString())}</p>
-                  {discount > 0 && (
-                    <span className="text-sm text-green-800 font-medium py-1 px-3 leading-[21px] bg-green-100 rounded-md">
+                  {discount > 0 && <span className="text-sm text-green-800 font-medium py-1 px-3 leading-[21px] bg-green-100 rounded-md">
                       {discount}% OFF
-                    </span>
-                  )}
+                    </span>}
                 </div>
               </span>
               <p className="font-medium text-base">
@@ -368,24 +293,17 @@ export default function ProductDetail() {
             </div>
 
             {/* Delivery Estimate */}
-            {shippingInfo ? (
-              <div className="mt-3">
+            {shippingInfo ? <div className="mt-3">
                 <p className="text-sm text-gray-700">
                   Entrega entre <span className="font-bold text-gray-900">{shippingInfo.deliveryDateStart}</span> e <span className="font-bold text-gray-900">{shippingInfo.deliveryDateEnd}</span>.
                 </p>
                 <p className="text-sm text-gray-500 mt-1">
                   Comprando dentro das próximas <span className="font-medium text-green-600">{getTimeUntilCutoff().hours} horas e {getTimeUntilCutoff().minutes} minutos</span>.
                 </p>
-              </div>
-            ) : (
-              <button 
-                onClick={() => setShippingSheetOpen(true)}
-                className="flex mt-2 gap-2 items-center leading-4 text-blue-600 font-normal text-base hover:underline"
-              >
+              </div> : <button onClick={() => setShippingSheetOpen(true)} className="flex mt-2 gap-2 items-center leading-4 text-blue-600 font-normal text-base hover:underline">
                 <MapPin className="w-5 h-5" />
                 Calcule o prazo de entrega
-              </button>
-            )}
+              </button>}
 
             {/* Coupon Section */}
             <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200 mt-2">
@@ -393,10 +311,7 @@ export default function ProductDetail() {
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <span className="font-medium text-gray-900">Cupom</span>
-                  <button 
-                    onClick={() => setCouponSheetOpen(true)}
-                    className="text-blue-600 hover:underline text-sm font-normal"
-                  >
+                  <button onClick={() => setCouponSheetOpen(true)} className="text-blue-600 hover:underline text-sm font-normal">
                     Ver cupons disponíveis
                   </button>
                 </div>
@@ -406,170 +321,115 @@ export default function ProductDetail() {
 
             {/* Options - Modelo and Cor on same row */}
             {(() => {
-              const modeloOption = product.options.find(o => o.name.toLowerCase() === 'modelo' || o.name.toLowerCase() === 'model');
-              const corOption = product.options.find(o => o.name.toLowerCase() === 'cor' || o.name.toLowerCase() === 'color');
-              const tamanhoOption = product.options.find(o => o.name.toLowerCase() === 'tamanho' || o.name.toLowerCase() === 'size');
-              const otherOptions = product.options.filter(o => 
-                !['modelo', 'model', 'cor', 'color', 'tamanho', 'size'].includes(o.name.toLowerCase())
-              );
+            const modeloOption = product.options.find(o => o.name.toLowerCase() === 'modelo' || o.name.toLowerCase() === 'model');
+            const corOption = product.options.find(o => o.name.toLowerCase() === 'cor' || o.name.toLowerCase() === 'color');
+            const tamanhoOption = product.options.find(o => o.name.toLowerCase() === 'tamanho' || o.name.toLowerCase() === 'size');
+            const otherOptions = product.options.filter(o => !['modelo', 'model', 'cor', 'color', 'tamanho', 'size'].includes(o.name.toLowerCase()));
 
-              // Color mapping for visual color circles
-              const colorMap: Record<string, string> = {
-                'preto': '#000000',
-                'black': '#000000',
-                'marinho': '#222E4B',
-                'navy': '#222E4B',
-                'azul': '#1e3a8a',
-                'blue': '#1e3a8a',
-                'verde': '#003218',
-                'green': '#003218',
-                'amarelo': '#a16207',
-                'yellow': '#a16207',
-                'vermelho': '#991b1b',
-                'red': '#991b1b',
-                'branco': '#ffffff',
-                'white': '#ffffff',
-                'cinza': '#374151',
-                'gray': '#374151',
-                'rosa': '#be185d',
-                'pink': '#be185d',
-                'laranja': '#c2410c',
-                'orange': '#c2410c',
-                'roxo': '#5b21b6',
-                'purple': '#5b21b6',
-                'bege': '#CA8A00',
-                'beige': '#CA8A00',
-                'marrom': '#451a03',
-                'brown': '#451a03',
-              };
-
-              const getColorHex = (colorName: string) => {
-                const lowerName = colorName.toLowerCase();
-                return colorMap[lowerName] || '#222E4B';
-              };
-
-              const renderOption = (option: typeof product.options[0]) => {
-                const isColorOption = option.name.toLowerCase() === 'cor' || option.name.toLowerCase() === 'color';
-                const selectedColorName = isColorOption ? selectedOptions[option.name] : null;
-
-                return (
-                  <div key={option.name} className="flex flex-col items-start gap-2 flex-1">
+            // Color mapping for visual color circles
+            const colorMap: Record<string, string> = {
+              'preto': '#000000',
+              'black': '#000000',
+              'marinho': '#222E4B',
+              'navy': '#222E4B',
+              'azul': '#1e3a8a',
+              'blue': '#1e3a8a',
+              'verde': '#003218',
+              'green': '#003218',
+              'amarelo': '#a16207',
+              'yellow': '#a16207',
+              'vermelho': '#991b1b',
+              'red': '#991b1b',
+              'branco': '#ffffff',
+              'white': '#ffffff',
+              'cinza': '#374151',
+              'gray': '#374151',
+              'rosa': '#be185d',
+              'pink': '#be185d',
+              'laranja': '#c2410c',
+              'orange': '#c2410c',
+              'roxo': '#5b21b6',
+              'purple': '#5b21b6',
+              'bege': '#CA8A00',
+              'beige': '#CA8A00',
+              'marrom': '#451a03',
+              'brown': '#451a03'
+            };
+            const getColorHex = (colorName: string) => {
+              const lowerName = colorName.toLowerCase();
+              return colorMap[lowerName] || '#222E4B';
+            };
+            const renderOption = (option: typeof product.options[0]) => {
+              const isColorOption = option.name.toLowerCase() === 'cor' || option.name.toLowerCase() === 'color';
+              const selectedColorName = isColorOption ? selectedOptions[option.name] : null;
+              return <div key={option.name} className="flex flex-col items-start gap-2 flex-1">
                     <span className="font-bold text-gray-900">
                       {option.name}{isColorOption && selectedColorName ? `: ${selectedColorName}` : ''}
                     </span>
                     <div className="flex flex-wrap gap-3">
-                      {option.values.map((value) => {
-                        const isSelected = selectedOptions[option.name] === value;
-                        const variantWithValue = product.variants.edges.find(v => 
-                          v.node.selectedOptions.some(o => o.name === option.name && o.value === value)
-                        );
-                        const isAvailable = variantWithValue?.node.availableForSale ?? false;
-
-                        const handleOptionSelect = () => {
-                          const newSelectedOptions = { ...selectedOptions, [option.name]: value };
-                          setSelectedOptions(newSelectedOptions);
-                          const matchingVariant = product.variants.edges.find(v => 
-                            v.node.selectedOptions.every(opt => 
-                              newSelectedOptions[opt.name] === opt.value
-                            )
-                          );
-                          if (matchingVariant) {
-                            setSelectedVariant(matchingVariant.node.id);
-                          }
-                        };
-
-                        if (isColorOption) {
-                          const colorHex = getColorHex(value);
-                          const isWhite = colorHex.toLowerCase() === '#ffffff';
-                          return (
-                            <button
-                              key={value}
-                              onClick={handleOptionSelect}
-                              className={`w-9 h-9 rounded-full transition-all ${
-                                isSelected 
-                                  ? 'ring-2 ring-offset-2 ring-gray-900' 
-                                  : 'hover:ring-2 hover:ring-offset-2 hover:ring-gray-400'
-                              } ${!isAvailable ? 'opacity-50 cursor-not-allowed' : ''} ${
-                                isWhite ? 'border border-gray-300' : ''
-                              }`}
-                              style={{ backgroundColor: colorHex }}
-                              disabled={!isAvailable}
-                              title={value}
-                              aria-label={value}
-                            />
-                          );
-                        }
-
-                        return (
-                          <button
-                            key={value}
-                            onClick={handleOptionSelect}
-                            className={`px-4 py-2 border rounded-full text-sm font-medium transition-colors ${
-                              isSelected 
-                                ? 'border-[#111928] bg-[#111928] text-white' 
-                                : 'border-gray-300 hover:border-[#111928] bg-white text-gray-900'
-                            } ${!isAvailable ? 'opacity-50 cursor-not-allowed line-through' : ''}`}
-                            disabled={!isAvailable}
-                          >
+                      {option.values.map(value => {
+                    const isSelected = selectedOptions[option.name] === value;
+                    const variantWithValue = product.variants.edges.find(v => v.node.selectedOptions.some(o => o.name === option.name && o.value === value));
+                    const isAvailable = variantWithValue?.node.availableForSale ?? false;
+                    const handleOptionSelect = () => {
+                      const newSelectedOptions = {
+                        ...selectedOptions,
+                        [option.name]: value
+                      };
+                      setSelectedOptions(newSelectedOptions);
+                      const matchingVariant = product.variants.edges.find(v => v.node.selectedOptions.every(opt => newSelectedOptions[opt.name] === opt.value));
+                      if (matchingVariant) {
+                        setSelectedVariant(matchingVariant.node.id);
+                      }
+                    };
+                    if (isColorOption) {
+                      const colorHex = getColorHex(value);
+                      const isWhite = colorHex.toLowerCase() === '#ffffff';
+                      return <button key={value} onClick={handleOptionSelect} className={`w-9 h-9 rounded-full transition-all ${isSelected ? 'ring-2 ring-offset-2 ring-gray-900' : 'hover:ring-2 hover:ring-offset-2 hover:ring-gray-400'} ${!isAvailable ? 'opacity-50 cursor-not-allowed' : ''} ${isWhite ? 'border border-gray-300' : ''}`} style={{
+                        backgroundColor: colorHex
+                      }} disabled={!isAvailable} title={value} aria-label={value} />;
+                    }
+                    return <button key={value} onClick={handleOptionSelect} className={`px-4 py-2 border rounded-full text-sm font-medium transition-colors ${isSelected ? 'border-[#111928] bg-[#111928] text-white' : 'border-gray-300 hover:border-[#111928] bg-white text-gray-900'} ${!isAvailable ? 'opacity-50 cursor-not-allowed line-through' : ''}`} disabled={!isAvailable}>
                             {value}
-                          </button>
-                        );
-                      })}
+                          </button>;
+                  })}
                     </div>
-                  </div>
-                );
-              };
-
-              return (
-                <>
+                  </div>;
+            };
+            return <>
                   {/* Row 1: Modelo and Cor */}
-                  {(modeloOption || corOption) && (
-                    <div className="flex flex-col sm:flex-row gap-5">
+                  {(modeloOption || corOption) && <div className="flex flex-col sm:flex-row gap-5">
                       {modeloOption && renderOption(modeloOption)}
                       {corOption && renderOption(corOption)}
-                    </div>
-                  )}
+                    </div>}
 
                   {/* Row 2: Tamanho and Quantidade */}
-                  {(tamanhoOption || true) && (
-                    <div className="flex flex-col sm:flex-row gap-5">
+                  {(tamanhoOption || true) && <div className="flex flex-col sm:flex-row gap-5">
                       {tamanhoOption && renderOption(tamanhoOption)}
                       
                       {/* Quantity */}
                       <div className="flex flex-col items-start gap-2 flex-1">
                         <span className="font-bold text-gray-900">Quantidade</span>
                         <div className="flex items-center border border-gray-300 rounded-full overflow-hidden">
-                          <button
-                            onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                            className="p-3 hover:bg-gray-100 transition-colors"
-                          >
+                          <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="p-3 hover:bg-gray-100 transition-colors">
                             <Minus className="w-4 h-4" />
                           </button>
                           <span className="w-12 text-center font-medium">{quantity}</span>
-                          <button
-                            onClick={() => setQuantity(quantity + 1)}
-                            className="p-3 hover:bg-gray-100 transition-colors"
-                          >
+                          <button onClick={() => setQuantity(quantity + 1)} className="p-3 hover:bg-gray-100 transition-colors">
                             <Plus className="w-4 h-4" />
                           </button>
                         </div>
                       </div>
-                    </div>
-                  )}
+                    </div>}
 
                   {/* Other options */}
                   {otherOptions.map(option => renderOption(option))}
-                </>
-              );
-            })()}
+                </>;
+          })()}
 
             {/* Add to Cart Button */}
-            <Button
-              onClick={handleAddToCart}
-              className="w-full py-6 text-base font-medium bg-black text-white hover:bg-black/90 rounded-lg"
-              disabled={!currentVariant?.availableForSale}
-            >
-              <ShoppingCart className="w-5 h-5 mr-2" />
+            <Button onClick={handleAddToCart} className="w-full py-6 text-base font-medium bg-black text-white hover:bg-black/90 rounded-lg" disabled={!currentVariant?.availableForSale}>
+              
               {currentVariant?.availableForSale ? 'Adicionar ao Carrinho' : 'Produto indisponível'}
             </Button>
 
@@ -607,16 +467,10 @@ export default function ProductDetail() {
         <div className="mt-10 border-t border-gray-200 pt-6">
           <Tabs defaultValue="fabricacao" className="w-full">
             <TabsList className="w-full justify-center bg-transparent border-b border-gray-200 rounded-none h-auto p-0">
-              <TabsTrigger 
-                value="fabricacao" 
-                className="px-4 py-3 border-b-2 border-transparent data-[state=active]:border-gray-800 data-[state=active]:bg-transparent rounded-none text-gray-500 data-[state=active]:text-gray-800 font-medium"
-              >
+              <TabsTrigger value="fabricacao" className="px-4 py-3 border-b-2 border-transparent data-[state=active]:border-gray-800 data-[state=active]:bg-transparent rounded-none text-gray-500 data-[state=active]:text-gray-800 font-medium">
                 Fabricação
               </TabsTrigger>
-              <TabsTrigger 
-                value="material"
-                className="px-4 py-3 border-b-2 border-transparent data-[state=active]:border-gray-800 data-[state=active]:bg-transparent rounded-none text-gray-500 data-[state=active]:text-gray-800 font-medium"
-              >
+              <TabsTrigger value="material" className="px-4 py-3 border-b-2 border-transparent data-[state=active]:border-gray-800 data-[state=active]:bg-transparent rounded-none text-gray-500 data-[state=active]:text-gray-800 font-medium">
                 Material
               </TabsTrigger>
             </TabsList>
@@ -655,7 +509,7 @@ export default function ProductDetail() {
           <div className="flex flex-col bg-gray-50 rounded-lg px-4 py-6 items-center text-center">
             <svg version="1.0" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 mb-2" viewBox="0 0 452 452" preserveAspectRatio="xMidYMid meet">
               <g transform="translate(0,452) scale(0.1,-0.1)" fill="currentColor" className="text-gray-700" stroke="none">
-                <path d="M1605 4231 c-22 -10 -65 -39 -95 -65 -82 -72 -88 -73 -148 -35 -59 36 -109 41 -160 15 -72 -37 -82 -124 -26 -224 35 -62 36 -66 19 -78 -10 -8 -34 -17 -52 -20 -29 -5 -43 0 -91 33 -82 56 -116 68 -202 67 -95 0 -141 -16 -180 -61 -25 -28 -31 -43 -29 -73 2 -28 -3 -45 -24 -69 -40 -48 -37 -98 12 -197 22 -43 42 -100 46 -126 6 -41 4 -50 -17 -71 -14 -14 -51 -32 -84 -41 -116 -33 -149 -49 -200 -100 -43 -42 -56 -64 -75 -126 -30 -97 -33 -249 -6 -326 37 -107 137 -183 244 -187 51 -2 55 -4 60 -30 7 -36 64 -84 109 -93 79 -15 158 1 266 53 152 74 142 74 158 6 32 -147 97 -202 260 -218 81 -8 135 -23 154 -44 9 -11 15 -47 18 -107 3 -80 6 -95 30 -125 29 -40 85 -70 173 -96 71 -21 75 -32 51 -149 -40 -191 -1 -290 137 -348 53 -23 66 -34 86 -72 13 -24 41 -59 61 -78 31 -28 38 -41 42 -84 3 -34 14 -63 31 -85 l26 -34 -22 -20 c-12 -11 -56 -45 -98 -75 -149 -109 -213 -227 -164 -301 16 -25 61 -47 96 -47 10 0 49 -30 86 -67 37 -38 84 -77 104 -87 32 -17 36 -23 37 -61 1 -74 57 -126 118 -111 32 8 108 86 242 246 53 63 127 150 165 192 100 113 132 211 103 318 -15 54 -14 56 12 94 26 38 88 94 128 114 47 25 187 53 297 61 102 7 123 12 157 35 51 34 102 104 136 186 15 36 55 124 89 195 101 209 104 228 79 467 -8 69 -4 74 82 132 60 40 198 185 282 298 112 149 150 319 93 412 -26 41 -79 71 -166 90 -116 27 -121 30 -166 117 -74 142 -157 200 -308 220 -46 5 -105 14 -133 19 -28 6 -83 10 -122 10 l-71 0 -20 37 c-27 50 -85 89 -164 112 -99 29 -143 33 -194 21 -46 -12 -46 -12 -77 23 -17 20 -44 38 -59 42 -27 6 -28 8 -23 51 9 80 -50 267 -101 323 -26 28 -76 51 -112 51 -60 0 -134 -59 -176 -141 l-19 -39 -103 6 -102 7 -90 -48 c-74 -39 -102 -48 -157 -53 l-67 -5 -6 34 c-3 19 -10 86 -14 150 -9 126 -24 168 -66 187 -35 16 -53 15 -100 -7z m-5 -291 c0 -74 20 -136 57 -180 47 -55 85 -70 175 -70 97 1 148 13 240 61 l77 39 103 -6 c95 -5 106 -3 143 18 22 13 54 44 70 70 17 26 33 47 36 47 8 1 39 -109 39 -140 0 -13 -22 -62 -50 -109 -58 -99 -67 -158 -29 -199 50 -53 102 -48 178 18 l44 38 47 -49 c57 -59 99 -65 150 -21 l32 27 76 -20 c76 -19 76 -19 109 -77 49 -82 68 -92 183 -92 108 0 296 -20 355 -38 36 -11 43 -20 86 -100 25 -48 61 -103 80 -123 44 -45 117 -80 202 -95 37 -7 67 -18 67 -24 0 -35 -35 -119 -72 -172 -81 -115 -201 -244 -275 -294 -125 -85 -151 -138 -137 -288 17 -197 17 -198 -68 -376 -42 -88 -84 -178 -93 -200 -9 -22 -26 -55 -38 -72 -21 -32 -25 -33 -89 -33 -37 0 -111 -9 -165 -19 -204 -40 -311 -101 -402 -232 -58 -82 -69 -123 -52 -194 25 -105 25 -108 -11 -153 -63 -78 -279 -332 -283 -332 -16 0 -128 76 -155 106 -19 20 -49 52 -67 71 l-32 34 95 70 c119 89 157 146 151 226 -2 36 -12 64 -30 91 -16 23 -27 52 -27 73 -1 48 -33 113 -70 141 -18 12 -47 46 -65 74 -39 60 -79 93 -152 124 -50 21 -53 25 -53 57 0 19 7 63 16 97 10 38 15 89 12 137 -5 124 -53 175 -210 224 l-57 18 1 72 c1 61 -3 80 -28 125 -16 29 -47 66 -68 82 -46 33 -138 63 -221 73 -33 3 -69 8 -81 10 -23 5 -38 45 -49 131 -12 92 -64 144 -144 144 -43 0 -179 -45 -273 -91 -105 -50 -114 -50 -121 3 -6 48 -33 88 -71 107 -25 11 -35 10 -83 -8 -68 -26 -65 -26 -102 4 -43 37 -58 112 -42 203 18 101 38 128 108 147 124 35 153 47 198 87 56 49 85 104 92 172 6 58 -15 153 -48 218 l-21 42 25 18 c27 20 53 80 42 98 -15 25 54 7 100 -26 69 -49 109 -64 169 -64 81 0 144 26 203 85 64 65 78 117 48 187 -6 16 -3 17 24 12 45 -9 93 3 142 36 24 16 47 26 51 24 4 -3 8 -23 8 -44z"/>
+                <path d="M1605 4231 c-22 -10 -65 -39 -95 -65 -82 -72 -88 -73 -148 -35 -59 36 -109 41 -160 15 -72 -37 -82 -124 -26 -224 35 -62 36 -66 19 -78 -10 -8 -34 -17 -52 -20 -29 -5 -43 0 -91 33 -82 56 -116 68 -202 67 -95 0 -141 -16 -180 -61 -25 -28 -31 -43 -29 -73 2 -28 -3 -45 -24 -69 -40 -48 -37 -98 12 -197 22 -43 42 -100 46 -126 6 -41 4 -50 -17 -71 -14 -14 -51 -32 -84 -41 -116 -33 -149 -49 -200 -100 -43 -42 -56 -64 -75 -126 -30 -97 -33 -249 -6 -326 37 -107 137 -183 244 -187 51 -2 55 -4 60 -30 7 -36 64 -84 109 -93 79 -15 158 1 266 53 152 74 142 74 158 6 32 -147 97 -202 260 -218 81 -8 135 -23 154 -44 9 -11 15 -47 18 -107 3 -80 6 -95 30 -125 29 -40 85 -70 173 -96 71 -21 75 -32 51 -149 -40 -191 -1 -290 137 -348 53 -23 66 -34 86 -72 13 -24 41 -59 61 -78 31 -28 38 -41 42 -84 3 -34 14 -63 31 -85 l26 -34 -22 -20 c-12 -11 -56 -45 -98 -75 -149 -109 -213 -227 -164 -301 16 -25 61 -47 96 -47 10 0 49 -30 86 -67 37 -38 84 -77 104 -87 32 -17 36 -23 37 -61 1 -74 57 -126 118 -111 32 8 108 86 242 246 53 63 127 150 165 192 100 113 132 211 103 318 -15 54 -14 56 12 94 26 38 88 94 128 114 47 25 187 53 297 61 102 7 123 12 157 35 51 34 102 104 136 186 15 36 55 124 89 195 101 209 104 228 79 467 -8 69 -4 74 82 132 60 40 198 185 282 298 112 149 150 319 93 412 -26 41 -79 71 -166 90 -116 27 -121 30 -166 117 -74 142 -157 200 -308 220 -46 5 -105 14 -133 19 -28 6 -83 10 -122 10 l-71 0 -20 37 c-27 50 -85 89 -164 112 -99 29 -143 33 -194 21 -46 -12 -46 -12 -77 23 -17 20 -44 38 -59 42 -27 6 -28 8 -23 51 9 80 -50 267 -101 323 -26 28 -76 51 -112 51 -60 0 -134 -59 -176 -141 l-19 -39 -103 6 -102 7 -90 -48 c-74 -39 -102 -48 -157 -53 l-67 -5 -6 34 c-3 19 -10 86 -14 150 -9 126 -24 168 -66 187 -35 16 -53 15 -100 -7z m-5 -291 c0 -74 20 -136 57 -180 47 -55 85 -70 175 -70 97 1 148 13 240 61 l77 39 103 -6 c95 -5 106 -3 143 18 22 13 54 44 70 70 17 26 33 47 36 47 8 1 39 -109 39 -140 0 -13 -22 -62 -50 -109 -58 -99 -67 -158 -29 -199 50 -53 102 -48 178 18 l44 38 47 -49 c57 -59 99 -65 150 -21 l32 27 76 -20 c76 -19 76 -19 109 -77 49 -82 68 -92 183 -92 108 0 296 -20 355 -38 36 -11 43 -20 86 -100 25 -48 61 -103 80 -123 44 -45 117 -80 202 -95 37 -7 67 -18 67 -24 0 -35 -35 -119 -72 -172 -81 -115 -201 -244 -275 -294 -125 -85 -151 -138 -137 -288 17 -197 17 -198 -68 -376 -42 -88 -84 -178 -93 -200 -9 -22 -26 -55 -38 -72 -21 -32 -25 -33 -89 -33 -37 0 -111 -9 -165 -19 -204 -40 -311 -101 -402 -232 -58 -82 -69 -123 -52 -194 25 -105 25 -108 -11 -153 -63 -78 -279 -332 -283 -332 -16 0 -128 76 -155 106 -19 20 -49 52 -67 71 l-32 34 95 70 c119 89 157 146 151 226 -2 36 -12 64 -30 91 -16 23 -27 52 -27 73 -1 48 -33 113 -70 141 -18 12 -47 46 -65 74 -39 60 -79 93 -152 124 -50 21 -53 25 -53 57 0 19 7 63 16 97 10 38 15 89 12 137 -5 124 -53 175 -210 224 l-57 18 1 72 c1 61 -3 80 -28 125 -16 29 -47 66 -68 82 -46 33 -138 63 -221 73 -33 3 -69 8 -81 10 -23 5 -38 45 -49 131 -12 92 -64 144 -144 144 -43 0 -179 -45 -273 -91 -105 -50 -114 -50 -121 3 -6 48 -33 88 -71 107 -25 11 -35 10 -83 -8 -68 -26 -65 -26 -102 4 -43 37 -58 112 -42 203 18 101 38 128 108 147 124 35 153 47 198 87 56 49 85 104 92 172 6 58 -15 153 -48 218 l-21 42 25 18 c27 20 53 80 42 98 -15 25 54 7 100 -26 69 -49 109 -64 169 -64 81 0 144 26 203 85 64 65 78 117 48 187 -6 16 -3 17 24 12 45 -9 93 3 142 36 24 16 47 26 51 24 4 -3 8 -23 8 -44z" />
               </g>
             </svg>
             <p className="text-sm leading-tight font-bold text-gray-900">Todo o Brasil</p>
@@ -664,14 +518,12 @@ export default function ProductDetail() {
         </div>
 
         {/* Description */}
-        {product.description && (
-          <div className="mt-10">
+        {product.description && <div className="mt-10">
             <h3 className="font-medium text-xl mb-4">Descrição do Produto</h3>
             <p className="text-gray-600 leading-relaxed">
               {product.description}
             </p>
-          </div>
-        )}
+          </div>}
 
         {/* Reviews Section */}
         <ProductReviews />
@@ -679,11 +531,7 @@ export default function ProductDetail() {
 
       {/* Mobile Add to Cart Fixed Button */}
       <div className={`fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 lg:hidden z-30 transition-transform duration-300 ${showMobileCart ? 'translate-y-0' : 'translate-y-full'}`}>
-        <Button
-          onClick={handleAddToCart}
-          className="w-full py-4 text-base font-medium bg-black text-white hover:bg-black/90 rounded-lg"
-          disabled={!currentVariant?.availableForSale}
-        >
+        <Button onClick={handleAddToCart} className="w-full py-4 text-base font-medium bg-black text-white hover:bg-black/90 rounded-lg" disabled={!currentVariant?.availableForSale}>
           {currentVariant?.availableForSale ? 'Adicionar ao Carrinho' : 'Produto indisponível'}
         </Button>
       </div>
@@ -694,10 +542,7 @@ export default function ProductDetail() {
 
       {/* Coupon Sheet */}
       <Sheet open={couponSheetOpen} onOpenChange={setCouponSheetOpen}>
-        <SheetContent 
-          side="bottom" 
-          className="h-[50vh] rounded-t-2xl px-6 pt-6"
-        >
+        <SheetContent side="bottom" className="h-[50vh] rounded-t-2xl px-6 pt-6">
           <SheetHeader className="flex flex-row items-center justify-between pb-4">
             <SheetTitle className="text-xl font-semibold">Cupons</SheetTitle>
           </SheetHeader>
@@ -708,20 +553,16 @@ export default function ProductDetail() {
               Você pode apenas aplicar um cupom por compra.
             </p>
             
-            {availableCoupons.map((coupon) => (
-              <div key={coupon.code} className="border border-gray-200 rounded-lg p-4 bg-white">
+            {availableCoupons.map(coupon => <div key={coupon.code} className="border border-gray-200 rounded-lg p-4 bg-white">
                 <div className="flex items-center justify-between mb-2">
                   <span className="inline-flex items-center gap-1.5 text-sm text-green-800 font-bold py-1 px-3 leading-[21px] bg-green-100 rounded-md">
                     <Tag className="w-3.5 h-3.5" />
                     {coupon.code}
                   </span>
-                  <button 
-                    onClick={() => {
-                      navigator.clipboard.writeText(coupon.code);
-                      toast.success('Cupom copiado!');
-                    }}
-                    className="text-gray-400 hover:text-gray-600"
-                  >
+                  <button onClick={() => {
+                navigator.clipboard.writeText(coupon.code);
+                toast.success('Cupom copiado!');
+              }} className="text-gray-400 hover:text-gray-600">
                     <Copy className="w-4 h-4" />
                   </button>
                 </div>
@@ -732,18 +573,14 @@ export default function ProductDetail() {
                   <li>• {coupon.discountPercent}% OFF</li>
                   <li>• Mínimo do carrinho: {coupon.minItems} itens</li>
                 </ul>
-              </div>
-            ))}
+              </div>)}
           </div>
         </SheetContent>
       </Sheet>
 
       {/* Shipping Sheet */}
       <Sheet open={shippingSheetOpen} onOpenChange={setShippingSheetOpen}>
-        <SheetContent 
-          side="bottom" 
-          className="h-[50vh] rounded-t-2xl px-6 pt-6"
-        >
+        <SheetContent side="bottom" className="h-[50vh] rounded-t-2xl px-6 pt-6">
           <SheetHeader className="flex flex-row items-center justify-between pb-4">
             <SheetTitle className="text-xl font-semibold">Calcular frete e prazo</SheetTitle>
           </SheetHeader>
@@ -754,29 +591,15 @@ export default function ProductDetail() {
             </p>
             
             <div className="flex gap-2">
-              <input
-                type="text"
-                value={cep}
-                onChange={handleCepChange}
-                placeholder="00000-000"
-                maxLength={9}
-                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-              />
-              <button
-                onClick={fetchCepInfo}
-                disabled={loadingCep || cep.length < 9}
-                className="px-6 py-3 bg-black text-white rounded-lg text-base font-medium hover:bg-black/90 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
+              <input type="text" value={cep} onChange={handleCepChange} placeholder="00000-000" maxLength={9} className="flex-1 px-4 py-3 border border-gray-300 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent" />
+              <button onClick={fetchCepInfo} disabled={loadingCep || cep.length < 9} className="px-6 py-3 bg-black text-white rounded-lg text-base font-medium hover:bg-black/90 disabled:opacity-50 disabled:cursor-not-allowed">
                 {loadingCep ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Calcular'}
               </button>
             </div>
             
-            {cepError && (
-              <p className="text-red-500 text-sm">{cepError}</p>
-            )}
+            {cepError && <p className="text-red-500 text-sm">{cepError}</p>}
             
-            {shippingInfo && (
-              <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+            {shippingInfo && <div className="p-4 bg-green-50 rounded-lg border border-green-200">
                 <div className="flex items-center gap-2 text-green-700 mb-2">
                   <Check className="w-5 h-5" />
                   <span className="font-semibold text-lg">Entrega para {shippingInfo.city}, {shippingInfo.state}</span>
@@ -793,20 +616,13 @@ export default function ProductDetail() {
                     <p className="font-medium text-gray-900 text-sm">e {shippingInfo.deliveryDateEnd}</p>
                   </div>
                 </div>
-              </div>
-            )}
+              </div>}
             
-            <a 
-              href="https://buscacepinter.correios.com.br/app/endereco/index.php" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:underline text-sm inline-block"
-            >
+            <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm inline-block">
               Não sei meu CEP
             </a>
           </div>
         </SheetContent>
       </Sheet>
-    </div>
-  );
+    </div>;
 }
