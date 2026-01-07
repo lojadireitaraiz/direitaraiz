@@ -468,7 +468,7 @@ export default function ProductDetail() {
             {availableCoupons.map((coupon) => (
               <div key={coupon.code} className="border border-gray-200 rounded-lg p-4 bg-white">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="inline-flex items-center gap-1.5 text-sm text-green-800 font-medium py-1 px-3 leading-[21px] bg-green-100 rounded-md">
+                  <span className="inline-flex items-center gap-1.5 text-sm text-green-800 font-bold py-1 px-3 leading-[21px] bg-green-100 rounded-md">
                     <Tag className="w-3.5 h-3.5" />
                     {coupon.code}
                   </span>
