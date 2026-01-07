@@ -1,6 +1,5 @@
 import { Header } from '@/components/store/Header';
 import { Footer } from '@/components/store/Footer';
-import { Logo } from '@/components/store/Logo';
 import { Instagram, Globe } from 'lucide-react';
 
 export default function About() {
@@ -8,14 +7,16 @@ export default function About() {
       <Header />
       
       <main className="max-w-4xl mx-auto px-4 py-12 md:py-16">
-        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-          <Logo className="w-48 md:w-64 flex-shrink-0" />
-          
-          <div className="text-muted-foreground">
-            <p className="text-lg leading-relaxed text-primary text-left">
-              A Direita Raiz nasceu da vontade de vestir o Brasil de verdade — o povo que acorda cedo, fala o que pensa e tem orgulho de suas origens. Aqui, cada camiseta carrega atitude, liberdade e identidade, sem filtros e sem frescura. Somos mais que uma marca: somos a voz de quem não se dobra, de quem carrega no peito a força, a garra e o humor do brasileiro raiz. Nossas peças são criadas pra quem vive com propósito, pra quem acredita que o estilo também é uma forma de expressão.
-            </p>
-          </div>
+        <div className="text-center mb-12">
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            DIREITA RAIZ
+          </h1>
+        </div>
+        
+        <div className="text-muted-foreground text-center max-w-2xl mx-auto">
+          <p className="text-lg leading-relaxed text-primary text-left">
+            A Direita Raiz nasceu da vontade de vestir o Brasil de verdade — o povo que acorda cedo, fala o que pensa e tem orgulho de suas origens. Aqui, cada camiseta carrega atitude, liberdade e identidade, sem filtros e sem frescura. Somos mais que uma marca: somos a voz de quem não se dobra, de quem carrega no peito a força, a garra e o humor do brasileiro raiz. Nossas peças são criadas pra quem vive com propósito, pra quem acredita que o estilo também é uma forma de expressão.
+          </p>
         </div>
 
         <div className="flex justify-center gap-4 mt-12">
