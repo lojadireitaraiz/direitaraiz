@@ -354,7 +354,7 @@ export default function ProductDetail() {
                   </del>
                 )}
                 <div className="flex items-center gap-2">
-                  <p className="text-4xl font-medium">{formatPrice(price.toString())}</p>
+                  <p className="text-4xl font-bold">{formatPrice(price.toString())}</p>
                   {discount > 0 && (
                     <span className="text-sm text-green-800 font-medium py-1 px-3 leading-[21px] bg-green-100 rounded-md">
                       {discount}% OFF
