@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Instagram, Globe } from 'lucide-react';
 import { Logo } from './Logo';
-
+import seloPci from '@/assets/selo-pci.png';
 export function Footer() {
   return (
     <footer className="store-footer bg-black text-white">
@@ -58,13 +58,11 @@ export function Footer() {
                     />
                   </div>
                 </a>
-                <div className="bg-white rounded px-2 py-1.5 flex items-center justify-center">
-                  <img 
-                    src="https://www.yampi.com.br/_nuxt/img/logo-pci.e3243d4.svg" 
-                    alt="Selo PCI" 
-                    className="h-8"
-                  />
-                </div>
+                <img 
+                  src={seloPci} 
+                  alt="Selo PCI DSS Compliant" 
+                  className="h-10"
+                />
               </div>
             </div>
 
