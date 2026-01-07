@@ -116,7 +116,7 @@ export function Header() {
 
             {/* Logo - Center */}
             <Link to="/" className="navbar-brand">
-              <Logo className="h-12 w-auto" />
+              <Logo className="h-8 md:h-12 w-auto" />
             </Link>
 
             {/* Right Actions */}
