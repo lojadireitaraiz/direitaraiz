@@ -26,7 +26,6 @@ export default function ProductDetail() {
   const [product, setProduct] = useState<ShopifyProduct['node'] | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
-  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [showMobileCart, setShowMobileCart] = useState(false);
@@ -52,33 +51,11 @@ export default function ProductDetail() {
       setProduct(data);
       if (data?.variants.edges[0]) {
         setSelectedVariant(data.variants.edges[0].node.id);
-        // Initialize selected options from first variant
-        const initialOptions: Record<string, string> = {};
-        data.variants.edges[0].node.selectedOptions.forEach(opt => {
-          initialOptions[opt.name] = opt.value;
-        });
-        setSelectedOptions(initialOptions);
       }
       setLoading(false);
     }
     loadProduct();
   }, [handle]);
-
-  // Handle option change and find matching variant
-  const handleOptionChange = (optionName: string, value: string) => {
-    const newOptions = { ...selectedOptions, [optionName]: value };
-    setSelectedOptions(newOptions);
-    
-    // Find variant that matches all selected options
-    if (product) {
-      const matchingVariant = product.variants.edges.find(v => 
-        v.node.selectedOptions.every(opt => newOptions[opt.name] === opt.value)
-      );
-      if (matchingVariant) {
-        setSelectedVariant(matchingVariant.node.id);
-      }
-    }
-  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -420,122 +397,53 @@ export default function ProductDetail() {
               </div>
             </div>
 
-            {/* Options - Grid Layout */}
-            <div className="grid grid-cols-2 gap-x-8 gap-y-6">
-              {/* Modelo */}
-              {product.options.find(o => o.name === 'Modelo') && (
-                <div className="flex flex-col items-start gap-3">
-                  <span className="font-medium text-gray-900">Modelo</span>
-                  <div className="flex flex-wrap gap-2">
-                    {product.options.find(o => o.name === 'Modelo')?.values.map((value) => {
-                      const variant = product.variants.edges.find(v => 
-                        v.node.selectedOptions.some(o => o.name === 'Modelo' && o.value === value)
-                      );
-                      const isSelected = selectedOptions['Modelo'] === value;
-                      
-                      return (
-                        <button
-                          key={value}
-                          onClick={() => handleOptionChange('Modelo', value)}
-                          className={`px-5 py-2 border-2 rounded-full text-sm font-medium transition-colors ${
-                            isSelected 
-                              ? 'border-black bg-white text-black' 
-                              : 'border-gray-300 hover:border-gray-400 bg-white text-gray-700'
-                          }`}
-                        >
-                          {value.toLowerCase()}
-                        </button>
-                      );
-                    })}
-                  </div>
+            {/* Options */}
+            {product.options.map((option) => (
+              <div key={option.name} className="flex flex-col items-start gap-2">
+                <span className="font-medium text-gray-900">{option.name}</span>
+                <div className="flex flex-wrap gap-3">
+                  {option.values.map((value) => {
+                    const variant = product.variants.edges.find(v => 
+                      v.node.selectedOptions.some(o => o.name === option.name && o.value === value)
+                    );
+                    const isSelected = variant?.node.id === selectedVariant;
+                    
+                    return (
+                      <button
+                        key={value}
+                        onClick={() => variant && setSelectedVariant(variant.node.id)}
+                        className={`px-4 py-2 border rounded-full text-sm font-medium transition-colors ${
+                          isSelected 
+                            ? 'border-black bg-black text-white' 
+                            : 'border-gray-300 hover:border-black bg-white text-gray-900'
+                        } ${!variant?.node.availableForSale ? 'opacity-50 cursor-not-allowed line-through' : ''}`}
+                        disabled={!variant?.node.availableForSale}
+                      >
+                        {value}
+                      </button>
+                    );
+                  })}
                 </div>
-              )}
+              </div>
+            ))}
 
-              {/* Cor */}
-              {product.options.find(o => o.name === 'Cor') && (
-                <div className="flex flex-col items-start gap-3">
-                  <span className="font-medium text-gray-900">Cor</span>
-                  <div className="flex flex-wrap gap-2">
-                    {product.options.find(o => o.name === 'Cor')?.values.map((value) => {
-                      const isSelected = selectedOptions['Cor'] === value;
-                      const colorMap: Record<string, string> = {
-                        'Preto': '#1a1a1a',
-                        'Azul Marinho': '#1e3a5f',
-                        'Verde': '#1a5c3a',
-                        'Bege': '#c9a227',
-                        'Branco': '#ffffff',
-                        'Cinza': '#6b7280',
-                        'Vermelho': '#dc2626',
-                        'Amarelo': '#eab308',
-                        'Rosa': '#ec4899',
-                        'Azul': '#3b82f6',
-                      };
-                      const bgColor = colorMap[value] || '#6b7280';
-                      
-                      return (
-                        <button
-                          key={value}
-                          onClick={() => handleOptionChange('Cor', value)}
-                          className={`w-8 h-8 rounded-full transition-all ${
-                            isSelected 
-                              ? 'ring-2 ring-offset-2 ring-black' 
-                              : 'hover:ring-2 hover:ring-offset-2 hover:ring-gray-300'
-                          }`}
-                          style={{ backgroundColor: bgColor }}
-                          title={value}
-                        />
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {/* Tamanho */}
-              {product.options.find(o => o.name === 'Tamanho') && (
-                <div className="flex flex-col items-start gap-3">
-                  <span className="font-medium text-gray-900">Tamanho</span>
-                  <div className="flex flex-wrap gap-2">
-                    {product.options.find(o => o.name === 'Tamanho')?.values.map((value) => {
-                      const isSelected = selectedOptions['Tamanho'] === value;
-                      
-                      return (
-                        <button
-                          key={value}
-                          onClick={() => handleOptionChange('Tamanho', value)}
-                          className={`w-11 h-11 rounded-full border-2 text-sm font-medium transition-colors flex items-center justify-center ${
-                            isSelected 
-                              ? 'border-black bg-white text-black' 
-                              : 'border-gray-300 hover:border-gray-400 bg-white text-gray-700'
-                          }`}
-                        >
-                          {value}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {/* Quantidade */}
-              <div className="flex flex-col items-start gap-3">
-                <span className="font-medium text-gray-900">Quantidade</span>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-11 h-11 rounded-full border-2 border-gray-300 hover:border-gray-400 flex items-center justify-center transition-colors"
-                  >
-                    <Minus className="w-4 h-4" />
-                  </button>
-                  <span className="w-11 h-11 rounded-full border-2 border-gray-300 flex items-center justify-center font-medium">
-                    {quantity}
-                  </span>
-                  <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="w-11 h-11 rounded-full border-2 border-gray-300 hover:border-gray-400 flex items-center justify-center transition-colors"
-                  >
-                    <Plus className="w-4 h-4" />
-                  </button>
-                </div>
+            {/* Quantity */}
+            <div className="flex flex-col items-start gap-2">
+              <span className="font-medium text-gray-900">Quantidade</span>
+              <div className="flex items-center border border-gray-300 rounded-full overflow-hidden">
+                <button
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="p-3 hover:bg-gray-100 transition-colors"
+                >
+                  <Minus className="w-4 h-4" />
+                </button>
+                <span className="w-12 text-center font-medium">{quantity}</span>
+                <button
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="p-3 hover:bg-gray-100 transition-colors"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
               </div>
             </div>
 
