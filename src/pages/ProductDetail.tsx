@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Loader2, Minus, Plus, Truck, Star, CreditCard, Shield, RefreshCw, MapPin, Tag, X, Copy, Check } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2, Minus, Plus, Truck, Star, CreditCard, Shield, RefreshCw, MapPin, Tag, Copy, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { Header } from '@/components/store/Header';
 import { Footer } from '@/components/store/Footer';
@@ -10,7 +10,7 @@ import { fetchProductByHandle, formatPrice, calculateDiscount, calculateInstallm
 import { useCartStore } from '@/stores/cartStore';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { ProductReviews } from '@/components/store/ProductReviews';
+import { ProductGrid } from '@/components/store/ProductGrid';
 
 // Coupon data (discount percentage is used for dynamic calculation)
 const availableCoupons = [{
@@ -596,16 +596,10 @@ export default function ProductDetail() {
           </div>
         </div>
 
-        {/* Description */}
-        {product.description && <div className="mt-10">
-            <h3 className="font-medium text-xl mb-4">Descrição do Produto</h3>
-            <p className="text-gray-600 leading-relaxed">
-              {product.description}
-            </p>
-          </div>}
-
-        {/* Reviews Section */}
-        <ProductReviews />
+        {/* Product Collection */}
+        <div className="mt-10">
+          <ProductGrid title="Você também pode gostar" />
+        </div>
       </main>
 
       {/* Mobile Add to Cart Fixed Button */}
