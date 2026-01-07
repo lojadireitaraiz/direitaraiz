@@ -231,31 +231,110 @@ export default function ProductDetail() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Product Images - Carousel */}
           <section className="relative">
-            <div className="relative w-full aspect-square max-w-[740px] mx-auto overflow-hidden rounded-lg bg-gray-100">
-              {product.images.edges[selectedImage]?.node && <img src={product.images.edges[selectedImage].node.url} alt={product.images.edges[selectedImage].node.altText || product.title} className="w-full h-full object-cover" />}
+            {/* Build image list: product images + unique variant images */}
+            {(() => {
+              const productImages = product.images.edges.map(e => e.node);
+              const variantImages = product.variants.edges
+                .filter(v => v.node.image?.url)
+                .map(v => ({
+                  url: v.node.image!.url,
+                  altText: v.node.image!.altText,
+                  variantId: v.node.id,
+                  color: v.node.selectedOptions.find(o => 
+                    o.name.toLowerCase() === 'cor' || o.name.toLowerCase() === 'color'
+                  )?.value
+                }));
               
-              {/* Navigation Arrows */}
-              {product.images.edges.length > 1 && <>
-                  <button onClick={prevImage} className="absolute left-2 top-1/2 -translate-y-1/2 bg-black text-white rounded-full w-11 h-11 flex items-center justify-center z-10 hover:bg-black/80 transition-colors" aria-label="Imagem anterior">
-                    <ChevronLeft className="w-5 h-5" />
-                  </button>
-                  <button onClick={nextImage} className="absolute right-2 top-1/2 -translate-y-1/2 bg-black text-white rounded-full w-11 h-11 flex items-center justify-center z-10 hover:bg-black/80 transition-colors" aria-label="Próxima imagem">
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                </>}
+              // Get unique variant images (by URL) that aren't already in product images
+              const productImageUrls = new Set(productImages.map(img => img.url));
+              const uniqueVariantImages = variantImages.filter(
+                (img, index, self) => 
+                  !productImageUrls.has(img.url) && 
+                  self.findIndex(i => i.url === img.url) === index
+              );
+              
+              // All images for the gallery
+              const allImages = [
+                ...productImages.map(img => ({ ...img, isVariant: false, color: undefined as string | undefined })),
+                ...uniqueVariantImages.map(img => ({ url: img.url, altText: img.altText, isVariant: true, color: img.color }))
+              ];
+              
+              // Find image index for currently selected color
+              const selectedColor = selectedOptions['Cor'] || selectedOptions['Color'] || selectedOptions['cor'] || selectedOptions['color'];
+              const variantImageForColor = selectedColor 
+                ? allImages.findIndex(img => img.color?.toLowerCase() === selectedColor.toLowerCase())
+                : -1;
+              
+              const currentImageIndex = variantImageForColor >= 0 ? variantImageForColor : selectedImage;
+              const currentImage = allImages[currentImageIndex] || allImages[0];
+              
+              return (
+                <>
+                  <div className="relative w-full aspect-square max-w-[740px] mx-auto overflow-hidden rounded-lg bg-gray-100">
+                    {currentImage && (
+                      <img 
+                        src={currentImage.url} 
+                        alt={currentImage.altText || product.title} 
+                        className="w-full h-full object-cover" 
+                      />
+                    )}
+                    
+                    {/* Navigation Arrows */}
+                    {allImages.length > 1 && (
+                      <>
+                        <button 
+                          onClick={() => setSelectedImage((currentImageIndex - 1 + allImages.length) % allImages.length)} 
+                          className="absolute left-2 top-1/2 -translate-y-1/2 bg-black text-white rounded-full w-11 h-11 flex items-center justify-center z-10 hover:bg-black/80 transition-colors" 
+                          aria-label="Imagem anterior"
+                        >
+                          <ChevronLeft className="w-5 h-5" />
+                        </button>
+                        <button 
+                          onClick={() => setSelectedImage((currentImageIndex + 1) % allImages.length)} 
+                          className="absolute right-2 top-1/2 -translate-y-1/2 bg-black text-white rounded-full w-11 h-11 flex items-center justify-center z-10 hover:bg-black/80 transition-colors" 
+                          aria-label="Próxima imagem"
+                        >
+                          <ChevronRight className="w-5 h-5" />
+                        </button>
+                      </>
+                    )}
 
-              {/* Dots Indicator */}
-              {product.images.edges.length > 1 && <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                  {product.images.edges.map((_, index) => <button key={index} onClick={() => setSelectedImage(index)} className={`w-3 h-3 rounded-full transition-colors ${selectedImage === index ? 'bg-gray-800' : 'bg-gray-300'}`} aria-label={`Imagem ${index + 1}`} />)}
-                </div>}
-            </div>
+                    {/* Dots Indicator */}
+                    {allImages.length > 1 && (
+                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                        {allImages.map((_, index) => (
+                          <button 
+                            key={index} 
+                            onClick={() => setSelectedImage(index)} 
+                            className={`w-3 h-3 rounded-full transition-colors ${currentImageIndex === index ? 'bg-gray-800' : 'bg-gray-300'}`} 
+                            aria-label={`Imagem ${index + 1}`} 
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
 
-            {/* Thumbnails - Desktop */}
-            {product.images.edges.length > 1 && <div className="hidden lg:flex gap-2 mt-4 overflow-x-auto no-scrollbar">
-                {product.images.edges.map((image, index) => <button key={index} onClick={() => setSelectedImage(index)} className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors ${selectedImage === index ? 'border-black' : 'border-transparent'}`}>
-                    <img src={image.node.url} alt={image.node.altText || `${product.title} ${index + 1}`} className="w-full h-full object-cover" />
-                  </button>)}
-              </div>}
+                  {/* Thumbnails - Desktop */}
+                  {allImages.length > 1 && (
+                    <div className="hidden lg:flex gap-2 mt-4 overflow-x-auto no-scrollbar">
+                      {allImages.map((image, index) => (
+                        <button 
+                          key={index} 
+                          onClick={() => setSelectedImage(index)} 
+                          className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors ${currentImageIndex === index ? 'border-black' : 'border-transparent'}`}
+                        >
+                          <img 
+                            src={image.url} 
+                            alt={image.altText || `${product.title} ${index + 1}`} 
+                            className="w-full h-full object-cover" 
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </>
+              );
+            })()}
           </section>
 
           {/* Product Details */}
