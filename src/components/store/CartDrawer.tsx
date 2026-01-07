@@ -295,7 +295,7 @@ export function CartDrawer() {
 
                 {/* Checkout Button */}
                 <div className="p-4">
-                  <Button onClick={handleCheckout} className="w-full bg-black text-white hover:bg-black/90 py-6 text-base font-medium rounded-full" disabled={items.length === 0 || isLoading}>
+                  <Button onClick={handleCheckout} className="w-full bg-black text-white hover:bg-black/90 py-6 text-base font-medium rounded-lg" disabled={items.length === 0 || isLoading}>
                     {isLoading ? <>
                         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                         Processando...
