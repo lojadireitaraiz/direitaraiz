@@ -47,7 +47,7 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-black text-white">
+      <header className="bg-black text-white">
         {/* Benefits Bar */}
         <div className="bg-neutral-900 text-white py-2.5 px-4 text-sm flex items-center justify-center overflow-hidden h-10">
           <span 
