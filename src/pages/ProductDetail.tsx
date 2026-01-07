@@ -476,7 +476,7 @@ export default function ProductDetail() {
                         <button
                           key={value}
                           onClick={() => handleOptionChange('Cor', value)}
-                          className={`w-10 h-10 rounded-full transition-all ${
+                          className={`w-8 h-8 rounded-full transition-all ${
                             isSelected 
                               ? 'ring-2 ring-offset-2 ring-black' 
                               : 'hover:ring-2 hover:ring-offset-2 hover:ring-gray-300'
