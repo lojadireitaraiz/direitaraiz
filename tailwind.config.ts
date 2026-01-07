@@ -87,7 +87,8 @@ export default {
 				'badge-discount': 'hsl(var(--store-badge-discount))'
 			},
 			emerald: {
-				500: '#0E9F81'
+				500: '#0E9F81',
+				600: '#50B150'
 			},
   			sidebar: {
   				DEFAULT: 'hsl(var(--sidebar-background))',
