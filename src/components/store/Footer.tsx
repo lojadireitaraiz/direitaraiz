@@ -86,8 +86,8 @@ export function Footer() {
             <Logo className="w-20 h-auto mb-4 md:ml-auto" />
             <div className="text-sm text-neutral-400 space-y-1">
               <p>
-                <a href="mailto:nacaoraizbrasil@gmail.com" className="hover:text-white">
-                  nacaoraizbrasil@gmail.com
+                <a href="mailto:suporte@direitaraiz.com" className="hover:text-white">
+                  suporte@direitaraiz.com
                 </a>
               </p>
               <p>Rua Euclides Miragaia, 660</p>
