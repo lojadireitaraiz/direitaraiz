@@ -16,6 +16,7 @@ export default function ProductDetail() {
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [showMobileCart, setShowMobileCart] = useState(false);
   
   const { addItem, setOpen } = useCartStore();
 
@@ -32,6 +33,17 @@ export default function ProductDetail() {
     }
     loadProduct();
   }, [handle]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = (window.scrollY / scrollHeight) * 100;
+      setShowMobileCart(scrollPercent >= 65);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleAddToCart = () => {
     if (!product || !selectedVariant) {
@@ -395,7 +407,7 @@ export default function ProductDetail() {
       </main>
 
       {/* Mobile Add to Cart Fixed Button */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 lg:hidden z-30">
+      <div className={`fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 lg:hidden z-30 transition-transform duration-300 ${showMobileCart ? 'translate-y-0' : 'translate-y-full'}`}>
         <Button
           onClick={handleAddToCart}
           className="w-full py-4 text-base font-medium bg-black text-white hover:bg-black/90 rounded-lg"
