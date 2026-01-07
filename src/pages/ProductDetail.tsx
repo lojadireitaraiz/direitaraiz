@@ -37,6 +37,7 @@ export default function ProductDetail() {
   } | null>(null);
   const [loadingCep, setLoadingCep] = useState(false);
   const [cepError, setCepError] = useState('');
+  const [shippingSheetOpen, setShippingSheetOpen] = useState(false);
   
   const { addItem, setOpen } = useCartStore();
 
@@ -329,57 +330,33 @@ export default function ProductDetail() {
             </div>
 
             {/* Delivery Estimate */}
-            <div className="mt-2 p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <div className="flex items-center gap-2 mb-3">
-                <Truck className="w-5 h-5 text-gray-700" />
-                <span className="font-medium text-gray-900">Calcular frete e prazo</span>
-              </div>
-              
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={cep}
-                  onChange={handleCepChange}
-                  placeholder="00000-000"
-                  maxLength={9}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-                />
-                <button
-                  onClick={fetchCepInfo}
-                  disabled={loadingCep || cep.length < 9}
-                  className="px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-black/90 disabled:opacity-50 disabled:cursor-not-allowed"
+            {shippingInfo ? (
+              <div className="flex mt-2 gap-2 items-center p-3 bg-green-50 rounded-lg border border-green-200">
+                <Truck className="w-5 h-5 text-green-600" />
+                <div className="flex-1">
+                  <p className="text-sm text-gray-700">
+                    <span className="font-medium text-green-600">Frete Grátis</span> para {shippingInfo.city}, {shippingInfo.state}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Receba até <span className="font-medium">{shippingInfo.deliveryDate}</span>
+                  </p>
+                </div>
+                <button 
+                  onClick={() => setShippingSheetOpen(true)}
+                  className="text-blue-600 hover:underline text-sm"
                 >
-                  {loadingCep ? <Loader2 className="w-4 h-4 animate-spin" /> : 'OK'}
+                  Alterar
                 </button>
               </div>
-              
-              {cepError && (
-                <p className="text-red-500 text-sm mt-2">{cepError}</p>
-              )}
-              
-              {shippingInfo && (
-                <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
-                  <div className="flex items-center gap-2 text-green-700">
-                    <Check className="w-4 h-4" />
-                    <span className="font-medium">Entrega para {shippingInfo.city}, {shippingInfo.state}</span>
-                  </div>
-                  <p className="text-sm text-gray-700 mt-1">
-                    <span className="font-medium text-green-600">Frete Grátis</span> - Previsão de entrega:{' '}
-                    <span className="font-medium">{shippingInfo.deliveryDate}</span>
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">Prazo de 9 dias úteis após confirmação do pagamento</p>
-                </div>
-              )}
-              
-              <a 
-                href="https://buscacepinter.correios.com.br/app/endereco/index.php" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:underline text-xs mt-2 inline-block"
+            ) : (
+              <button 
+                onClick={() => setShippingSheetOpen(true)}
+                className="flex mt-2 gap-2 items-center leading-4 text-blue-600 font-normal text-base hover:underline"
               >
-                Não sei meu CEP
-              </a>
-            </div>
+                <MapPin className="w-5 h-5" />
+                Calcule o prazo de entrega
+              </button>
+            )}
 
             {/* Coupon Section */}
             <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200 mt-2">
@@ -616,6 +593,75 @@ export default function ProductDetail() {
                 </ul>
               </div>
             ))}
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* Shipping Sheet */}
+      <Sheet open={shippingSheetOpen} onOpenChange={setShippingSheetOpen}>
+        <SheetContent 
+          side="bottom" 
+          className="h-[50vh] rounded-t-2xl px-6 pt-6"
+        >
+          <SheetHeader className="flex flex-row items-center justify-between pb-4">
+            <SheetTitle className="text-xl font-semibold">Calcular frete e prazo</SheetTitle>
+          </SheetHeader>
+          
+          <div className="space-y-4">
+            <p className="text-gray-500 text-sm">
+              Digite seu CEP para calcular o prazo de entrega.
+            </p>
+            
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={cep}
+                onChange={handleCepChange}
+                placeholder="00000-000"
+                maxLength={9}
+                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+              />
+              <button
+                onClick={fetchCepInfo}
+                disabled={loadingCep || cep.length < 9}
+                className="px-6 py-3 bg-black text-white rounded-lg text-base font-medium hover:bg-black/90 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loadingCep ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Calcular'}
+              </button>
+            </div>
+            
+            {cepError && (
+              <p className="text-red-500 text-sm">{cepError}</p>
+            )}
+            
+            {shippingInfo && (
+              <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                <div className="flex items-center gap-2 text-green-700 mb-2">
+                  <Check className="w-5 h-5" />
+                  <span className="font-semibold text-lg">Entrega para {shippingInfo.city}, {shippingInfo.state}</span>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200">
+                  <Truck className="w-6 h-6 text-green-600" />
+                  <div className="flex-1">
+                    <p className="font-medium text-green-600">Frete Grátis</p>
+                    <p className="text-sm text-gray-600">Prazo de 9 dias úteis</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-gray-500">Receba até</p>
+                    <p className="font-medium text-gray-900">{shippingInfo.deliveryDate}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            <a 
+              href="https://buscacepinter.correios.com.br/app/endereco/index.php" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:underline text-sm inline-block"
+            >
+              Não sei meu CEP
+            </a>
           </div>
         </SheetContent>
       </Sheet>
