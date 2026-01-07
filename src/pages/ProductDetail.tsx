@@ -10,6 +10,7 @@ import { fetchProductByHandle, formatPrice, calculateDiscount, calculateInstallm
 import { useCartStore } from '@/stores/cartStore';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { ProductReviews } from '@/components/store/ProductReviews';
 
 // Coupon data (discount percentage is used for dynamic calculation)
 const availableCoupons = [
@@ -555,6 +556,9 @@ export default function ProductDetail() {
             </p>
           </div>
         )}
+
+        {/* Reviews Section */}
+        <ProductReviews />
       </main>
 
       {/* Mobile Add to Cart Fixed Button */}
