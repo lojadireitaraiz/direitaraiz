@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Instagram, Globe } from 'lucide-react';
+import { Logo } from './Logo';
 
 export function Footer() {
   return (
@@ -82,7 +83,7 @@ export function Footer() {
 
           {/* Contact */}
           <div className="md:text-right">
-            <h3 className="font-bold text-lg mb-4 text-white">NAÇÃO RAIZ</h3>
+            <Logo className="w-24 h-auto mb-4 md:ml-auto" />
             <div className="text-sm text-neutral-400 space-y-1">
               <p>
                 <a href="mailto:nacaoraizbrasil@gmail.com" className="hover:text-white">
