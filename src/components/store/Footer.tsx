@@ -83,7 +83,7 @@ export function Footer() {
 
           {/* Contact */}
           <div className="md:text-right">
-            <Logo className="w-24 h-auto mb-4 md:ml-auto" />
+            <Logo className="w-20 h-auto mb-4 md:ml-auto" />
             <div className="text-sm text-neutral-400 space-y-1">
               <p>
                 <a href="mailto:nacaoraizbrasil@gmail.com" className="hover:text-white">
