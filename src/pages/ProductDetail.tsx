@@ -233,110 +233,67 @@ export default function ProductDetail() {
           <section className="relative">
             {/* Build image list: product images + unique variant images */}
             {(() => {
-              const productImages = product.images.edges.map(e => e.node);
-              const variantImages = product.variants.edges
-                .filter(v => v.node.image?.url)
-                .map(v => ({
-                  url: v.node.image!.url,
-                  altText: v.node.image!.altText,
-                  variantId: v.node.id
-                }));
-              
-              // Get unique variant images (by URL) that aren't already in product images
-              const productImageUrls = new Set(productImages.map(img => img.url));
-              const uniqueVariantImages = variantImages.filter(
-                (img, index, self) => 
-                  !productImageUrls.has(img.url) && 
-                  self.findIndex(i => i.url === img.url) === index
-              );
-              
-              // All images for the gallery
-              const allImages = [
-                ...productImages.map(img => ({ ...img, variantId: undefined as string | undefined })),
-                ...uniqueVariantImages.map(img => ({ url: img.url, altText: img.altText, variantId: img.variantId }))
-              ];
-              
-              // Find image for currently selected variant
-              const currentVariantImage = currentVariant?.image?.url;
-              let currentImageIndex = selectedImage;
-              
-              // If the selected variant has an image, show it
-              if (currentVariantImage) {
-                const variantImageIndex = allImages.findIndex(img => img.url === currentVariantImage);
-                if (variantImageIndex >= 0) {
-                  currentImageIndex = variantImageIndex;
-                }
+            const productImages = product.images.edges.map(e => e.node);
+            const variantImages = product.variants.edges.filter(v => v.node.image?.url).map(v => ({
+              url: v.node.image!.url,
+              altText: v.node.image!.altText,
+              variantId: v.node.id
+            }));
+
+            // Get unique variant images (by URL) that aren't already in product images
+            const productImageUrls = new Set(productImages.map(img => img.url));
+            const uniqueVariantImages = variantImages.filter((img, index, self) => !productImageUrls.has(img.url) && self.findIndex(i => i.url === img.url) === index);
+
+            // All images for the gallery
+            const allImages = [...productImages.map(img => ({
+              ...img,
+              variantId: undefined as string | undefined
+            })), ...uniqueVariantImages.map(img => ({
+              url: img.url,
+              altText: img.altText,
+              variantId: img.variantId
+            }))];
+
+            // Find image for currently selected variant
+            const currentVariantImage = currentVariant?.image?.url;
+            let currentImageIndex = selectedImage;
+
+            // If the selected variant has an image, show it
+            if (currentVariantImage) {
+              const variantImageIndex = allImages.findIndex(img => img.url === currentVariantImage);
+              if (variantImageIndex >= 0) {
+                currentImageIndex = variantImageIndex;
               }
-              
-              const currentImage = allImages[currentImageIndex] || allImages[0];
-              
-              return (
-                <>
+            }
+            const currentImage = allImages[currentImageIndex] || allImages[0];
+            return <>
                   <div className="relative w-full aspect-square max-w-[740px] mx-auto overflow-hidden rounded-lg bg-gray-100">
-                    {currentImage && (
-                      <img 
-                        src={currentImage.url} 
-                        alt={currentImage.altText || product.title} 
-                        className="w-full h-full object-cover" 
-                      />
-                    )}
+                    {currentImage && <img src={currentImage.url} alt={currentImage.altText || product.title} className="w-full h-full object-cover" />}
                     
                     {/* Navigation Arrows */}
-                    {allImages.length > 1 && (
-                      <>
-                        <button 
-                          onClick={() => setSelectedImage((currentImageIndex - 1 + allImages.length) % allImages.length)} 
-                          className="absolute left-2 top-1/2 -translate-y-1/2 bg-black text-white rounded-full w-11 h-11 flex items-center justify-center z-10 hover:bg-black/80 transition-colors" 
-                          aria-label="Imagem anterior"
-                        >
+                    {allImages.length > 1 && <>
+                        <button onClick={() => setSelectedImage((currentImageIndex - 1 + allImages.length) % allImages.length)} className="absolute left-2 top-1/2 -translate-y-1/2 bg-black text-white rounded-full w-11 h-11 flex items-center justify-center z-10 hover:bg-black/80 transition-colors" aria-label="Imagem anterior">
                           <ChevronLeft className="w-5 h-5" />
                         </button>
-                        <button 
-                          onClick={() => setSelectedImage((currentImageIndex + 1) % allImages.length)} 
-                          className="absolute right-2 top-1/2 -translate-y-1/2 bg-black text-white rounded-full w-11 h-11 flex items-center justify-center z-10 hover:bg-black/80 transition-colors" 
-                          aria-label="Próxima imagem"
-                        >
+                        <button onClick={() => setSelectedImage((currentImageIndex + 1) % allImages.length)} className="absolute right-2 top-1/2 -translate-y-1/2 bg-black text-white rounded-full w-11 h-11 flex items-center justify-center z-10 hover:bg-black/80 transition-colors" aria-label="Próxima imagem">
                           <ChevronRight className="w-5 h-5" />
                         </button>
-                      </>
-                    )}
+                      </>}
 
                     {/* Dots Indicator */}
-                    {allImages.length > 1 && (
-                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                        {allImages.map((_, index) => (
-                          <button 
-                            key={index} 
-                            onClick={() => setSelectedImage(index)} 
-                            className={`w-3 h-3 rounded-full transition-colors ${currentImageIndex === index ? 'bg-gray-800' : 'bg-gray-300'}`} 
-                            aria-label={`Imagem ${index + 1}`} 
-                          />
-                        ))}
-                      </div>
-                    )}
+                    {allImages.length > 1 && <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                        {allImages.map((_, index) => <button key={index} onClick={() => setSelectedImage(index)} className={`w-3 h-3 rounded-full transition-colors ${currentImageIndex === index ? 'bg-gray-800' : 'bg-gray-300'}`} aria-label={`Imagem ${index + 1}`} />)}
+                      </div>}
                   </div>
 
                   {/* Thumbnails - Desktop */}
-                  {allImages.length > 1 && (
-                    <div className="hidden lg:flex gap-2 mt-4 overflow-x-auto no-scrollbar">
-                      {allImages.map((image, index) => (
-                        <button 
-                          key={index} 
-                          onClick={() => setSelectedImage(index)} 
-                          className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors ${currentImageIndex === index ? 'border-black' : 'border-transparent'}`}
-                        >
-                          <img 
-                            src={image.url} 
-                            alt={image.altText || `${product.title} ${index + 1}`} 
-                            className="w-full h-full object-cover" 
-                          />
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </>
-              );
-            })()}
+                  {allImages.length > 1 && <div className="hidden lg:flex gap-2 mt-4 overflow-x-auto no-scrollbar">
+                      {allImages.map((image, index) => <button key={index} onClick={() => setSelectedImage(index)} className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors ${currentImageIndex === index ? 'border-black' : 'border-transparent'}`}>
+                          <img src={image.url} alt={image.altText || `${product.title} ${index + 1}`} className="w-full h-full object-cover" />
+                        </button>)}
+                    </div>}
+                </>;
+          })()}
           </section>
 
           {/* Product Details */}
@@ -369,7 +326,7 @@ export default function ProductDetail() {
                 </div>
               </span>
               <p className="font-medium text-base">
-                ou em até <span className="text-emerald-500">3x de {calculateInstallments(price.toString())} sem juros</span>
+                ou em até <span className="text-lime-800">3x de {calculateInstallments(price.toString())} sem juros</span>
               </p>
             </div>
 
@@ -463,19 +420,14 @@ export default function ProductDetail() {
                         [option.name]: value
                       };
                       setSelectedOptions(newSelectedOptions);
-                      
+
                       // Find a variant that matches all selected options
-                      let matchingVariant = product.variants.edges.find(v => 
-                        v.node.selectedOptions.every(opt => newSelectedOptions[opt.name] === opt.value)
-                      );
-                      
+                      let matchingVariant = product.variants.edges.find(v => v.node.selectedOptions.every(opt => newSelectedOptions[opt.name] === opt.value));
+
                       // If no exact match, find first available variant with the newly selected option
                       if (!matchingVariant) {
-                        matchingVariant = product.variants.edges.find(v => 
-                          v.node.availableForSale && 
-                          v.node.selectedOptions.some(opt => opt.name === option.name && opt.value === value)
-                        );
-                        
+                        matchingVariant = product.variants.edges.find(v => v.node.availableForSale && v.node.selectedOptions.some(opt => opt.name === option.name && opt.value === value));
+
                         // Update all selected options to match this variant
                         if (matchingVariant) {
                           const updatedOptions: Record<string, string> = {};
@@ -485,7 +437,6 @@ export default function ProductDetail() {
                           setSelectedOptions(updatedOptions);
                         }
                       }
-                      
                       if (matchingVariant) {
                         setSelectedVariant(matchingVariant.node.id);
                       }
