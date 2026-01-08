@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ShopifyAnalytics from "./components/ShopifyAnalytics";
 import Index from "./pages/Index";
 import ProductDetail from "./pages/ProductDetail";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -21,6 +22,7 @@ const App = () => (
       <Toaster />
       <Sonner position="top-center" />
       <BrowserRouter>
+        <ShopifyAnalytics />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/produto/:handle" element={<ProductDetail />} />
