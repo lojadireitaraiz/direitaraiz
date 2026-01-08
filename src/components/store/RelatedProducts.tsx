@@ -96,8 +96,14 @@ export function RelatedProducts({ title, query, excludeHandle }: RelatedProducts
 
       {/* Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-        {visibleProducts.map((product) => (
-          <ProductCard key={product.node.id} product={product} />
+        {visibleProducts.map((product, index) => (
+          <div 
+            key={product.node.id} 
+            className="animate-fade-in"
+            style={{ animationDelay: `${index * 75}ms` }}
+          >
+            <ProductCard product={product} />
+          </div>
         ))}
       </div>
     </section>
