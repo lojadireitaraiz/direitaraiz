@@ -579,7 +579,7 @@ export default function ProductDetail() {
 
         {/* Product Collection */}
         <div className="mt-10">
-          <ProductGrid title="Você também pode gostar" />
+          <ProductGrid title="Você também pode gostar" excludeHandle={handle} />
         </div>
       </main>
 
