@@ -326,7 +326,7 @@ export default function ProductDetail() {
                 </div>
               </span>
               <p className="font-medium text-base">
-                ou em até <span className="text-lime-800">3x de {calculateInstallments(price.toString())} sem juros</span>
+                ou em até <span className="text-green-900">3x de {calculateInstallments(price.toString())} sem juros</span>
               </p>
             </div>
 
