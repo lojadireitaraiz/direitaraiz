@@ -33,6 +33,8 @@ export default function ProductDetail() {
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
   const [selectedImage, setSelectedImage] = useState(0);
+  const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
+  const [isAnimating, setIsAnimating] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [showMobileCart, setShowMobileCart] = useState(false);
   const [showModelWarning, setShowModelWarning] = useState(false);
@@ -279,16 +281,46 @@ export default function ProductDetail() {
               }
             }
             const currentImage = allImages[currentImageIndex] || allImages[0];
+
+            const handlePrevImage = () => {
+              if (isAnimating) return;
+              setSlideDirection('right');
+              setIsAnimating(true);
+              setTimeout(() => {
+                setSelectedImage((currentImageIndex - 1 + allImages.length) % allImages.length);
+                setIsAnimating(false);
+                setSlideDirection(null);
+              }, 300);
+            };
+
+            const handleNextImage = () => {
+              if (isAnimating) return;
+              setSlideDirection('left');
+              setIsAnimating(true);
+              setTimeout(() => {
+                setSelectedImage((currentImageIndex + 1) % allImages.length);
+                setIsAnimating(false);
+                setSlideDirection(null);
+              }, 300);
+            };
+
             return <>
                   <div className="relative w-full aspect-square max-w-[740px] mx-auto overflow-hidden rounded-lg bg-gray-100">
-                    {currentImage && <img src={currentImage.url} alt={currentImage.altText || product.title} className="w-full h-full object-cover" />}
+                    <div 
+                      className={`w-full h-full transition-transform duration-300 ease-out ${
+                        slideDirection === 'left' ? '-translate-x-full' : 
+                        slideDirection === 'right' ? 'translate-x-full' : ''
+                      }`}
+                    >
+                      {currentImage && <img src={currentImage.url} alt={currentImage.altText || product.title} className="w-full h-full object-cover" />}
+                    </div>
                     
                     {/* Navigation Arrows */}
                     {allImages.length > 1 && <>
-                        <button onClick={() => setSelectedImage((currentImageIndex - 1 + allImages.length) % allImages.length)} className="absolute left-2 top-1/2 -translate-y-1/2 bg-black text-white rounded-full w-6 h-6 flex items-center justify-center z-10 hover:bg-black/80 transition-colors" aria-label="Imagem anterior">
+                        <button onClick={handlePrevImage} className="absolute left-2 top-1/2 -translate-y-1/2 bg-black text-white rounded-full w-6 h-6 flex items-center justify-center z-10 hover:bg-black/80 transition-colors" aria-label="Imagem anterior">
                           <ChevronLeft className="w-3 h-3" />
                         </button>
-                        <button onClick={() => setSelectedImage((currentImageIndex + 1) % allImages.length)} className="absolute right-2 top-1/2 -translate-y-1/2 bg-black text-white rounded-full w-6 h-6 flex items-center justify-center z-10 hover:bg-black/80 transition-colors" aria-label="Próxima imagem">
+                        <button onClick={handleNextImage} className="absolute right-2 top-1/2 -translate-y-1/2 bg-black text-white rounded-full w-6 h-6 flex items-center justify-center z-10 hover:bg-black/80 transition-colors" aria-label="Próxima imagem">
                           <ChevronRight className="w-3 h-3" />
                         </button>
                       </>}
