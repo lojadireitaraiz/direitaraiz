@@ -59,13 +59,18 @@ export default function DireitaRaiz() {
     loadProducts();
   }, []);
 
-  // Extract all available sizes from products
+  // Extract all available sizes from products (excluding month variants)
   const availableSizes = useMemo(() => {
     const sizes = new Set<string>();
+    const monthPattern = /^\d+-\d+M$/i; // Matches patterns like 0-3M, 3-6M, etc.
     products.forEach(product => {
       product.node.options.forEach(option => {
         if (option.name.toLowerCase() === 'tamanho' || option.name.toLowerCase() === 'size') {
-          option.values.forEach(value => sizes.add(value));
+          option.values.forEach(value => {
+            if (!monthPattern.test(value)) {
+              sizes.add(value);
+            }
+          });
         }
       });
     });
