@@ -600,7 +600,7 @@ export function ProductReviews() {
             onClick={() => setVisibleCount(prev => prev + REVIEWS_PER_PAGE)}
             className="px-8 py-3 border border-gray-300 rounded-lg text-gray-900 font-medium hover:bg-gray-50 transition-colors"
           >
-            Ver mais avaliações ({mockReviews.length - visibleCount} restantes)
+            Ver mais avaliações
           </button>
         </div>
       )}
