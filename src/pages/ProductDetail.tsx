@@ -327,7 +327,7 @@ export default function ProductDetail() {
             {/* Desktop Header */}
             <header className="hidden lg:flex flex-col gap-2 mt-8">
               <p className="text-gray-400 text-sm uppercase">{productTypeLabel}</p>
-              <h1 className="font-bold text-2xl">{displayTitle}</h1>
+              <h1 className="font-bold text-2xl uppercase">{displayTitle}</h1>
               <div className="inline-flex items-center gap-2">
                 <div className="flex text-yellow-400">
                   {[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5 fill-current" />)}
