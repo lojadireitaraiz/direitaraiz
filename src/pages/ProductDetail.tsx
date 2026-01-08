@@ -494,7 +494,11 @@ export default function ProductDetail() {
             <Dialog>
               <DialogTrigger asChild>
                 <button className="flex items-center gap-2 text-blue-600 hover:underline text-sm font-normal">
-                  <Ruler className="w-4 h-4" />
+                  <img 
+                    src="https://d2u4gk28rgr5ys.cloudfront.net/assets/site/tamanhos/sewing-tape-measure-c112f4fbd9b68e4d78ea9e7b4e6cbb34b5b5b949a9fb9635f9aaadeb7caf459b.svg" 
+                    alt="Fita métrica" 
+                    className="w-5 h-5"
+                  />
                   Confira suas medidas
                 </button>
               </DialogTrigger>
