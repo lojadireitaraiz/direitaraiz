@@ -635,14 +635,14 @@ export default function ProductDetail() {
           </div>
         </div>
 
-        {/* Product Reviews Section */}
-        <div className="mt-10">
-          <ProductReviews />
-        </div>
-
         {/* Product Collection */}
         <div className="mt-10">
           <RelatedProducts title="Você também pode gostar" excludeHandle={handle} />
+        </div>
+
+        {/* Product Reviews Section */}
+        <div className="mt-10">
+          <ProductReviews />
         </div>
       </main>
 
