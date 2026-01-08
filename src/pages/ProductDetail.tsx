@@ -55,15 +55,9 @@ export default function ProductDetail() {
       setLoading(true);
       const data = await fetchProductByHandle(handle);
       setProduct(data);
-      if (data?.variants.edges[0]) {
-        setSelectedVariant(data.variants.edges[0].node.id);
-        // Initialize selected options from first variant
-        const initialOptions: Record<string, string> = {};
-        data.variants.edges[0].node.selectedOptions.forEach(opt => {
-          initialOptions[opt.name] = opt.value;
-        });
-        setSelectedOptions(initialOptions);
-      }
+      // Don't pre-select any variant - leave options empty
+      setSelectedVariant(null);
+      setSelectedOptions({});
       setLoading(false);
     }
     loadProduct();
@@ -78,11 +72,12 @@ export default function ProductDetail() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   const handleAddToCart = () => {
-    if (!product || !selectedVariant) {
-      toast.error('Selecione uma variante');
+    if (!product) {
       return;
     }
-    const variant = product.variants.edges.find(v => v.node.id === selectedVariant)?.node;
+    // Use selected variant or fall back to first variant
+    const variantId = selectedVariant || product.variants.edges[0]?.node.id;
+    const variant = product.variants.edges.find(v => v.node.id === variantId)?.node;
     if (!variant) return;
     addItem({
       product: {
