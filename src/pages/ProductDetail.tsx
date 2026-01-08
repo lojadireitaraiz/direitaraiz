@@ -272,11 +272,11 @@ export default function ProductDetail() {
                     
                     {/* Navigation Arrows */}
                     {allImages.length > 1 && <>
-                        <button onClick={() => setSelectedImage((currentImageIndex - 1 + allImages.length) % allImages.length)} className="absolute left-2 top-1/2 -translate-y-1/2 bg-black text-white rounded-full w-11 h-11 flex items-center justify-center z-10 hover:bg-black/80 transition-colors" aria-label="Imagem anterior">
-                          <ChevronLeft className="w-5 h-5" />
+                        <button onClick={() => setSelectedImage((currentImageIndex - 1 + allImages.length) % allImages.length)} className="absolute left-2 top-1/2 -translate-y-1/2 bg-black text-white rounded-full w-8 h-8 flex items-center justify-center z-10 hover:bg-black/80 transition-colors" aria-label="Imagem anterior">
+                          <ChevronLeft className="w-4 h-4" />
                         </button>
-                        <button onClick={() => setSelectedImage((currentImageIndex + 1) % allImages.length)} className="absolute right-2 top-1/2 -translate-y-1/2 bg-black text-white rounded-full w-11 h-11 flex items-center justify-center z-10 hover:bg-black/80 transition-colors" aria-label="Próxima imagem">
-                          <ChevronRight className="w-5 h-5" />
+                        <button onClick={() => setSelectedImage((currentImageIndex + 1) % allImages.length)} className="absolute right-2 top-1/2 -translate-y-1/2 bg-black text-white rounded-full w-8 h-8 flex items-center justify-center z-10 hover:bg-black/80 transition-colors" aria-label="Próxima imagem">
+                          <ChevronRight className="w-4 h-4" />
                         </button>
                       </>}
 
