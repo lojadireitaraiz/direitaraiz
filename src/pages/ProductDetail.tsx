@@ -11,6 +11,7 @@ import { useCartStore } from '@/stores/cartStore';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { ProductGrid } from '@/components/store/ProductGrid';
+import { ProductReviews } from '@/components/store/ProductReviews';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import sizeGuideMale from '@/assets/size-guide-male.webp';
 import sizeGuideFemale from '@/assets/size-guide-female.webp';
@@ -618,6 +619,11 @@ export default function ProductDetail() {
             <p className="text-sm leading-tight font-bold text-gray-900">Todo o Brasil</p>
             <p className="text-sm leading-tight font-normal text-gray-500">Envio para todas regiões brasileiras</p>
           </div>
+        </div>
+
+        {/* Product Reviews Section */}
+        <div className="mt-10">
+          <ProductReviews />
         </div>
 
         {/* Product Collection */}
