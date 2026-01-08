@@ -36,6 +36,7 @@ export default function ProductDetail() {
   const [showMobileCart, setShowMobileCart] = useState(false);
   const [showModelWarning, setShowModelWarning] = useState(false);
   const mainButtonRef = React.useRef<HTMLButtonElement>(null);
+  const modeloSectionRef = React.useRef<HTMLDivElement>(null);
   const [couponSheetOpen, setCouponSheetOpen] = useState(false);
   const [cep, setCep] = useState('');
   const [shippingInfo, setShippingInfo] = useState<{
@@ -82,6 +83,8 @@ export default function ProductDetail() {
     
     // Check if variant is selected
     if (!selectedVariant) {
+      // Scroll to modelo section
+      modeloSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setShowModelWarning(true);
       setTimeout(() => setShowModelWarning(false), 3000);
       return;
@@ -467,7 +470,7 @@ export default function ProductDetail() {
             };
             return <>
                   {/* Row 1: Modelo and Cor */}
-                  {(modeloOption || corOption) && <div className="flex flex-col sm:flex-row gap-5">
+                  {(modeloOption || corOption) && <div ref={modeloSectionRef} className="flex flex-col sm:flex-row gap-5">
                       {modeloOption && (
                         <div className="relative">
                           {renderOption(modeloOption)}
