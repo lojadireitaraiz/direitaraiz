@@ -20,9 +20,10 @@ const sortOptions = [
 interface ProductGridProps {
   title?: string;
   query?: string;
+  excludeHandle?: string;
 }
 
-export function ProductGrid({ title, query }: ProductGridProps) {
+export function ProductGrid({ title, query, excludeHandle }: ProductGridProps) {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [gridCols, setGridCols] = useState(4);
@@ -38,7 +39,11 @@ export function ProductGrid({ title, query }: ProductGridProps) {
     loadProducts();
   }, [query]);
 
-  const sortedProducts = [...products].sort((a, b) => {
+  const filteredProducts = excludeHandle 
+    ? products.filter(p => p.node.handle !== excludeHandle)
+    : products;
+
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortBy) {
       case 'lowest_price':
         return parseFloat(a.node.priceRange.minVariantPrice.amount) - parseFloat(b.node.priceRange.minVariantPrice.amount);
