@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Star, ThumbsUp, ThumbsDown, Check } from 'lucide-react';
+import { Star, ThumbsUp, Check } from 'lucide-react';
 
 interface Review {
   id: string;
@@ -8,7 +8,6 @@ interface Review {
   date: string;
   content: string;
   helpful: number;
-  notHelpful: number;
   verified: boolean;
   productName?: string;
   image?: string;
@@ -17,56 +16,72 @@ interface Review {
 const mockReviews: Review[] = [
   {
     id: '1',
-    author: 'João carlos s.',
+    author: 'BRUNO S.',
     rating: 5,
-    date: '08 de Setembro de 2025',
-    content: 'Produto de excelente qualidade! Superou minhas expectativas. O tecido é muito macio e confortável. Recomendo demais!',
-    helpful: 12,
-    notHelpful: 0,
+    date: '07 de Janeiro de 2026',
+    content: '',
+    helpful: 0,
     verified: true,
-    productName: 'Magnitsky',
-    image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop',
+    productName: 'Constituição Socialista art 1',
   },
   {
     id: '2',
-    author: 'Maria S.',
+    author: 'DIONE A.',
     rating: 5,
-    date: '05 de Setembro de 2025',
-    content: 'Amei o caimento e a qualidade do algodão. Comprei para dar de presente e a pessoa amou! Com certeza vou comprar mais.',
-    helpful: 8,
-    notHelpful: 0,
+    date: '03 de Janeiro de 2026',
+    content: '',
+    helpful: 0,
     verified: true,
-    productName: 'Magnitsky',
-    image: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400&h=400&fit=crop',
+    productName: 'Brasil, Acima de todos',
   },
   {
     id: '3',
-    author: 'Pedro L.',
+    author: 'ALEX S.',
     rating: 5,
-    date: '01 de Setembro de 2025',
-    content: 'Muito boa, o acabamento é impecável. Chegou super rápido e bem embalado. A estampa é linda e não desbota.',
-    helpful: 5,
-    notHelpful: 1,
+    date: '02 de Janeiro de 2026',
+    content: 'Excelente, material bom e design muito bom.',
+    helpful: 0,
     verified: true,
-    productName: 'Magnitsky',
-    image: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=400&h=400&fit=crop',
+    productName: 'Nação Raiz',
+    image: 'https://rsv-ink-images.ink.rsvcloud.com/images/review_image/f18454360343166de9275e261386863f.jpg',
   },
   {
     id: '4',
-    author: 'Ana C.',
+    author: 'JOÃO CARLOS S.',
     rating: 5,
-    date: '28 de Agosto de 2025',
-    content: 'Já é a terceira vez que compro aqui e sempre fico satisfeita. O algodão é macio e não encolhe na lavagem.',
-    helpful: 15,
-    notHelpful: 0,
+    date: '08 de Setembro de 2025',
+    content: 'Produto de excelente qualidade! Superou minhas expectativas.',
+    helpful: 12,
     verified: true,
     productName: 'Magnitsky',
-    image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&h=400&fit=crop',
+    image: 'https://rsv-ink-images.ink.rsvcloud.com/images/review_image/14baa0d5827e0c66bc3df1198c0ee4dc.jpg',
+  },
+  {
+    id: '5',
+    author: 'MARIA S.',
+    rating: 5,
+    date: '05 de Setembro de 2025',
+    content: 'Amei o caimento e a qualidade do algodão.',
+    helpful: 8,
+    verified: true,
+    productName: 'Magnitsky',
+    image: 'https://rsv-ink-images.ink.rsvcloud.com/images/review_image/eaa71edb27eec5a927916940868a5df1.jpg',
+  },
+  {
+    id: '6',
+    author: 'PEDRO L.',
+    rating: 5,
+    date: '01 de Setembro de 2025',
+    content: 'Muito boa, o acabamento é impecável.',
+    helpful: 5,
+    verified: true,
+    productName: 'Magnitsky',
+    image: 'https://rsv-ink-images.ink.rsvcloud.com/images/review_image/0e3fa667f280c5a563faafd7ff87c135.jpg',
   },
 ];
 
 const ratingDistribution = [
-  { stars: 5, count: 40 },
+  { stars: 5, count: 41 },
   { stars: 4, count: 1 },
   { stars: 3, count: 1 },
   { stars: 2, count: 0 },
@@ -75,7 +90,6 @@ const ratingDistribution = [
 
 export function ProductReviews() {
   const [helpfulClicked, setHelpfulClicked] = useState<Set<string>>(new Set());
-  const [notHelpfulClicked, setNotHelpfulClicked] = useState<Set<string>>(new Set());
 
   const totalReviews = ratingDistribution.reduce((sum, r) => sum + r.count, 0);
   const averageRating = (ratingDistribution.reduce((sum, r) => sum + r.stars * r.count, 0) / totalReviews).toFixed(1);
@@ -87,40 +101,15 @@ export function ProductReviews() {
         newSet.delete(reviewId);
       } else {
         newSet.add(reviewId);
-        // Remove from not helpful if clicked
-        setNotHelpfulClicked(p => {
-          const s = new Set(p);
-          s.delete(reviewId);
-          return s;
-        });
       }
       return newSet;
     });
   };
 
-  const handleNotHelpful = (reviewId: string) => {
-    setNotHelpfulClicked(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(reviewId)) {
-        newSet.delete(reviewId);
-      } else {
-        newSet.add(reviewId);
-        // Remove from helpful if clicked
-        setHelpfulClicked(p => {
-          const s = new Set(p);
-          s.delete(reviewId);
-          return s;
-        });
-      }
-      return newSet;
-    });
-  };
-
-  const renderStars = (rating: number, size: 'sm' | 'md' | 'lg' = 'sm') => {
+  const renderStars = (rating: number, size: 'sm' | 'md' = 'sm') => {
     const sizeClasses = {
-      sm: 'w-3.5 h-3.5',
-      md: 'w-4 h-4',
-      lg: 'w-5 h-5',
+      sm: 'w-4 h-4',
+      md: 'w-5 h-5',
     };
     return (
       <div className="flex gap-0.5">
@@ -128,7 +117,7 @@ export function ProductReviews() {
           <Star
             key={star}
             className={`${sizeClasses[size]} ${
-              star <= rating ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-200 text-gray-200'
+              star <= rating ? 'fill-yellow-300 text-yellow-300' : 'fill-gray-200 text-gray-200'
             }`}
           />
         ))}
@@ -140,43 +129,44 @@ export function ProductReviews() {
   const photoReviews = mockReviews.filter(r => r.image);
 
   return (
-    <section className="mt-10 border-t border-gray-200 pt-8">
+    <section className="flex flex-col gap-6 mb-20">
       {/* Photo Reviews Section */}
-      <div className="mb-8">
-        <h3 className="text-lg font-semibold mb-4">Fotos de avaliações</h3>
-        <div className="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+      <div className="flex flex-col gap-4">
+        <p className="text-xl leading-normal text-gray-900 font-medium">Fotos de avaliações</p>
+        <div className="relative w-full grid grid-cols-4 md:grid-cols-8 gap-4">
           {photoReviews.map((review) => (
-            <div key={review.id} className="flex-shrink-0 relative">
-              <div className="w-24 h-24 rounded-lg overflow-hidden bg-gray-100">
-                <img 
-                  src={review.image} 
-                  alt={`Avaliação de ${review.author}`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="absolute bottom-1 left-1 right-1 bg-white/90 backdrop-blur-sm rounded px-1.5 py-0.5 flex items-center gap-1">
-                <span className="text-xs font-bold">{review.rating.toFixed(1)}</span>
-                {renderStars(review.rating, 'sm')}
-              </div>
+            <div key={review.id} className="relative w-fit">
+              <img
+                src={review.image}
+                alt={`Avaliação de ${review.author}`}
+                className="rounded-lg object-cover h-28 w-28 md:w-36 md:h-36"
+              />
+              <span className="absolute flex flex-row items-center rounded-full px-2 py-1 bottom-2 left-1/2 -translate-x-1/2 text-[10px] font-medium leading-normal text-gray-900 bg-white bg-opacity-90">
+                {review.rating.toFixed(1)}
+                <span className="text-yellow-300 ml-0.5 flex">
+                  {[...Array(review.rating)].map((_, i) => (
+                    <Star key={i} className="w-2 h-2 fill-current" />
+                  ))}
+                </span>
+              </span>
             </div>
           ))}
         </div>
       </div>
 
       {/* Main Reviews Header */}
-      <div className="mb-6">
-        <h2 className="text-lg font-semibold mb-4">Avaliações</h2>
+      <div className="flex flex-col gap-4">
+        <h2 className="text-xl leading-normal text-gray-900 font-medium">Avaliações</h2>
         
         <div className="flex flex-col lg:flex-row lg:items-start gap-6">
           {/* Average Rating */}
-          <div className="flex items-center gap-4">
+          <div className="flex flex-row items-center gap-3">
             <div className="text-5xl font-bold text-gray-900">{averageRating}</div>
-            <div>
-              <div className="flex items-center gap-2">
-                {renderStars(Math.round(parseFloat(averageRating)), 'lg')}
-                <span className="text-gray-500 text-sm">({averageRating})</span>
+            <div className="flex flex-col">
+              <div className="flex items-center gap-1">
+                {renderStars(Math.round(parseFloat(averageRating)), 'md')}
               </div>
-              <p className="text-gray-500 text-sm mt-0.5">{totalReviews} avaliações</p>
+              <p className="text-gray-500 text-sm mt-0.5">({averageRating}) {totalReviews} avaliações</p>
             </div>
           </div>
 
@@ -185,14 +175,15 @@ export function ProductReviews() {
             {ratingDistribution.map((item) => (
               <div key={item.stars} className="flex items-center gap-2 mb-1.5">
                 <span className="text-sm text-gray-700 w-4 font-medium">{item.stars}</span>
-                <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                <Star className="w-4 h-4 fill-yellow-300 text-yellow-300" />
+                <div className="flex-1 h-1 bg-gray-200 rounded">
                   <div 
-                    className="h-full bg-yellow-400 rounded-full transition-all"
+                    className="h-full bg-yellow-300 rounded transition-all"
                     style={{ width: `${(item.count / totalReviews) * 100}%` }}
                   />
                 </div>
-                <span className="text-sm text-gray-500 w-20">
-                  {item.count} {item.count === 1 ? 'avaliação' : 'avaliações'}
+                <span className="text-sm text-gray-500 w-24">
+                  {item.count} <span className="hidden md:inline">{item.count === 1 ? 'avaliação' : 'avaliações'}</span>
                 </span>
               </div>
             ))}
@@ -201,73 +192,72 @@ export function ProductReviews() {
       </div>
 
       {/* Reviews List */}
-      <div className="space-y-0">
+      <div className="mt-6">
         {mockReviews.map((review, index) => (
-          <div 
-            key={review.id} 
-            className={`py-5 ${index !== mockReviews.length - 1 ? 'border-b border-gray-100' : ''}`}
-          >
-            <div className="flex flex-col gap-2">
-              {/* Stars and Header */}
-              <div className="flex items-start justify-between">
-                <div>
-                  {renderStars(review.rating, 'md')}
-                  <div className="flex items-center gap-2 mt-2">
-                    <span className="font-semibold text-gray-900">{review.author}</span>
-                    <span className="text-gray-400 text-sm">{review.date}</span>
-                  </div>
+          <div key={review.id}>
+            <div className="flex flex-col md:flex-row gap-2 md:gap-3">
+              {/* Left column - Author info */}
+              <div className="flex flex-col gap-2 w-full md:max-w-72">
+                <div className="flex flex-row gap-1">
+                  {renderStars(review.rating, 'sm')}
                 </div>
-              </div>
-
-              {/* Badges */}
-              <div className="flex flex-wrap gap-2">
+                <div>
+                  <p className="text-gray-900 font-semibold leading-normal text-base">{review.author}</p>
+                  <p className="text-gray-500 leading-5 font-normal text-sm">{review.date}</p>
+                </div>
                 {review.verified && (
-                  <span className="inline-flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-1 rounded-full">
-                    <Check className="w-3 h-3" />
+                  <p className="text-gray-900 leading-normal font-normal text-sm flex flex-row items-center gap-1">
+                    <Check className="w-4 h-4 text-green-500" />
                     Compra verificada
-                  </span>
+                  </p>
+                )}
+                {review.productName && (
+                  <p className="text-sm font-medium leading-5 text-gray-900">
+                    Produtos comprados: <br />
+                    <span className="text-gray-500 font-normal">{review.productName}</span>
+                  </p>
                 )}
               </div>
 
-              {/* Product Purchased */}
-              {review.productName && (
-                <p className="text-sm text-gray-500">
-                  Produtos comprados: <span className="text-gray-700">{review.productName}</span>
-                </p>
-              )}
+              {/* Right column - Content */}
+              <div className="flex flex-col gap-4 md:max-w-4xl">
+                {review.content && (
+                  <p className="text-base text-gray-500 leading-6 font-normal">{review.content}</p>
+                )}
+                
+                {/* Review images inline */}
+                {review.image && (
+                  <div className="flex flex-row gap-2">
+                    <img 
+                      src={review.image} 
+                      alt={`Foto de ${review.author}`}
+                      className="w-20 h-20 rounded-lg object-cover"
+                    />
+                  </div>
+                )}
 
-              {/* Review Content */}
-              <p className="text-gray-700 leading-relaxed">{review.content}</p>
-
-              {/* Helpful Section */}
-              <div className="flex items-center gap-4 mt-2">
-                <span className="text-sm text-gray-500">Isso foi útil para você?</span>
-                <div className="flex items-center gap-3">
+                {/* Helpful Section */}
+                <div className="flex flex-row gap-4">
+                  <p className="text-gray-500 font-medium text-sm leading-5">Isso foi útil para você?</p>
                   <button
                     onClick={() => handleHelpful(review.id)}
-                    className={`flex items-center gap-1 text-sm transition-colors ${
-                      helpfulClicked.has(review.id)
-                        ? 'text-green-600'
-                        : 'text-gray-400 hover:text-gray-600'
+                    className={`flex flex-row gap-2 transition-colors ${
+                      helpfulClicked.has(review.id) ? 'text-green-600' : 'text-gray-500 hover:text-gray-700'
                     }`}
                   >
                     <ThumbsUp className="w-4 h-4" />
-                    <span>{review.helpful + (helpfulClicked.has(review.id) ? 1 : 0)}</span>
-                  </button>
-                  <button
-                    onClick={() => handleNotHelpful(review.id)}
-                    className={`flex items-center gap-1 text-sm transition-colors ${
-                      notHelpfulClicked.has(review.id)
-                        ? 'text-red-500'
-                        : 'text-gray-400 hover:text-gray-600'
-                    }`}
-                  >
-                    <ThumbsDown className="w-4 h-4" />
-                    <span>{review.notHelpful + (notHelpfulClicked.has(review.id) ? 1 : 0)}</span>
+                    <span className="text-gray-900 text-xs font-medium leading-5">
+                      {review.helpful + (helpfulClicked.has(review.id) ? 1 : 0)}
+                    </span>
                   </button>
                 </div>
               </div>
             </div>
+            
+            {/* Divider */}
+            {index !== mockReviews.length - 1 && (
+              <hr className="border-gray-300 my-6" />
+            )}
           </div>
         ))}
       </div>
