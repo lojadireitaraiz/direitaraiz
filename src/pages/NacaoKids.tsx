@@ -55,18 +55,23 @@ export default function NacaoKids() {
     loadProducts();
   }, []);
 
-  // Extract all available sizes from products
+  // Extract all available sizes from products (excluding month variants)
   const availableSizes = useMemo(() => {
     const sizes = new Set<string>();
+    const monthPattern = /^\d+-\d+M$/i; // Matches patterns like 0-3M, 3-6M, etc.
     products.forEach(product => {
       product.node.options.forEach(option => {
         if (option.name.toLowerCase() === 'tamanho' || option.name.toLowerCase() === 'size') {
-          option.values.forEach(value => sizes.add(value));
+          option.values.forEach(value => {
+            if (!monthPattern.test(value)) {
+              sizes.add(value);
+            }
+          });
         }
       });
     });
     return Array.from(sizes).sort((a, b) => {
-      const order = ['PP', 'P', 'M', 'G', 'GG', 'XG', 'XXG', 'XXXG', '0-3M', '3-6M', '6-9M', '9-12M', '12-18M', '18-24M', '1', '2', '3', '4', '6', '8', '10', '12'];
+      const order = ['PP', 'P', 'M', 'G', 'GG', 'XG', 'XXG', 'XXXG', '1', '2', '3', '4', '6', '8', '10', '12'];
       const indexA = order.indexOf(a);
       const indexB = order.indexOf(b);
       if (indexA !== -1 && indexB !== -1) return indexA - indexB;
