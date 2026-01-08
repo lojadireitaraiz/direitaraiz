@@ -456,7 +456,29 @@ export default function ProductDetail() {
                         [option.name]: value
                       };
                       setSelectedOptions(newSelectedOptions);
-                      const matchingVariant = product.variants.edges.find(v => v.node.selectedOptions.every(opt => newSelectedOptions[opt.name] === opt.value));
+                      
+                      // Find a variant that matches all selected options
+                      let matchingVariant = product.variants.edges.find(v => 
+                        v.node.selectedOptions.every(opt => newSelectedOptions[opt.name] === opt.value)
+                      );
+                      
+                      // If no exact match, find first available variant with the newly selected option
+                      if (!matchingVariant) {
+                        matchingVariant = product.variants.edges.find(v => 
+                          v.node.availableForSale && 
+                          v.node.selectedOptions.some(opt => opt.name === option.name && opt.value === value)
+                        );
+                        
+                        // Update all selected options to match this variant
+                        if (matchingVariant) {
+                          const updatedOptions: Record<string, string> = {};
+                          matchingVariant.node.selectedOptions.forEach(opt => {
+                            updatedOptions[opt.name] = opt.value;
+                          });
+                          setSelectedOptions(updatedOptions);
+                        }
+                      }
+                      
                       if (matchingVariant) {
                         setSelectedVariant(matchingVariant.node.id);
                       }
