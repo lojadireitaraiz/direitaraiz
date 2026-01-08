@@ -13,6 +13,7 @@ import TermsOfUse from "./pages/TermsOfUse";
 import FAQ from "./pages/FAQ";
 import ExchangesReturns from "./pages/ExchangesReturns";
 import Collection from "./pages/Collection";
+import NacaoKids from "./pages/NacaoKids";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/faq" element={<FAQ />} />
           <Route path="/trocas" element={<ExchangesReturns />} />
           <Route path="/colecao" element={<Collection />} />
+          <Route path="/colecao/nacao-kids" element={<NacaoKids />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
