@@ -16,6 +16,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import sizeGuideMale from '@/assets/size-guide-male.webp';
 import sizeGuideFemale from '@/assets/size-guide-female.webp';
 import sizeGuideBodyInfantil from '@/assets/size-guide-body-infantil.webp';
+import sizeGuideInfantil from '@/assets/size-guide-infantil.webp';
 
 // Coupon data (discount percentage is used for dynamic calculation)
 const availableCoupons = [{
@@ -225,12 +226,16 @@ export default function ProductDetail() {
   // Promo end date - 7 days from now
   const promoEndDate = new Date();
   promoEndDate.setDate(promoEndDate.getDate() + 7);
-  // Check if product has BODY INFANTIL tag
+  // Check if product has BODY INFANTIL or CAMISETA INFANTIL tag
   const hasBodyInfantilTag = product.tags?.some(tag => tag.toUpperCase() === 'BODY INFANTIL') ?? false;
-  const productTypeLabel = hasBodyInfantilTag ? 'BODY INFANTIL' : 'CAMISETA';
+  const hasCamisetaInfantilTag = product.tags?.some(tag => tag.toUpperCase() === 'CAMISETA INFANTIL') ?? false;
+  
+  const productTypeLabel = hasBodyInfantilTag ? 'BODY INFANTIL' : hasCamisetaInfantilTag ? 'CAMISETA INFANTIL' : 'CAMISETA';
   const displayTitle = hasBodyInfantilTag 
     ? product.title.replace(/CAMISETA/gi, 'BODY INFANTIL')
-    : product.title;
+    : hasCamisetaInfantilTag 
+      ? product.title.replace(/CAMISETA/gi, 'CAMISETA INFANTIL')
+      : product.title;
 
   return <div className="min-h-screen bg-white">
       <Header />
@@ -536,6 +541,10 @@ export default function ProductDetail() {
                 {hasBodyInfantilTag ? (
                   <div className="flex justify-center mt-4">
                     <img src={sizeGuideBodyInfantil} alt="Guia de medidas body infantil" className="w-full max-w-md object-contain rounded-lg" />
+                  </div>
+                ) : hasCamisetaInfantilTag ? (
+                  <div className="flex justify-center mt-4">
+                    <img src={sizeGuideInfantil} alt="Guia de medidas camiseta infantil" className="w-full max-w-md object-contain rounded-lg" />
                   </div>
                 ) : (
                   <div className="flex flex-col md:flex-row gap-4 mt-4">
