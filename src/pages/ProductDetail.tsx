@@ -488,7 +488,8 @@ export default function ProductDetail() {
                     if (isColorOption) {
                       const colorHex = getColorHex(value);
                       const isWhite = colorHex.toLowerCase() === '#ffffff';
-                      return <button key={value} onClick={handleOptionSelect} className={`w-9 h-9 rounded-full transition-all ${isSelected ? 'ring-2 ring-offset-2 ring-gray-900' : 'hover:ring-2 hover:ring-offset-2 hover:ring-gray-400'} ${!isAvailable ? 'opacity-50 cursor-not-allowed' : ''} ${isWhite ? 'border border-gray-300' : ''}`} style={{
+                      const isBlack = colorHex.toLowerCase() === '#000000';
+                      return <button key={value} onClick={handleOptionSelect} className={`w-9 h-9 rounded-full transition-all ${isSelected ? 'ring-2 ring-offset-2 ring-gray-900' : 'hover:ring-2 hover:ring-offset-2 hover:ring-gray-400'} ${!isAvailable ? 'opacity-50 cursor-not-allowed' : ''} ${isWhite ? 'border border-gray-300' : ''} ${isBlack ? 'border border-gray-400' : ''}`} style={{
                         backgroundColor: colorHex
                       }} disabled={!isAvailable} title={value} aria-label={value} />;
                     }
