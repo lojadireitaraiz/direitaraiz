@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Loader2, Minus, Plus, Truck, Star, CreditCard, Shield, RefreshCw, MapPin, Tag, Copy, Check, Ruler } from 'lucide-react';
 import { toast } from 'sonner';
@@ -34,6 +34,8 @@ export default function ProductDetail() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [showMobileCart, setShowMobileCart] = useState(false);
+  const [showModelWarning, setShowModelWarning] = useState(false);
+  const mainButtonRef = React.useRef<HTMLButtonElement>(null);
   const [couponSheetOpen, setCouponSheetOpen] = useState(false);
   const [cep, setCep] = useState('');
   const [shippingInfo, setShippingInfo] = useState<{
@@ -64,9 +66,11 @@ export default function ProductDetail() {
   }, [handle]);
   useEffect(() => {
     const handleScroll = () => {
-      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = window.scrollY / scrollHeight * 100;
-      setShowMobileCart(scrollPercent >= 65);
+      if (mainButtonRef.current) {
+        const rect = mainButtonRef.current.getBoundingClientRect();
+        // Show mobile cart when main button is out of view (scrolled past)
+        setShowMobileCart(rect.bottom < 0);
+      }
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -78,9 +82,8 @@ export default function ProductDetail() {
     
     // Check if variant is selected
     if (!selectedVariant) {
-      toast.error('Selecione o modelo antes de adicionar ao carrinho', {
-        position: 'top-center'
-      });
+      setShowModelWarning(true);
+      setTimeout(() => setShowModelWarning(false), 3000);
       return;
     }
     
@@ -465,7 +468,20 @@ export default function ProductDetail() {
             return <>
                   {/* Row 1: Modelo and Cor */}
                   {(modeloOption || corOption) && <div className="flex flex-col sm:flex-row gap-5">
-                      {modeloOption && renderOption(modeloOption)}
+                      {modeloOption && (
+                        <div className="relative">
+                          {renderOption(modeloOption)}
+                          {/* Warning tooltip */}
+                          {showModelWarning && !selectedOptions[modeloOption.name] && (
+                            <div className="absolute left-0 top-full mt-2 flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2 shadow-lg animate-fade-in z-10">
+                              <div className="w-5 h-5 bg-amber-400 rounded flex items-center justify-center flex-shrink-0">
+                                <span className="text-white text-xs font-bold">!</span>
+                              </div>
+                              <span className="text-sm text-gray-700 whitespace-nowrap">Selecione o modelo</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
                       {corOption && renderOption(corOption)}
                     </div>}
 
@@ -513,7 +529,7 @@ export default function ProductDetail() {
             </Dialog>
 
             {/* Add to Cart Button */}
-            <Button onClick={handleAddToCart} className="w-full py-6 text-base font-medium bg-black text-white hover:bg-black/90 rounded-lg" disabled={displayVariant && !displayVariant.availableForSale}>
+            <Button ref={mainButtonRef} onClick={handleAddToCart} className="w-full py-6 text-base font-medium bg-black text-white hover:bg-black/90 rounded-lg" disabled={displayVariant && !displayVariant.availableForSale}>
               {displayVariant?.availableForSale !== false ? 'Adicionar ao Carrinho' : 'Produto indisponível'}
             </Button>
 
