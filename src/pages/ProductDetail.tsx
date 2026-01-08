@@ -329,7 +329,7 @@ export default function ProductDetail() {
                 </div>
               </span>
               <p className="font-medium text-base">
-                ou em até <span className="text-green-900">3x de {calculateInstallments(price.toString())} sem juros</span>
+                ou em até <span className="text-emerald-700">3x de {calculateInstallments(price.toString())} sem juros</span>
               </p>
             </div>
 
@@ -494,11 +494,7 @@ export default function ProductDetail() {
             <Dialog>
               <DialogTrigger asChild>
                 <button className="flex items-center gap-2 text-blue-600 underline text-base font-normal">
-                  <img 
-                    src="https://d2u4gk28rgr5ys.cloudfront.net/assets/site/tamanhos/sewing-tape-measure-c112f4fbd9b68e4d78ea9e7b4e6cbb34b5b5b949a9fb9635f9aaadeb7caf459b.svg" 
-                    alt="Fita métrica" 
-                    className="w-6 h-6"
-                  />
+                  <img src="https://d2u4gk28rgr5ys.cloudfront.net/assets/site/tamanhos/sewing-tape-measure-c112f4fbd9b68e4d78ea9e7b4e6cbb34b5b5b949a9fb9635f9aaadeb7caf459b.svg" alt="Fita métrica" className="w-6 h-6" />
                   Confira suas medidas
                 </button>
               </DialogTrigger>
@@ -507,16 +503,8 @@ export default function ProductDetail() {
                   <DialogTitle>Guia de Medidas</DialogTitle>
                 </DialogHeader>
                 <div className="flex flex-col md:flex-row gap-4 mt-4">
-                  <img 
-                    src={sizeGuideFemale} 
-                    alt="Guia de medidas feminino" 
-                    className="w-full md:w-1/2 object-contain rounded-lg"
-                  />
-                  <img 
-                    src={sizeGuideMale} 
-                    alt="Guia de medidas masculino" 
-                    className="w-full md:w-1/2 object-contain rounded-lg"
-                  />
+                  <img src={sizeGuideFemale} alt="Guia de medidas feminino" className="w-full md:w-1/2 object-contain rounded-lg" />
+                  <img src={sizeGuideMale} alt="Guia de medidas masculino" className="w-full md:w-1/2 object-contain rounded-lg" />
                 </div>
               </DialogContent>
             </Dialog>
@@ -529,16 +517,16 @@ export default function ProductDetail() {
             {/* Trust Badges */}
             <div className="flex flex-col gap-4 mt-2">
               <div className="flex gap-2 items-start">
-                <RefreshCw className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+                <RefreshCw className="w-4 h-4 flex-shrink-0 mt-0.5 text-emerald-700" />
                 <span className="leading-5 text-gray-500 text-sm">
-                  <em className="text-emerald-500 not-italic font-medium">Primeira troca grátis.</em>{' '}
+                  <em className="not-italic font-medium text-emerald-700">Primeira troca grátis.</em>{' '}
                   Você tem até 30 dias para trocar o produto.
                 </span>
               </div>
               <div className="flex gap-2 items-start">
-                <Shield className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+                <Shield className="w-4 h-4 flex-shrink-0 mt-0.5 text-emerald-700" />
                 <span className="leading-5 text-gray-500 text-sm">
-                  <em className="text-emerald-500 not-italic font-medium">Compra segura.</em>{' '}
+                  <em className="not-italic font-medium text-emerald-700">Compra segura.</em>{' '}
                   Site construído para a sua segurança.
                 </span>
               </div>
