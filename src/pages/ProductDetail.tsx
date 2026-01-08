@@ -33,8 +33,8 @@ export default function ProductDetail() {
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
   const [selectedImage, setSelectedImage] = useState(0);
+  const [previousImage, setPreviousImage] = useState<number | null>(null);
   const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
-  const [isAnimating, setIsAnimating] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [showMobileCart, setShowMobileCart] = useState(false);
   const [showModelWarning, setShowModelWarning] = useState(false);
@@ -281,86 +281,56 @@ export default function ProductDetail() {
               }
             }
             const currentImage = allImages[currentImageIndex] || allImages[0];
-            const nextImageIdx = (currentImageIndex + 1) % allImages.length;
-            const prevImageIdx = (currentImageIndex - 1 + allImages.length) % allImages.length;
+            const prevIdx = previousImage !== null ? previousImage : currentImageIndex;
+            const prevImage = allImages[prevIdx];
 
             const handlePrevImage = () => {
-              if (isAnimating) return;
-              setIsAnimating(true);
+              if (slideDirection) return;
+              const newIdx = (currentImageIndex - 1 + allImages.length) % allImages.length;
+              setPreviousImage(currentImageIndex);
+              setSelectedImage(newIdx);
               setSlideDirection('right');
-              setTimeout(() => {
-                setSelectedImage(prevImageIdx);
-              }, 10);
             };
 
             const handleNextImage = () => {
-              if (isAnimating) return;
-              setIsAnimating(true);
+              if (slideDirection) return;
+              const newIdx = (currentImageIndex + 1) % allImages.length;
+              setPreviousImage(currentImageIndex);
+              setSelectedImage(newIdx);
               setSlideDirection('left');
-              setTimeout(() => {
-                setSelectedImage(nextImageIdx);
-              }, 10);
             };
 
             const handleTransitionEnd = () => {
-              setIsAnimating(false);
               setSlideDirection(null);
+              setPreviousImage(null);
             };
-
-            // Determine which images to show based on animation state
-            const showPrevImage = slideDirection === 'right';
-            const showNextImage = slideDirection === 'left';
-            
-            // Calculate transform based on direction
-            let transform = 'translateX(0%)';
-            if (slideDirection === 'left') {
-              transform = 'translateX(0%)'; // Next image slides in from right, so container stays at 0
-            } else if (slideDirection === 'right') {
-              transform = 'translateX(0%)'; // Prev image slides in from left
-            }
 
             return <>
                   <div className="relative w-full aspect-square max-w-[740px] mx-auto overflow-hidden rounded-lg bg-gray-100">
-                    {/* Sliding container */}
                     <div className="relative w-full h-full">
-                      {/* Previous image - positioned to the left */}
-                      <div 
-                        className={`absolute inset-0 transition-transform duration-300 ease-out ${
-                          showPrevImage ? 'translate-x-0' : '-translate-x-full'
-                        }`}
-                        style={{ opacity: showPrevImage ? 1 : 0 }}
-                      >
-                        <img 
-                          src={allImages[prevImageIdx]?.url || ''} 
-                          alt={allImages[prevImageIdx]?.altText || product.title} 
-                          className="w-full h-full object-cover" 
-                        />
-                      </div>
+                      {/* Previous image (the one sliding out) */}
+                      {slideDirection && prevImage && (
+                        <div 
+                          className={`absolute inset-0 transition-transform duration-300 ease-out ${
+                            slideDirection === 'left' ? '-translate-x-full' : 'translate-x-full'
+                          }`}
+                        >
+                          <img src={prevImage.url} alt={prevImage.altText || product.title} className="w-full h-full object-cover" />
+                        </div>
+                      )}
 
-                      {/* Current image */}
+                      {/* Current image (the one sliding in) */}
                       <div 
                         className={`absolute inset-0 transition-transform duration-300 ease-out ${
-                          slideDirection === 'left' ? '-translate-x-full' : 
-                          slideDirection === 'right' ? 'translate-x-full' : 
-                          'translate-x-0'
+                          !slideDirection ? 'translate-x-0' :
+                          slideDirection === 'left' ? 'translate-x-0' : 'translate-x-0'
                         }`}
+                        style={{
+                          transform: !slideDirection ? 'translateX(0)' : 'translateX(0)',
+                        }}
                         onTransitionEnd={handleTransitionEnd}
                       >
                         {currentImage && <img src={currentImage.url} alt={currentImage.altText || product.title} className="w-full h-full object-cover" />}
-                      </div>
-                      
-                      {/* Next image - positioned to the right */}
-                      <div 
-                        className={`absolute inset-0 transition-transform duration-300 ease-out ${
-                          showNextImage ? 'translate-x-0' : 'translate-x-full'
-                        }`}
-                        style={{ opacity: showNextImage ? 1 : 0 }}
-                      >
-                        <img 
-                          src={allImages[nextImageIdx]?.url || ''} 
-                          alt={allImages[nextImageIdx]?.altText || product.title} 
-                          className="w-full h-full object-cover" 
-                        />
                       </div>
                     </div>
                     
@@ -376,13 +346,13 @@ export default function ProductDetail() {
 
                     {/* Dots Indicator */}
                     {allImages.length > 1 && <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                        {allImages.map((_, index) => <button key={index} onClick={() => setSelectedImage(index)} className={`w-3 h-3 rounded-full transition-colors ${currentImageIndex === index ? 'bg-gray-800' : 'bg-gray-300'}`} aria-label={`Imagem ${index + 1}`} />)}
+                        {allImages.map((_, index) => <button key={index} onClick={() => { setPreviousImage(null); setSlideDirection(null); setSelectedImage(index); }} className={`w-3 h-3 rounded-full transition-colors ${currentImageIndex === index ? 'bg-gray-800' : 'bg-gray-300'}`} aria-label={`Imagem ${index + 1}`} />)}
                       </div>}
                   </div>
 
                   {/* Thumbnails - Desktop */}
                   {allImages.length > 1 && <div className="hidden lg:flex gap-2 mt-4 overflow-x-auto no-scrollbar">
-                      {allImages.map((image, index) => <button key={index} onClick={() => setSelectedImage(index)} className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors ${currentImageIndex === index ? 'border-black' : 'border-transparent'}`}>
+                      {allImages.map((image, index) => <button key={index} onClick={() => { setPreviousImage(null); setSlideDirection(null); setSelectedImage(index); }} className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors ${currentImageIndex === index ? 'border-black' : 'border-transparent'}`}>
                           <img src={image.url} alt={image.altText || `${product.title} ${index + 1}`} className="w-full h-full object-cover" />
                         </button>)}
                     </div>}
