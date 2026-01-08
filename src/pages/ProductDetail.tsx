@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Loader2, Minus, Plus, Truck, Star, CreditCard, Shield, RefreshCw, MapPin, Tag, Copy, Check } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2, Minus, Plus, Truck, Star, CreditCard, Shield, RefreshCw, MapPin, Tag, Copy, Check, Ruler } from 'lucide-react';
 import { toast } from 'sonner';
 import { Header } from '@/components/store/Header';
 import { Footer } from '@/components/store/Footer';
@@ -11,6 +11,9 @@ import { useCartStore } from '@/stores/cartStore';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { ProductGrid } from '@/components/store/ProductGrid';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import sizeGuideMale from '@/assets/size-guide-male.webp';
+import sizeGuideFemale from '@/assets/size-guide-female.webp';
 
 // Coupon data (discount percentage is used for dynamic calculation)
 const availableCoupons = [{
@@ -487,9 +490,35 @@ export default function ProductDetail() {
                 </>;
           })()}
 
+            {/* Size Guide Link */}
+            <Dialog>
+              <DialogTrigger asChild>
+                <button className="flex items-center gap-2 text-blue-600 hover:underline text-sm font-normal">
+                  <Ruler className="w-4 h-4" />
+                  Confira suas medidas
+                </button>
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Guia de Medidas</DialogTitle>
+                </DialogHeader>
+                <div className="flex flex-col md:flex-row gap-4 mt-4">
+                  <img 
+                    src={sizeGuideFemale} 
+                    alt="Guia de medidas feminino" 
+                    className="w-full md:w-1/2 object-contain rounded-lg"
+                  />
+                  <img 
+                    src={sizeGuideMale} 
+                    alt="Guia de medidas masculino" 
+                    className="w-full md:w-1/2 object-contain rounded-lg"
+                  />
+                </div>
+              </DialogContent>
+            </Dialog>
+
             {/* Add to Cart Button */}
             <Button onClick={handleAddToCart} className="w-full py-6 text-base font-medium bg-black text-white hover:bg-black/90 rounded-lg" disabled={!currentVariant?.availableForSale}>
-              
               {currentVariant?.availableForSale ? 'Adicionar ao Carrinho' : 'Produto indisponível'}
             </Button>
 
