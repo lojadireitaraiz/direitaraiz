@@ -239,10 +239,7 @@ export default function ProductDetail() {
                 .map(v => ({
                   url: v.node.image!.url,
                   altText: v.node.image!.altText,
-                  variantId: v.node.id,
-                  color: v.node.selectedOptions.find(o => 
-                    o.name.toLowerCase() === 'cor' || o.name.toLowerCase() === 'color'
-                  )?.value
+                  variantId: v.node.id
                 }));
               
               // Get unique variant images (by URL) that aren't already in product images
@@ -255,17 +252,22 @@ export default function ProductDetail() {
               
               // All images for the gallery
               const allImages = [
-                ...productImages.map(img => ({ ...img, isVariant: false, color: undefined as string | undefined })),
-                ...uniqueVariantImages.map(img => ({ url: img.url, altText: img.altText, isVariant: true, color: img.color }))
+                ...productImages.map(img => ({ ...img, variantId: undefined as string | undefined })),
+                ...uniqueVariantImages.map(img => ({ url: img.url, altText: img.altText, variantId: img.variantId }))
               ];
               
-              // Find image index for currently selected color
-              const selectedColor = selectedOptions['Cor'] || selectedOptions['Color'] || selectedOptions['cor'] || selectedOptions['color'];
-              const variantImageForColor = selectedColor 
-                ? allImages.findIndex(img => img.color?.toLowerCase() === selectedColor.toLowerCase())
-                : -1;
+              // Find image for currently selected variant
+              const currentVariantImage = currentVariant?.image?.url;
+              let currentImageIndex = selectedImage;
               
-              const currentImageIndex = variantImageForColor >= 0 ? variantImageForColor : selectedImage;
+              // If the selected variant has an image, show it
+              if (currentVariantImage) {
+                const variantImageIndex = allImages.findIndex(img => img.url === currentVariantImage);
+                if (variantImageIndex >= 0) {
+                  currentImageIndex = variantImageIndex;
+                }
+              }
+              
               const currentImage = allImages[currentImageIndex] || allImages[0];
               
               return (
