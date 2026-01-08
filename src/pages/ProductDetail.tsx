@@ -281,38 +281,72 @@ export default function ProductDetail() {
               }
             }
             const currentImage = allImages[currentImageIndex] || allImages[0];
+            const nextImageIdx = (currentImageIndex + 1) % allImages.length;
+            const prevImageIdx = (currentImageIndex - 1 + allImages.length) % allImages.length;
 
             const handlePrevImage = () => {
               if (isAnimating) return;
               setSlideDirection('right');
               setIsAnimating(true);
-              setTimeout(() => {
-                setSelectedImage((currentImageIndex - 1 + allImages.length) % allImages.length);
-                setIsAnimating(false);
-                setSlideDirection(null);
-              }, 300);
             };
 
             const handleNextImage = () => {
               if (isAnimating) return;
               setSlideDirection('left');
               setIsAnimating(true);
-              setTimeout(() => {
-                setSelectedImage((currentImageIndex + 1) % allImages.length);
-                setIsAnimating(false);
-                setSlideDirection(null);
-              }, 300);
+            };
+
+            const handleTransitionEnd = () => {
+              if (slideDirection === 'left') {
+                setSelectedImage(nextImageIdx);
+              } else if (slideDirection === 'right') {
+                setSelectedImage(prevImageIdx);
+              }
+              setIsAnimating(false);
+              setSlideDirection(null);
             };
 
             return <>
                   <div className="relative w-full aspect-square max-w-[740px] mx-auto overflow-hidden rounded-lg bg-gray-100">
+                    {/* Container for all images in a row */}
                     <div 
-                      className={`w-full h-full transition-transform duration-300 ease-out ${
-                        slideDirection === 'left' ? '-translate-x-full' : 
-                        slideDirection === 'right' ? 'translate-x-full' : ''
-                      }`}
+                      className={`flex w-full h-full transition-transform duration-300 ease-out`}
+                      style={{
+                        transform: slideDirection === 'left' 
+                          ? 'translateX(-100%)' 
+                          : slideDirection === 'right' 
+                            ? 'translateX(100%)' 
+                            : 'translateX(0%)',
+                        marginLeft: slideDirection === 'right' ? '-100%' : '0'
+                      }}
+                      onTransitionEnd={handleTransitionEnd}
                     >
-                      {currentImage && <img src={currentImage.url} alt={currentImage.altText || product.title} className="w-full h-full object-cover" />}
+                      {/* Previous image (for sliding right) */}
+                      {slideDirection === 'right' && (
+                        <div className="w-full h-full flex-shrink-0">
+                          <img 
+                            src={allImages[prevImageIdx].url} 
+                            alt={allImages[prevImageIdx].altText || product.title} 
+                            className="w-full h-full object-cover" 
+                          />
+                        </div>
+                      )}
+                      
+                      {/* Current image */}
+                      <div className="w-full h-full flex-shrink-0">
+                        {currentImage && <img src={currentImage.url} alt={currentImage.altText || product.title} className="w-full h-full object-cover" />}
+                      </div>
+                      
+                      {/* Next image (for sliding left) */}
+                      {slideDirection === 'left' && (
+                        <div className="w-full h-full flex-shrink-0">
+                          <img 
+                            src={allImages[nextImageIdx].url} 
+                            alt={allImages[nextImageIdx].altText || product.title} 
+                            className="w-full h-full object-cover" 
+                          />
+                        </div>
+                      )}
                     </div>
                     
                     {/* Navigation Arrows */}
