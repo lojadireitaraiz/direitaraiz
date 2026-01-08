@@ -5,7 +5,6 @@ import { formatPrice } from '@/lib/shopify';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-
 export function CartDrawer() {
   const {
     items,
@@ -30,7 +29,6 @@ export function CartDrawer() {
     deliveryDateStart: string;
     deliveryDateEnd: string;
   } | null>(null);
-
   const handleCheckout = async () => {
     try {
       await createCheckout();
@@ -43,11 +41,10 @@ export function CartDrawer() {
       console.error('Checkout failed:', error);
     }
   };
-
   const handleApplyCoupon = () => {
     setCouponError('');
     const code = couponCode.toUpperCase().trim();
-    
+
     // RAIZ10: 10% de desconto, mínimo 2 itens
     if (code === 'RAIZ10') {
       if (totalItems >= 2) {
@@ -60,18 +57,15 @@ export function CartDrawer() {
       setCouponError('Cupom inválido');
     }
   };
-
   const handleRemoveCoupon = () => {
     setAppliedCoupon(null);
     setCouponError('');
   };
-
   const formatCep = (value: string) => {
     const numbers = value.replace(/\D/g, '');
     if (numbers.length <= 5) return numbers;
     return `${numbers.slice(0, 5)}-${numbers.slice(5, 8)}`;
   };
-
   const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatCep(e.target.value);
     setCepCode(formatted);
@@ -80,41 +74,33 @@ export function CartDrawer() {
       setShippingInfo(null);
     }
   };
-
   const calculateDeliveryDates = () => {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() + 9);
-    
     const endDate = new Date();
     endDate.setDate(endDate.getDate() + 12);
-    
     const formatDate = (date: Date) => {
-      return date.toLocaleDateString('pt-BR', { 
-        day: 'numeric', 
-        month: 'short' 
+      return date.toLocaleDateString('pt-BR', {
+        day: 'numeric',
+        month: 'short'
       });
     };
-    
     return {
       start: formatDate(startDate),
-      end: formatDate(endDate),
+      end: formatDate(endDate)
     };
   };
-
   const fetchCepInfo = async () => {
     const cleanCep = cepCode.replace(/\D/g, '');
     if (cleanCep.length !== 8) {
       setCepError('CEP inválido');
       return;
     }
-
     setLoadingCep(true);
     setCepError('');
-
     try {
       const response = await fetch(`https://viacep.com.br/ws/${cleanCep}/json/`);
       const data = await response.json();
-
       if (data.erro) {
         setCepError('CEP não encontrado');
         setShippingInfo(null);
@@ -124,7 +110,7 @@ export function CartDrawer() {
           city: data.localidade,
           state: data.uf,
           deliveryDateStart: dates.start,
-          deliveryDateEnd: dates.end,
+          deliveryDateEnd: dates.end
         });
       }
     } catch (error) {
@@ -134,24 +120,21 @@ export function CartDrawer() {
       setLoadingCep(false);
     }
   };
-
   const totalItems = getTotalItems();
   const subtotal = getTotalPrice();
-  
+
   // Regra: 2+ itens = frete grátis
   const hasFreeShipping = totalItems >= 2;
   const itemsForFreeShipping = 2;
   const itemsRemaining = Math.max(0, itemsForFreeShipping - totalItems);
-  const progressPercent = Math.min(100, (totalItems / itemsForFreeShipping) * 100);
-  
+  const progressPercent = Math.min(100, totalItems / itemsForFreeShipping * 100);
+
   // Valor do frete (R$ 19,59 conforme imagem, grátis com 2+ itens)
   const shippingCost = hasFreeShipping ? 0 : 19.59;
-  
+
   // Desconto do cupom RAIZ10 (10%)
   const discount = appliedCoupon === 'RAIZ10' ? subtotal * 0.10 : 0;
-  
   const totalPrice = subtotal - discount + shippingCost;
-
   return <Sheet open={isOpen} onOpenChange={setOpen}>
       <SheetContent className="w-full sm:max-w-md flex flex-col h-full bg-background border-border p-0">
         {/* Header */}
@@ -225,51 +208,36 @@ export function CartDrawer() {
               {/* Footer Section */}
               <div className="flex-shrink-0 border-t border-border bg-background">
                 {/* Barra de Progresso Frete Grátis - só mostra se ainda não atingiu */}
-                {!hasFreeShipping && (
-                  <div className="px-4 py-3">
+                {!hasFreeShipping && <div className="px-4 py-3">
                     <div className="relative h-1.5 bg-muted rounded-full overflow-hidden">
-                      <div 
-                        className="absolute left-0 top-0 h-full transition-all duration-500 bg-emerald-500"
-                        style={{ width: `${progressPercent}%` }}
-                      />
+                      <div style={{
+                  width: `${progressPercent}%`
+                }} className="absolute left-0 top-0 h-full transition-all duration-500 bg-emerald-700" />
                     </div>
                     <p className="text-center text-sm mt-2 text-foreground">
                       Faltam {itemsRemaining} {itemsRemaining === 1 ? 'item' : 'itens'} para o frete grátis.
                     </p>
-                  </div>
-                )}
+                  </div>}
 
                 {/* Cupom */}
                 <div className="flex flex-col px-4 py-3 gap-2">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium text-foreground">Cupom</span>
-                    {appliedCoupon ? (
-                      <div className="flex items-center gap-2">
+                    {appliedCoupon ? <div className="flex items-center gap-2">
                         <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded">
                           {appliedCoupon} aplicado
                         </span>
                         <button onClick={handleRemoveCoupon} className="p-1 hover:bg-muted rounded-full transition-colors text-muted-foreground">
                           <X className="w-3.5 h-3.5" />
                         </button>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <Input 
-                          type="text" 
-                          placeholder="CUPOM" 
-                          value={couponCode} 
-                          onChange={e => setCouponCode(e.target.value.toUpperCase())} 
-                          className="w-32 h-7 text-center text-xs border-border rounded-full" 
-                        />
+                      </div> : <div className="flex items-center gap-2">
+                        <Input type="text" placeholder="CUPOM" value={couponCode} onChange={e => setCouponCode(e.target.value.toUpperCase())} className="w-32 h-7 text-center text-xs border-border rounded-full" />
                         <button onClick={handleApplyCoupon} className="p-2 hover:bg-muted rounded-full transition-colors">
                           <ArrowRight className="w-4 h-4" />
                         </button>
-                      </div>
-                    )}
+                      </div>}
                   </div>
-                  {couponError && (
-                    <p className="text-xs text-destructive text-right">{couponError}</p>
-                  )}
+                  {couponError && <p className="text-xs text-destructive text-right">{couponError}</p>}
                 </div>
 
                 {/* Frete */}
@@ -277,28 +245,14 @@ export function CartDrawer() {
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium text-foreground">Frete</span>
                     <div className="flex items-center gap-2">
-                      <Input 
-                        type="text" 
-                        placeholder="00000-000" 
-                        value={cepCode} 
-                        onChange={handleCepChange} 
-                        maxLength={9}
-                        className="w-32 h-7 text-center text-xs border-border rounded-full" 
-                      />
-                      <button 
-                        onClick={fetchCepInfo} 
-                        disabled={loadingCep}
-                        className="p-2 hover:bg-muted rounded-full transition-colors"
-                      >
+                      <Input type="text" placeholder="00000-000" value={cepCode} onChange={handleCepChange} maxLength={9} className="w-32 h-7 text-center text-xs border-border rounded-full" />
+                      <button onClick={fetchCepInfo} disabled={loadingCep} className="p-2 hover:bg-muted rounded-full transition-colors">
                         {loadingCep ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
                       </button>
                     </div>
                   </div>
-                  {cepError && (
-                    <p className="text-xs text-destructive text-right">{cepError}</p>
-                  )}
-                  {shippingInfo && (
-                    <div className="flex items-center justify-between text-xs bg-muted/50 rounded-md px-3 py-2">
+                  {cepError && <p className="text-xs text-destructive text-right">{cepError}</p>}
+                  {shippingInfo && <div className="flex items-center justify-between text-xs bg-muted/50 rounded-md px-3 py-2">
                       <div className="flex items-center gap-2 text-muted-foreground">
                         <Truck className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
                         <span>
@@ -308,8 +262,7 @@ export function CartDrawer() {
                       <span className={`font-semibold ${hasFreeShipping ? 'text-emerald-600' : 'text-foreground'}`}>
                         {formatPrice(shippingCost.toString())}
                       </span>
-                    </div>
-                  )}
+                    </div>}
                 </div>
 
                 {/* Subtotal */}
