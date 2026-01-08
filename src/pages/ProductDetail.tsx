@@ -286,67 +286,82 @@ export default function ProductDetail() {
 
             const handlePrevImage = () => {
               if (isAnimating) return;
-              setSlideDirection('right');
               setIsAnimating(true);
+              setSlideDirection('right');
+              setTimeout(() => {
+                setSelectedImage(prevImageIdx);
+              }, 10);
             };
 
             const handleNextImage = () => {
               if (isAnimating) return;
-              setSlideDirection('left');
               setIsAnimating(true);
+              setSlideDirection('left');
+              setTimeout(() => {
+                setSelectedImage(nextImageIdx);
+              }, 10);
             };
 
             const handleTransitionEnd = () => {
-              if (slideDirection === 'left') {
-                setSelectedImage(nextImageIdx);
-              } else if (slideDirection === 'right') {
-                setSelectedImage(prevImageIdx);
-              }
               setIsAnimating(false);
               setSlideDirection(null);
             };
 
+            // Determine which images to show based on animation state
+            const showPrevImage = slideDirection === 'right';
+            const showNextImage = slideDirection === 'left';
+            
+            // Calculate transform based on direction
+            let transform = 'translateX(0%)';
+            if (slideDirection === 'left') {
+              transform = 'translateX(0%)'; // Next image slides in from right, so container stays at 0
+            } else if (slideDirection === 'right') {
+              transform = 'translateX(0%)'; // Prev image slides in from left
+            }
+
             return <>
                   <div className="relative w-full aspect-square max-w-[740px] mx-auto overflow-hidden rounded-lg bg-gray-100">
-                    {/* Container for all images in a row */}
-                    <div 
-                      className={`flex w-full h-full transition-transform duration-300 ease-out`}
-                      style={{
-                        transform: slideDirection === 'left' 
-                          ? 'translateX(-100%)' 
-                          : slideDirection === 'right' 
-                            ? 'translateX(100%)' 
-                            : 'translateX(0%)',
-                        marginLeft: slideDirection === 'right' ? '-100%' : '0'
-                      }}
-                      onTransitionEnd={handleTransitionEnd}
-                    >
-                      {/* Previous image (for sliding right) */}
-                      {slideDirection === 'right' && (
-                        <div className="w-full h-full flex-shrink-0">
-                          <img 
-                            src={allImages[prevImageIdx].url} 
-                            alt={allImages[prevImageIdx].altText || product.title} 
-                            className="w-full h-full object-cover" 
-                          />
-                        </div>
-                      )}
-                      
+                    {/* Sliding container */}
+                    <div className="relative w-full h-full">
+                      {/* Previous image - positioned to the left */}
+                      <div 
+                        className={`absolute inset-0 transition-transform duration-300 ease-out ${
+                          showPrevImage ? 'translate-x-0' : '-translate-x-full'
+                        }`}
+                        style={{ opacity: showPrevImage ? 1 : 0 }}
+                      >
+                        <img 
+                          src={allImages[prevImageIdx]?.url || ''} 
+                          alt={allImages[prevImageIdx]?.altText || product.title} 
+                          className="w-full h-full object-cover" 
+                        />
+                      </div>
+
                       {/* Current image */}
-                      <div className="w-full h-full flex-shrink-0">
+                      <div 
+                        className={`absolute inset-0 transition-transform duration-300 ease-out ${
+                          slideDirection === 'left' ? '-translate-x-full' : 
+                          slideDirection === 'right' ? 'translate-x-full' : 
+                          'translate-x-0'
+                        }`}
+                        onTransitionEnd={handleTransitionEnd}
+                      >
                         {currentImage && <img src={currentImage.url} alt={currentImage.altText || product.title} className="w-full h-full object-cover" />}
                       </div>
                       
-                      {/* Next image (for sliding left) */}
-                      {slideDirection === 'left' && (
-                        <div className="w-full h-full flex-shrink-0">
-                          <img 
-                            src={allImages[nextImageIdx].url} 
-                            alt={allImages[nextImageIdx].altText || product.title} 
-                            className="w-full h-full object-cover" 
-                          />
-                        </div>
-                      )}
+                      {/* Next image - positioned to the right */}
+                      <div 
+                        className={`absolute inset-0 transition-transform duration-300 ease-out ${
+                          showNextImage ? 'translate-x-0' : 'translate-x-full'
+                        }`}
+                        style={{ opacity: showNextImage ? 1 : 0 }}
+                      >
+                        <img 
+                          src={allImages[nextImageIdx]?.url || ''} 
+                          alt={allImages[nextImageIdx]?.altText || product.title} 
+                          className="w-full h-full object-cover" 
+                        />
+                      </div>
                     </div>
                     
                     {/* Navigation Arrows */}
