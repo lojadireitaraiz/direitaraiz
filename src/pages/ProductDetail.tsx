@@ -75,9 +75,16 @@ export default function ProductDetail() {
     if (!product) {
       return;
     }
-    // Use selected variant or fall back to first variant
-    const variantId = selectedVariant || product.variants.edges[0]?.node.id;
-    const variant = product.variants.edges.find(v => v.node.id === variantId)?.node;
+    
+    // Check if variant is selected
+    if (!selectedVariant) {
+      toast.error('Selecione o modelo antes de adicionar ao carrinho', {
+        position: 'top-center'
+      });
+      return;
+    }
+    
+    const variant = product.variants.edges.find(v => v.node.id === selectedVariant)?.node;
     if (!variant) return;
     addItem({
       product: {
