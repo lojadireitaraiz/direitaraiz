@@ -224,6 +224,13 @@ export default function ProductDetail() {
   // Promo end date - 7 days from now
   const promoEndDate = new Date();
   promoEndDate.setDate(promoEndDate.getDate() + 7);
+  // Check if product has BODY INFANTIL tag
+  const hasBodyInfantilTag = product.tags?.some(tag => tag.toUpperCase() === 'BODY INFANTIL') ?? false;
+  const productTypeLabel = hasBodyInfantilTag ? 'BODY INFANTIL' : 'CAMISETA';
+  const displayTitle = hasBodyInfantilTag 
+    ? product.title.replace(/CAMISETA/gi, 'BODY INFANTIL')
+    : product.title;
+
   return <div className="min-h-screen bg-white">
       <Header />
       <PromoAlert message="FRETE GRÁTIS A PARTIR DE 2 PEÇAS" endDate={promoEndDate} />
@@ -231,8 +238,8 @@ export default function ProductDetail() {
       <main className="max-w-7xl mx-auto px-4 py-6">
         {/* Mobile Header */}
         <header className="flex flex-col gap-2 mb-6 lg:hidden">
-          <p className="text-gray-400 text-sm uppercase">CAMISETA</p>
-          <h1 className="font-bold text-2xl">{product.title}</h1>
+          <p className="text-gray-400 text-sm uppercase">{productTypeLabel}</p>
+          <h1 className="font-bold text-2xl">{displayTitle}</h1>
           <div className="inline-flex items-center gap-2">
             <div className="flex text-yellow-400">
               {[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5 fill-current" />)}
@@ -313,8 +320,8 @@ export default function ProductDetail() {
           <section className="flex flex-col gap-5">
             {/* Desktop Header */}
             <header className="hidden lg:flex flex-col gap-2 mt-8">
-              <p className="text-gray-400 text-sm uppercase">CAMISETA</p>
-              <h1 className="font-bold text-2xl">{product.title}</h1>
+              <p className="text-gray-400 text-sm uppercase">{productTypeLabel}</p>
+              <h1 className="font-bold text-2xl">{displayTitle}</h1>
               <div className="inline-flex items-center gap-2">
                 <div className="flex text-yellow-400">
                   {[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5 fill-current" />)}
