@@ -332,7 +332,7 @@ export default function ProductDetail() {
                 <div className="flex text-yellow-400">
                   {[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5 fill-current" />)}
                 </div>
-                <span className="font-medium text-yellow-500">(42 avaliações)</span>
+                <span className="font-medium text-yellow-500 text-sm">(42 avaliações)</span>
               </div>
             </header>
 
