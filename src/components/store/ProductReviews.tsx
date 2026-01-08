@@ -67,7 +67,7 @@ const mockReviews: Review[] = [
     helpful: 8,
     verified: true,
     productName: 'Magnitsky',
-    image: 'https://rsv-ink-images.ink.rsvcloud.com/images/review_image/eaa71edb27eec5a927916940868a5df1.jpg',
+    
   },
   {
     id: '6',
