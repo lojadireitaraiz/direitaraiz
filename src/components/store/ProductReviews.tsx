@@ -79,6 +79,306 @@ const mockReviews: Review[] = [
     productName: 'Magnitsky',
     image: 'https://rsv-ink-images.ink.rsvcloud.com/images/review_image/0e3fa667f280c5a563faafd7ff87c135.jpg',
   },
+  {
+    id: '7',
+    author: 'LUCAS M.',
+    rating: 5,
+    date: '28 de Agosto de 2025',
+    content: 'Camiseta muito confortável, tecido de alta qualidade.',
+    helpful: 3,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '8',
+    author: 'FERNANDA R.',
+    rating: 5,
+    date: '25 de Agosto de 2025',
+    content: 'Adorei! A estampa é linda e não desbota na lavagem.',
+    helpful: 7,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '9',
+    author: 'CARLOS E.',
+    rating: 4,
+    date: '22 de Agosto de 2025',
+    content: 'Boa qualidade, apenas achei um pouco larga.',
+    helpful: 2,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '10',
+    author: 'ANA P.',
+    rating: 5,
+    date: '20 de Agosto de 2025',
+    content: 'Perfeita! Chegou antes do prazo e bem embalada.',
+    helpful: 4,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '11',
+    author: 'ROBERTO S.',
+    rating: 5,
+    date: '18 de Agosto de 2025',
+    content: 'Excelente produto, recomendo!',
+    helpful: 6,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '12',
+    author: 'JULIANA C.',
+    rating: 5,
+    date: '15 de Agosto de 2025',
+    content: 'Muito satisfeita com a compra. Qualidade top!',
+    helpful: 3,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '13',
+    author: 'MARCOS V.',
+    rating: 5,
+    date: '12 de Agosto de 2025',
+    content: 'Camiseta com ótimo caimento. Comprarei mais.',
+    helpful: 5,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '14',
+    author: 'PATRÍCIA L.',
+    rating: 5,
+    date: '10 de Agosto de 2025',
+    content: 'Material excelente e design diferenciado.',
+    helpful: 2,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '15',
+    author: 'THIAGO N.',
+    rating: 5,
+    date: '08 de Agosto de 2025',
+    content: 'Produto chegou certinho, muito bom!',
+    helpful: 1,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '16',
+    author: 'CAMILA D.',
+    rating: 5,
+    date: '05 de Agosto de 2025',
+    content: 'Amei a camiseta! Super confortável.',
+    helpful: 4,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '17',
+    author: 'FELIPE G.',
+    rating: 5,
+    date: '03 de Agosto de 2025',
+    content: 'Qualidade do tecido é surpreendente.',
+    helpful: 3,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '18',
+    author: 'LETÍCIA F.',
+    rating: 5,
+    date: '01 de Agosto de 2025',
+    content: 'Entrega rápida e produto impecável.',
+    helpful: 2,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '19',
+    author: 'GUSTAVO H.',
+    rating: 5,
+    date: '30 de Julho de 2025',
+    content: 'Muito bom! Estampa de qualidade.',
+    helpful: 5,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '20',
+    author: 'BEATRIZ A.',
+    rating: 5,
+    date: '28 de Julho de 2025',
+    content: 'Camiseta linda, recomendo demais!',
+    helpful: 6,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '21',
+    author: 'ANDERSON M.',
+    rating: 5,
+    date: '25 de Julho de 2025',
+    content: 'Produto excelente, superou expectativas.',
+    helpful: 4,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '22',
+    author: 'RENATA S.',
+    rating: 5,
+    date: '22 de Julho de 2025',
+    content: 'Amei! Vou comprar outras cores.',
+    helpful: 3,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '23',
+    author: 'DIEGO R.',
+    rating: 5,
+    date: '20 de Julho de 2025',
+    content: 'Tecido macio e durável. Aprovado!',
+    helpful: 2,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '24',
+    author: 'VANESSA P.',
+    rating: 5,
+    date: '18 de Julho de 2025',
+    content: 'Qualidade excelente, vale cada centavo.',
+    helpful: 7,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '25',
+    author: 'RICARDO B.',
+    rating: 5,
+    date: '15 de Julho de 2025',
+    content: 'Muito satisfeito com a compra!',
+    helpful: 1,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '26',
+    author: 'AMANDA T.',
+    rating: 5,
+    date: '12 de Julho de 2025',
+    content: 'Design incrível e confortável.',
+    helpful: 4,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '27',
+    author: 'EDUARDO C.',
+    rating: 5,
+    date: '10 de Julho de 2025',
+    content: 'Ótima camiseta, recomendo a todos.',
+    helpful: 3,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '28',
+    author: 'GABRIELA M.',
+    rating: 5,
+    date: '08 de Julho de 2025',
+    content: 'Produto de primeira! Voltarei a comprar.',
+    helpful: 5,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '29',
+    author: 'HENRIQUE L.',
+    rating: 5,
+    date: '05 de Julho de 2025',
+    content: 'Caimento perfeito, muito confortável.',
+    helpful: 2,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '30',
+    author: 'ISABELA N.',
+    rating: 5,
+    date: '03 de Julho de 2025',
+    content: 'Adorei a qualidade e o acabamento.',
+    helpful: 6,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '31',
+    author: 'LEANDRO F.',
+    rating: 5,
+    date: '01 de Julho de 2025',
+    content: 'Estampa não desbota, excelente!',
+    helpful: 4,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '32',
+    author: 'NATÁLIA R.',
+    rating: 5,
+    date: '28 de Junho de 2025',
+    content: 'Camiseta top! Super recomendo.',
+    helpful: 3,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '33',
+    author: 'OTÁVIO S.',
+    rating: 5,
+    date: '25 de Junho de 2025',
+    content: 'Produto chegou rápido e bem embalado.',
+    helpful: 1,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '34',
+    author: 'PRISCILA A.',
+    rating: 5,
+    date: '22 de Junho de 2025',
+    content: 'Muito boa qualidade, amei!',
+    helpful: 5,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '35',
+    author: 'RAFAEL D.',
+    rating: 5,
+    date: '20 de Junho de 2025',
+    content: 'Excelente custo-benefício.',
+    helpful: 2,
+    verified: true,
+    productName: 'Magnitsky',
+  },
+  {
+    id: '36',
+    author: 'SANDRA G.',
+    rating: 5,
+    date: '18 de Junho de 2025',
+    content: 'Camiseta confortável e bonita.',
+    helpful: 4,
+    verified: true,
+    productName: 'Magnitsky',
+  },
 ];
 
 const ratingDistribution = [
@@ -89,10 +389,16 @@ const ratingDistribution = [
   { stars: 1, count: 0 },
 ];
 
+const REVIEWS_PER_PAGE = 6;
+
 export function ProductReviews() {
   const [helpfulClicked, setHelpfulClicked] = useState<Set<string>>(new Set());
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(REVIEWS_PER_PAGE);
+
+  const visibleReviews = mockReviews.slice(0, visibleCount);
+  const hasMoreReviews = visibleCount < mockReviews.length;
 
   // Get all images from reviews
   const allReviewImages = mockReviews
@@ -218,7 +524,7 @@ export function ProductReviews() {
 
       {/* Reviews List */}
       <div className="mt-6">
-        {mockReviews.map((review, index) => (
+        {visibleReviews.map((review, index) => (
           <div key={review.id}>
             <div className="flex flex-col md:flex-row gap-2 md:gap-3">
               {/* Left column - Author info */}
@@ -280,12 +586,24 @@ export function ProductReviews() {
             </div>
             
             {/* Divider */}
-            {index !== mockReviews.length - 1 && (
+            {index !== visibleReviews.length - 1 && (
               <hr className="border-gray-300 my-6" />
             )}
           </div>
         ))}
       </div>
+
+      {/* Load More Button */}
+      {hasMoreReviews && (
+        <div className="flex justify-center mt-8">
+          <button
+            onClick={() => setVisibleCount(prev => prev + REVIEWS_PER_PAGE)}
+            className="px-8 py-3 border border-gray-300 rounded-lg text-gray-900 font-medium hover:bg-gray-50 transition-colors"
+          >
+            Ver mais avaliações ({mockReviews.length - visibleCount} restantes)
+          </button>
+        </div>
+      )}
 
       {/* Image Modal */}
       <Dialog open={imageModalOpen} onOpenChange={setImageModalOpen}>
