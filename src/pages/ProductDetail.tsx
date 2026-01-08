@@ -15,6 +15,7 @@ import { ProductReviews } from '@/components/store/ProductReviews';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import sizeGuideMale from '@/assets/size-guide-male.webp';
 import sizeGuideFemale from '@/assets/size-guide-female.webp';
+import sizeGuideBodyInfantil from '@/assets/size-guide-body-infantil.webp';
 
 // Coupon data (discount percentage is used for dynamic calculation)
 const availableCoupons = [{
@@ -532,10 +533,16 @@ export default function ProductDetail() {
                 <DialogHeader>
                   <DialogTitle>Guia de Medidas</DialogTitle>
                 </DialogHeader>
-                <div className="flex flex-col md:flex-row gap-4 mt-4">
-                  <img src={sizeGuideFemale} alt="Guia de medidas feminino" className="w-full md:w-1/2 object-contain rounded-lg" />
-                  <img src={sizeGuideMale} alt="Guia de medidas masculino" className="w-full md:w-1/2 object-contain rounded-lg" />
-                </div>
+                {hasBodyInfantilTag ? (
+                  <div className="flex justify-center mt-4">
+                    <img src={sizeGuideBodyInfantil} alt="Guia de medidas body infantil" className="w-full max-w-md object-contain rounded-lg" />
+                  </div>
+                ) : (
+                  <div className="flex flex-col md:flex-row gap-4 mt-4">
+                    <img src={sizeGuideFemale} alt="Guia de medidas feminino" className="w-full md:w-1/2 object-contain rounded-lg" />
+                    <img src={sizeGuideMale} alt="Guia de medidas masculino" className="w-full md:w-1/2 object-contain rounded-lg" />
+                  </div>
+                )}
               </DialogContent>
             </Dialog>
 
