@@ -10,7 +10,7 @@ import { fetchProductByHandle, formatPrice, calculateDiscount, calculateInstallm
 import { useCartStore } from '@/stores/cartStore';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { ProductGrid } from '@/components/store/ProductGrid';
+import { RelatedProducts } from '@/components/store/RelatedProducts';
 import { ProductReviews } from '@/components/store/ProductReviews';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import sizeGuideMale from '@/assets/size-guide-male.webp';
@@ -642,7 +642,7 @@ export default function ProductDetail() {
 
         {/* Product Collection */}
         <div className="mt-10">
-          <ProductGrid title="Você também pode gostar" excludeHandle={handle} />
+          <RelatedProducts title="Você também pode gostar" excludeHandle={handle} />
         </div>
       </main>
 
