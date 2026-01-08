@@ -62,12 +62,14 @@ export default function DireitaRaiz() {
   // Extract all available sizes from products (excluding month variants)
   const availableSizes = useMemo(() => {
     const sizes = new Set<string>();
-    const monthPattern = /^\d+-\d+M$/i; // Matches patterns like 0-3M, 3-6M, etc.
+    // Matches patterns like 0-3M, 3-6M, 6-9M, 9-12M, 12-18M, 18-24M, or any size containing "M" with numbers
+    const monthPattern = /^\d+(-\d+)?M$/i;
     products.forEach(product => {
       product.node.options.forEach(option => {
         if (option.name.toLowerCase() === 'tamanho' || option.name.toLowerCase() === 'size') {
           option.values.forEach(value => {
-            if (!monthPattern.test(value)) {
+            // Exclude month-based sizes (contains numbers followed by M)
+            if (!monthPattern.test(value) && !/\d+\s*M(ESES)?/i.test(value)) {
               sizes.add(value);
             }
           });
