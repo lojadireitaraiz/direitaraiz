@@ -77,7 +77,7 @@ export function RelatedProducts({ title, query, excludeHandle }: RelatedProducts
               size="icon"
               onClick={handlePrev}
               disabled={!canGoPrev}
-              className="h-9 w-9 rounded-full"
+              className="h-9 w-9 rounded-full border-emerald-700 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700 disabled:border-gray-300 disabled:text-gray-300"
             >
               <ChevronLeft className="h-5 w-5" />
             </Button>
@@ -86,7 +86,7 @@ export function RelatedProducts({ title, query, excludeHandle }: RelatedProducts
               size="icon"
               onClick={handleNext}
               disabled={!canGoNext}
-              className="h-9 w-9 rounded-full"
+              className="h-9 w-9 rounded-full border-emerald-700 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700 disabled:border-gray-300 disabled:text-gray-300"
             >
               <ChevronRight className="h-5 w-5" />
             </Button>
