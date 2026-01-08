@@ -209,8 +209,9 @@ export default function ProductDetail() {
       </div>;
   }
   const currentVariant = product.variants.edges.find(v => v.node.id === selectedVariant)?.node;
-  const price = currentVariant ? parseFloat(currentVariant.price.amount) : 0;
-  const compareAtPrice = currentVariant?.compareAtPrice ? parseFloat(currentVariant.compareAtPrice.amount) : null;
+  const displayVariant = currentVariant || product.variants.edges[0]?.node;
+  const price = displayVariant ? parseFloat(displayVariant.price.amount) : 0;
+  const compareAtPrice = displayVariant?.compareAtPrice ? parseFloat(displayVariant.compareAtPrice.amount) : null;
   const discount = compareAtPrice ? calculateDiscount(compareAtPrice.toString(), price.toString()) : 0;
 
   // Promo end date - 7 days from now
@@ -512,8 +513,8 @@ export default function ProductDetail() {
             </Dialog>
 
             {/* Add to Cart Button */}
-            <Button onClick={handleAddToCart} className="w-full py-6 text-base font-medium bg-black text-white hover:bg-black/90 rounded-lg" disabled={!currentVariant?.availableForSale}>
-              {currentVariant?.availableForSale ? 'Adicionar ao Carrinho' : 'Produto indisponível'}
+            <Button onClick={handleAddToCart} className="w-full py-6 text-base font-medium bg-black text-white hover:bg-black/90 rounded-lg" disabled={displayVariant && !displayVariant.availableForSale}>
+              {displayVariant?.availableForSale !== false ? 'Adicionar ao Carrinho' : 'Produto indisponível'}
             </Button>
 
             {/* Trust Badges */}
@@ -608,8 +609,8 @@ export default function ProductDetail() {
 
       {/* Mobile Add to Cart Fixed Button */}
       <div className={`fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 lg:hidden z-30 transition-transform duration-300 ${showMobileCart ? 'translate-y-0' : 'translate-y-full'}`}>
-        <Button onClick={handleAddToCart} className="w-full py-4 text-base font-medium bg-black text-white hover:bg-black/90 rounded-lg" disabled={!currentVariant?.availableForSale}>
-          {currentVariant?.availableForSale ? 'Adicionar ao Carrinho' : 'Produto indisponível'}
+        <Button onClick={handleAddToCart} className="w-full py-4 text-base font-medium bg-black text-white hover:bg-black/90 rounded-lg" disabled={displayVariant && !displayVariant.availableForSale}>
+          {displayVariant?.availableForSale !== false ? 'Adicionar ao Carrinho' : 'Produto indisponível'}
         </Button>
       </div>
 
