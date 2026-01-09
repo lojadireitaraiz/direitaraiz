@@ -303,7 +303,8 @@ export function Header() {
                 href="https://buscacepinter.correios.com.br/app/endereco/index.php" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:underline text-sm whitespace-nowrap"
+                className="hover:underline text-sm whitespace-nowrap"
+                style={{ color: '#50B150' }}
               >
                 Não sei o meu CEP
               </a>
