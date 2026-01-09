@@ -293,7 +293,8 @@ export function Header() {
                 />
                 <Button 
                   onClick={handleCepSubmit}
-                  className="absolute right-1 top-1/2 -translate-y-1/2 h-8 px-4 bg-blue-600 hover:bg-blue-700 text-white"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 h-8 px-4 text-white"
+                  style={{ backgroundColor: '#50B150' }}
                 >
                   Usar
                 </Button>
