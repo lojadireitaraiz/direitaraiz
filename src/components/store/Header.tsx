@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, Search, ShoppingCart, User, ChevronDown, CreditCard, Package, Truck, MapPin } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
 import { CartDrawer } from './CartDrawer';
@@ -41,6 +41,7 @@ const benefitsMessages = [
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [currentBenefitIndex, setCurrentBenefitIndex] = useState(0);
   const [cepDialogOpen, setCepDialogOpen] = useState(false);
   const [cepInput, setCepInput] = useState('');
@@ -50,6 +51,16 @@ export function Header() {
   });
   const { setOpen: setCartOpen } = useCartStore();
   const totalItems = useCartStore((state) => state.getTotalItems());
+  const navigate = useNavigate();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/produtos?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchOpen(false);
+      setSearchQuery('');
+    }
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -267,14 +278,16 @@ export function Header() {
 
           {/* Search Bar */}
           {searchOpen && (
-            <div className="mt-4 max-w-md mx-auto animate-fade-in">
+            <form onSubmit={handleSearch} className="mt-4 max-w-md mx-auto animate-fade-in">
               <input
                 type="search"
                 placeholder="Pesquisar..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full px-4 py-3 bg-neutral-900 border border-neutral-700 rounded-full text-sm text-white focus:outline-none focus:ring-2 focus:ring-white"
                 autoFocus
               />
-            </div>
+            </form>
           )}
         </nav>
 
