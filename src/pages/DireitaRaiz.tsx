@@ -203,9 +203,9 @@ export default function DireitaRaiz() {
       
       <main className="max-w-7xl mx-auto px-4 py-8">
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Direita Raiz</h1>
-          <p className="text-muted-foreground">
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-xl md:text-3xl font-bold text-foreground mb-1 md:mb-2">Direita Raiz</h1>
+          <p className="text-xs md:text-base text-muted-foreground">
             {loading ? 'Carregando...' : `${filteredProducts.length} produtos encontrados`}
           </p>
         </div>
