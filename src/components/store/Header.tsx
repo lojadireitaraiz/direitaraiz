@@ -5,12 +5,6 @@ import { useCartStore } from '@/stores/cartStore';
 import { CartDrawer } from './CartDrawer';
 import { Logo } from './Logo';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -205,37 +199,47 @@ export function Header() {
                 Loja
               </Link>
               
-              <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center gap-1 text-sm font-medium hover:text-muted-foreground transition-colors">
+              {/* Produtos Dropdown - Hover */}
+              <div className="relative group">
+                <button className="flex items-center gap-1 text-sm font-medium hover:text-muted-foreground transition-colors">
                   Produtos
-                  <ChevronDown className="w-4 h-4" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-black border-neutral-800 text-white">
-                  {categories.map((category) => (
-                    <DropdownMenuItem key={category.name} asChild>
-                      <Link to={category.href} className="cursor-pointer">
+                  <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
+                </button>
+                <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                  <div className="bg-black border border-neutral-800 rounded-md py-1 min-w-[180px] shadow-lg">
+                    {categories.map((category) => (
+                      <Link
+                        key={category.name}
+                        to={category.href}
+                        className="block px-4 py-2 text-sm hover:bg-neutral-800 transition-colors"
+                      >
                         {category.name}
                       </Link>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+                    ))}
+                  </div>
+                </div>
+              </div>
 
-              <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center gap-1 text-sm font-medium hover:text-muted-foreground transition-colors">
+              {/* Categorias Dropdown - Hover */}
+              <div className="relative group">
+                <button className="flex items-center gap-1 text-sm font-medium hover:text-muted-foreground transition-colors">
                   Categorias
-                  <ChevronDown className="w-4 h-4" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-black border-neutral-800 text-white">
-                  {collections.map((collection) => (
-                    <DropdownMenuItem key={collection.name} asChild>
-                      <Link to={collection.href} className="cursor-pointer">
+                  <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
+                </button>
+                <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                  <div className="bg-black border border-neutral-800 rounded-md py-1 min-w-[180px] shadow-lg">
+                    {collections.map((collection) => (
+                      <Link
+                        key={collection.name}
+                        to={collection.href}
+                        className="block px-4 py-2 text-sm hover:bg-neutral-800 transition-colors"
+                      >
                         {collection.name}
                       </Link>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+                    ))}
+                  </div>
+                </div>
+              </div>
 
               <Link to="/sobre" className="text-sm font-medium hover:text-muted-foreground transition-colors">
                 Sobre
