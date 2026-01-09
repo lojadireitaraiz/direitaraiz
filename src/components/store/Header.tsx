@@ -114,6 +114,25 @@ export function Header() {
 
             {/* Desktop Navigation - Left */}
             <div className="hidden lg:flex items-center gap-6">
+              {/* CEP Selector */}
+              <button 
+                onClick={() => setCepDialogOpen(true)}
+                className="flex items-center gap-1.5 text-sm font-medium hover:text-muted-foreground transition-colors"
+              >
+                <MapPin className="w-4 h-4" />
+                {savedCity ? (
+                  <span className="flex flex-col items-start leading-tight">
+                    <span className="text-[10px] text-neutral-400">Enviar para</span>
+                    <span className="truncate max-w-[120px]">{savedCity} ...</span>
+                  </span>
+                ) : (
+                  <span className="flex flex-col items-start leading-tight">
+                    <span className="text-[10px] text-neutral-400">Informe seu</span>
+                    <span>CEP</span>
+                  </span>
+                )}
+              </button>
+
               <Link to="/" className="text-sm font-medium hover:text-muted-foreground transition-colors">
                 Loja
               </Link>
@@ -153,25 +172,6 @@ export function Header() {
               <Link to="/sobre" className="text-sm font-medium hover:text-muted-foreground transition-colors">
                 Sobre
               </Link>
-
-              {/* CEP Selector */}
-              <button 
-                onClick={() => setCepDialogOpen(true)}
-                className="flex items-center gap-1.5 text-sm font-medium hover:text-muted-foreground transition-colors"
-              >
-                <MapPin className="w-4 h-4" />
-                {savedCity ? (
-                  <span className="flex flex-col items-start leading-tight">
-                    <span className="text-[10px] text-neutral-400">Enviar para</span>
-                    <span className="truncate max-w-[120px]">{savedCity} ...</span>
-                  </span>
-                ) : (
-                  <span className="flex flex-col items-start leading-tight">
-                    <span className="text-[10px] text-neutral-400">Informe seu</span>
-                    <span>CEP</span>
-                  </span>
-                )}
-              </button>
             </div>
 
             {/* Logo - Center */}
