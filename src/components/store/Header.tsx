@@ -137,7 +137,7 @@ export function Header() {
             </button>
 
             {/* Desktop Navigation - Left */}
-            <div className="hidden lg:flex items-center gap-6">
+            <div className="hidden lg:flex items-center gap-6 flex-1">
               {/* CEP Selector with Notification */}
               <div className="relative">
                 <button 
@@ -232,12 +232,12 @@ export function Header() {
             </div>
 
             {/* Logo - Center */}
-            <Link to="/" className="navbar-brand">
+            <Link to="/" className="navbar-brand absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 lg:mx-auto">
               <Logo className="h-10 md:h-12 w-auto" />
             </Link>
 
             {/* Right Actions */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 flex-1 justify-end">
               <button 
                 className="p-2 hover:bg-neutral-800 rounded-full transition-colors"
                 onClick={() => setSearchOpen(!searchOpen)}
