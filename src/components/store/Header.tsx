@@ -119,20 +119,28 @@ export function Header() {
     }
   };
 
-  const CurrentIcon = benefitsMessages[currentBenefitIndex].icon;
 
   return (
     <>
       <header className="bg-black text-white">
         {/* Benefits Bar */}
         <div className="bg-neutral-900 text-white py-2.5 px-4 text-sm flex items-center justify-center overflow-hidden h-10">
-          <span 
-            key={currentBenefitIndex}
-            className="flex items-center gap-2 text-xs md:text-sm font-medium animate-fade-in"
-          >
-            <CurrentIcon className="w-4 h-4" />
-            {benefitsMessages[currentBenefitIndex].text}
-          </span>
+          <div className="relative w-full flex items-center justify-center">
+            {benefitsMessages.map((benefit, index) => {
+              const Icon = benefit.icon;
+              return (
+                <span 
+                  key={index}
+                  className={`flex items-center gap-2 text-xs md:text-sm font-medium transition-opacity duration-500 ${
+                    index === currentBenefitIndex ? 'opacity-100' : 'opacity-0 absolute'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  {benefit.text}
+                </span>
+              );
+            })}
+          </div>
         </div>
 
         {/* Main Navbar */}
