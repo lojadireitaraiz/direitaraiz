@@ -8,9 +8,10 @@ interface RelatedProductsProps {
   title?: string;
   query?: string;
   excludeHandle?: string;
+  collectionFilter?: 'direita-raiz' | 'nacao-kids' | 'all';
 }
 
-export function RelatedProducts({ title, query, excludeHandle }: RelatedProductsProps) {
+export function RelatedProducts({ title, query, excludeHandle, collectionFilter = 'all' }: RelatedProductsProps) {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -27,9 +28,22 @@ export function RelatedProducts({ title, query, excludeHandle }: RelatedProducts
     loadProducts();
   }, [query]);
 
+  // Filter by collection
+  const collectionFilteredProducts = products.filter(product => {
+    const tags = product.node.tags?.map((tag: string) => tag.toUpperCase()) || [];
+    const isInfantil = tags.includes('CAMISETA INFANTIL') || tags.includes('BODY INFANTIL');
+    
+    if (collectionFilter === 'direita-raiz') {
+      return !isInfantil;
+    } else if (collectionFilter === 'nacao-kids') {
+      return isInfantil;
+    }
+    return true;
+  });
+
   const filteredProducts = excludeHandle 
-    ? products.filter(p => p.node.handle !== excludeHandle)
-    : products;
+    ? collectionFilteredProducts.filter(p => p.node.handle !== excludeHandle)
+    : collectionFilteredProducts;
 
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
   const canGoNext = currentIndex < totalPages - 1;

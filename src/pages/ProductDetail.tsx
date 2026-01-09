@@ -651,7 +651,11 @@ export default function ProductDetail() {
 
         {/* Product Collection */}
         <div className="mt-10">
-          <RelatedProducts title="Você também pode gostar" excludeHandle={handle} />
+          <RelatedProducts 
+            title="Você também pode gostar" 
+            excludeHandle={handle} 
+            collectionFilter={hasCamisetaInfantilTag || hasBodyInfantilTag ? 'nacao-kids' : 'direita-raiz'}
+          />
         </div>
 
         {/* Product Reviews Section */}
