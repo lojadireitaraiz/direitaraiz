@@ -22,7 +22,7 @@ export default function Index() {
       <main>
         <HeroBanner />
         <MiniBanners />
-        <ProductGrid />
+        <ProductGrid collectionFilter="direita-raiz" />
       </main>
 
       <Footer />
