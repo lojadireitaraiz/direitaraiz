@@ -42,6 +42,7 @@ export default function ProductDetail() {
   const mainButtonRef = React.useRef<HTMLButtonElement>(null);
   const modeloSectionRef = React.useRef<HTMLDivElement>(null);
   const [couponSheetOpen, setCouponSheetOpen] = useState(false);
+  const [couponDialogOpen, setCouponDialogOpen] = useState(false);
   const [cep, setCep] = useState('');
   const [shippingInfo, setShippingInfo] = useState<{
     city: string;
@@ -376,7 +377,10 @@ export default function ProductDetail() {
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <span className="font-medium text-gray-900">Cupom</span>
-                  <button onClick={() => setCouponSheetOpen(true)} className="text-blue-600 hover:underline text-sm font-normal">
+                  <button onClick={() => setCouponSheetOpen(true)} className="text-blue-600 hover:underline text-sm font-normal md:hidden">
+                    Ver cupons disponíveis
+                  </button>
+                  <button onClick={() => setCouponDialogOpen(true)} className="text-blue-600 hover:underline text-sm font-normal hidden md:inline">
                     Ver cupons disponíveis
                   </button>
                 </div>
@@ -704,6 +708,46 @@ export default function ProductDetail() {
           </div>
         </SheetContent>
       </Sheet>
+
+      {/* Coupon Dialog (Desktop) */}
+      <Dialog open={couponDialogOpen} onOpenChange={setCouponDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold">Cupons</DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <p className="text-gray-500 text-sm">
+              Cupons disponíveis para esse produto.<br />
+              Você pode apenas aplicar um cupom por compra.
+            </p>
+            
+            {availableCoupons.map(coupon => (
+              <div key={coupon.code} className="border border-gray-200 rounded-lg p-4 bg-white">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="inline-flex items-center gap-1.5 text-sm text-green-800 font-bold py-1 px-3 leading-[21px] bg-green-100 rounded-md">
+                    <Tag className="w-3.5 h-3.5" />
+                    {coupon.code}
+                  </span>
+                  <button onClick={() => {
+                    navigator.clipboard.writeText(coupon.code);
+                    toast.success('Cupom copiado!');
+                  }} className="text-gray-400 hover:text-gray-600">
+                    <Copy className="w-4 h-4" />
+                  </button>
+                </div>
+                <p className="text-sm text-gray-700">
+                  Você economiza <span className="text-green-600 font-medium">{formatPrice((price * coupon.discountPercent / 100).toString())}</span> na compra
+                </p>
+                <ul className="mt-2 text-sm text-gray-900 space-y-1">
+                  <li>• {coupon.discountPercent}% OFF</li>
+                  <li>• Mínimo do carrinho: {coupon.minItems} itens</li>
+                </ul>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Shipping Sheet */}
       <Sheet open={shippingSheetOpen} onOpenChange={setShippingSheetOpen}>
