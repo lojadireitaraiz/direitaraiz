@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, Search, ShoppingCart, User, ChevronDown, CreditCard, Package, Truck } from 'lucide-react';
+import { Menu, X, Search, ShoppingCart, User, ChevronDown, CreditCard, Package, Truck, MapPin } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
 import { CartDrawer } from './CartDrawer';
 import { Logo } from './Logo';
@@ -10,6 +10,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
 
 const categories = [
   { name: 'Camiseta', href: '/produtos?type=camiseta' },
@@ -33,6 +42,11 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [currentBenefitIndex, setCurrentBenefitIndex] = useState(0);
+  const [cepDialogOpen, setCepDialogOpen] = useState(false);
+  const [cepInput, setCepInput] = useState('');
+  const [savedCity, setSavedCity] = useState<string | null>(() => {
+    return localStorage.getItem('headerCity');
+  });
   const { setOpen: setCartOpen } = useCartStore();
   const totalItems = useCartStore((state) => state.getTotalItems());
 
@@ -42,6 +56,33 @@ export function Header() {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  const handleCepSubmit = async () => {
+    if (cepInput.length !== 8) {
+      toast.error('CEP inválido');
+      return;
+    }
+    
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${cepInput}/json/`);
+      const data = await response.json();
+      
+      if (data.erro) {
+        toast.error('CEP não encontrado');
+        return;
+      }
+      
+      const cityName = data.localidade;
+      setSavedCity(cityName);
+      localStorage.setItem('headerCity', cityName);
+      localStorage.setItem('headerCep', cepInput);
+      setCepDialogOpen(false);
+      setCepInput('');
+      toast.success('Localização salva!');
+    } catch {
+      toast.error('Erro ao buscar CEP');
+    }
+  };
 
   const CurrentIcon = benefitsMessages[currentBenefitIndex].icon;
 
@@ -112,6 +153,25 @@ export function Header() {
               <Link to="/sobre" className="text-sm font-medium hover:text-muted-foreground transition-colors">
                 Sobre
               </Link>
+
+              {/* CEP Selector */}
+              <button 
+                onClick={() => setCepDialogOpen(true)}
+                className="flex items-center gap-1.5 text-sm font-medium hover:text-muted-foreground transition-colors"
+              >
+                <MapPin className="w-4 h-4" />
+                {savedCity ? (
+                  <span className="flex flex-col items-start leading-tight">
+                    <span className="text-[10px] text-neutral-400">Enviar para</span>
+                    <span className="truncate max-w-[120px]">{savedCity} ...</span>
+                  </span>
+                ) : (
+                  <span className="flex flex-col items-start leading-tight">
+                    <span className="text-[10px] text-neutral-400">Informe seu</span>
+                    <span>CEP</span>
+                  </span>
+                )}
+              </button>
             </div>
 
             {/* Logo - Center */}
@@ -208,6 +268,49 @@ export function Header() {
         )}
       </header>
       
+      {/* CEP Dialog */}
+      <Dialog open={cepDialogOpen} onOpenChange={setCepDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold">Selecione onde quer receber suas compras</DialogTitle>
+          </DialogHeader>
+          
+          <p className="text-gray-500 text-sm">
+            Você poderá ver custos e prazos de entrega precisos em tudo que procurar.
+          </p>
+          
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">CEP</label>
+            <div className="flex items-center gap-3">
+              <div className="flex-1 relative">
+                <Input
+                  type="text"
+                  placeholder="Informar um CEP"
+                  value={cepInput}
+                  onChange={(e) => setCepInput(e.target.value.replace(/\D/g, '').slice(0, 8))}
+                  onKeyDown={(e) => e.key === 'Enter' && handleCepSubmit()}
+                  className="pr-20"
+                />
+                <Button 
+                  onClick={handleCepSubmit}
+                  className="absolute right-1 top-1/2 -translate-y-1/2 h-8 px-4 bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  Usar
+                </Button>
+              </div>
+              <a 
+                href="https://buscacepinter.correios.com.br/app/endereco/index.php" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline text-sm whitespace-nowrap"
+              >
+                Não sei o meu CEP
+              </a>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <CartDrawer />
     </>
   );
