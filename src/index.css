@@ -166,15 +166,15 @@
   }
 
   .product-card-prices {
-    @apply flex items-center gap-2 text-sm;
+    @apply flex items-center gap-1 md:gap-2 text-xs md:text-sm;
   }
 
   .product-card-original-price {
-    @apply text-muted-foreground line-through text-xs;
+    @apply text-muted-foreground line-through text-[10px] md:text-xs;
   }
 
   .product-card-price {
-    @apply text-foreground font-semibold;
+    @apply text-foreground font-semibold text-xs md:text-sm;
   }
 
   .product-card-installments {
