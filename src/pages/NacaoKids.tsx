@@ -342,7 +342,7 @@ export default function NacaoKids() {
                   className={`grid gap-4 md:gap-6 ${
                     gridCols === 2 
                       ? 'grid-cols-2' 
-                      : 'grid-cols-2 lg:grid-cols-3'
+                      : 'grid-cols-2 lg:grid-cols-4'
                   }`}
                 >
                   {paginatedProducts.map((product) => (
