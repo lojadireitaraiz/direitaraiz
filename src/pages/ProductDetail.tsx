@@ -17,6 +17,7 @@ import sizeGuideMale from '@/assets/size-guide-male.webp';
 import sizeGuideFemale from '@/assets/size-guide-female.webp';
 import sizeGuideBodyInfantil from '@/assets/size-guide-body-infantil.webp';
 import sizeGuideInfantil from '@/assets/size-guide-infantil.webp';
+import sewingTapeMeasure from '@/assets/sewing-tape-measure.svg';
 
 // Coupon data (discount percentage is used for dynamic calculation)
 const availableCoupons = [{
@@ -530,7 +531,7 @@ export default function ProductDetail() {
             <Dialog>
               <DialogTrigger asChild>
                 <button className="flex items-center gap-2 text-blue-600 underline text-base font-normal">
-                  <img src="https://d2u4gk28rgr5ys.cloudfront.net/assets/site/tamanhos/sewing-tape-measure-c112f4fbd9b68e4d78ea9e7b4e6cbb34b5b5b949a9fb9635f9aaadeb7caf459b.svg" alt="Fita métrica" className="w-6 h-6" />
+                  <img src={sewingTapeMeasure} alt="Fita métrica" className="w-6 h-6" />
                   Confira suas medidas
                 </button>
               </DialogTrigger>
