@@ -111,8 +111,14 @@ export default function DireitaRaiz() {
       return true;
     });
 
-    // Sort
+    // Sort - "Uma merda" always first
     filtered.sort((a, b) => {
+      const aIsUmaMerda = a.node.title.toLowerCase().includes('uma merda');
+      const bIsUmaMerda = b.node.title.toLowerCase().includes('uma merda');
+      
+      if (aIsUmaMerda && !bIsUmaMerda) return -1;
+      if (!aIsUmaMerda && bIsUmaMerda) return 1;
+      
       switch (sortBy) {
         case 'lowest_price':
           return parseFloat(a.node.priceRange.minVariantPrice.amount) - parseFloat(b.node.priceRange.minVariantPrice.amount);
