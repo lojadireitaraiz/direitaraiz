@@ -15,6 +15,7 @@ import ExchangesReturns from "./pages/ExchangesReturns";
 import Collection from "./pages/Collection";
 import NacaoKids from "./pages/NacaoKids";
 import DireitaRaiz from "./pages/DireitaRaiz";
+import Products from "./pages/Products";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +39,7 @@ const App = () => (
           <Route path="/colecao" element={<Collection />} />
           <Route path="/colecao/nacao-kids" element={<NacaoKids />} />
           <Route path="/colecao/direita-raiz" element={<DireitaRaiz />} />
+          <Route path="/produtos" element={<Products />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
