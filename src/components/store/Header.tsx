@@ -44,6 +44,7 @@ export function Header() {
   const [currentBenefitIndex, setCurrentBenefitIndex] = useState(0);
   const [cepDialogOpen, setCepDialogOpen] = useState(false);
   const [cepInput, setCepInput] = useState('');
+  const [showCepNotification, setShowCepNotification] = useState(false);
   const [savedCity, setSavedCity] = useState<string | null>(() => {
     return localStorage.getItem('headerCity');
   });
@@ -56,6 +57,29 @@ export function Header() {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  // Show CEP notification on first visit
+  useEffect(() => {
+    const hasSeenNotification = localStorage.getItem('cepNotificationSeen');
+    const hasCepSaved = localStorage.getItem('headerCity');
+    
+    if (!hasSeenNotification && !hasCepSaved) {
+      const timer = setTimeout(() => {
+        setShowCepNotification(true);
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  const dismissCepNotification = () => {
+    setShowCepNotification(false);
+    localStorage.setItem('cepNotificationSeen', 'true');
+  };
+
+  const handleIncluirCep = () => {
+    dismissCepNotification();
+    setCepDialogOpen(true);
+  };
 
   const handleCepSubmit = async () => {
     if (cepInput.length !== 8) {
@@ -114,24 +138,57 @@ export function Header() {
 
             {/* Desktop Navigation - Left */}
             <div className="hidden lg:flex items-center gap-6">
-              {/* CEP Selector */}
-              <button 
-                onClick={() => setCepDialogOpen(true)}
-                className="flex items-center gap-1.5 text-sm font-medium hover:text-muted-foreground transition-colors"
-              >
-                <MapPin className="w-4 h-4" />
-                {savedCity ? (
-                  <span className="flex flex-col items-start leading-tight">
-                    <span className="text-[10px] text-neutral-400">Enviar para</span>
-                    <span className="truncate max-w-[120px]">{savedCity} ...</span>
-                  </span>
-                ) : (
-                  <span className="flex flex-col items-start leading-tight">
-                    <span className="text-[10px] text-neutral-400">Informe seu</span>
-                    <span>CEP</span>
-                  </span>
+              {/* CEP Selector with Notification */}
+              <div className="relative">
+                <button 
+                  onClick={() => setCepDialogOpen(true)}
+                  className="flex items-center gap-1.5 text-sm font-medium hover:text-muted-foreground transition-colors"
+                >
+                  <MapPin className="w-4 h-4" />
+                  {savedCity ? (
+                    <span className="flex flex-col items-start leading-tight">
+                      <span className="text-[10px] text-neutral-400">Enviar para</span>
+                      <span className="truncate max-w-[120px]">{savedCity} ...</span>
+                    </span>
+                  ) : (
+                    <span className="flex flex-col items-start leading-tight">
+                      <span className="text-[10px] text-neutral-400">Informe seu</span>
+                      <span>CEP</span>
+                    </span>
+                  )}
+                </button>
+
+                {/* CEP Notification Tooltip */}
+                {showCepNotification && (
+                  <div className="absolute top-full left-0 mt-3 w-72 bg-white rounded-lg shadow-xl border border-gray-200 p-4 z-50 animate-fade-in">
+                    {/* Arrow */}
+                    <div className="absolute -top-2 left-6 w-4 h-4 bg-white border-l border-t border-gray-200 rotate-45"></div>
+                    
+                    <h4 className="font-semibold text-gray-900 mb-1">
+                      Confira o envio para o seu endereço
+                    </h4>
+                    <p className="text-sm text-gray-500 mb-4">
+                      Inclua seu CEP para verificar os custos e prazos de entrega precisos na busca.
+                    </p>
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={handleIncluirCep}
+                        className="px-4 py-2 text-sm font-medium text-white rounded-md"
+                        style={{ backgroundColor: '#50B150' }}
+                      >
+                        Incluir CEP
+                      </button>
+                      <button
+                        onClick={dismissCepNotification}
+                        className="text-sm font-medium"
+                        style={{ color: '#50B150' }}
+                      >
+                        Mais tarde
+                      </button>
+                    </div>
+                  </div>
                 )}
-              </button>
+              </div>
 
               <Link to="/" className="text-sm font-medium hover:text-muted-foreground transition-colors">
                 Loja
