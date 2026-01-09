@@ -4,7 +4,9 @@ import { Footer } from '@/components/store/Footer';
 import { ProductCard } from '@/components/store/ProductCard';
 import { ShopifyProduct, fetchProducts } from '@/lib/shopify';
 import { 
-  ChevronDown, 
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Grid2X2, 
   Grid3X3, 
   Loader2, 
@@ -35,6 +37,8 @@ const sortOptions = [
   { label: 'Novidades', value: 'recent' },
 ];
 
+const PRODUCTS_PER_PAGE = 20;
+
 export default function NacaoKids() {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -43,6 +47,7 @@ export default function NacaoKids() {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     async function loadProducts() {
@@ -119,6 +124,18 @@ export default function NacaoKids() {
 
     return filtered;
   }, [products, priceRange, selectedSizes, sortBy]);
+
+  // Pagination
+  const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
+  const paginatedProducts = useMemo(() => {
+    const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
+    return filteredProducts.slice(startIndex, startIndex + PRODUCTS_PER_PAGE);
+  }, [filteredProducts, currentPage]);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [priceRange, selectedSizes, sortBy]);
 
   const toggleSize = (size: string) => {
     setSelectedSizes(prev => 
@@ -320,17 +337,56 @@ export default function NacaoKids() {
                 </Button>
               </div>
             ) : (
-              <div 
-                className={`grid gap-4 md:gap-6 ${
-                  gridCols === 2 
-                    ? 'grid-cols-2' 
-                    : 'grid-cols-2 lg:grid-cols-3'
-                }`}
-              >
-                {filteredProducts.map((product) => (
-                  <ProductCard key={product.node.id} product={product} />
-                ))}
-              </div>
+              <>
+                <div 
+                  className={`grid gap-4 md:gap-6 ${
+                    gridCols === 2 
+                      ? 'grid-cols-2' 
+                      : 'grid-cols-2 lg:grid-cols-3'
+                  }`}
+                >
+                  {paginatedProducts.map((product) => (
+                    <ProductCard key={product.node.id} product={product} />
+                  ))}
+                </div>
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-2 mt-8">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </Button>
+                    
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                        <Button
+                          key={page}
+                          variant={currentPage === page ? "default" : "outline"}
+                          size="icon"
+                          onClick={() => setCurrentPage(page)}
+                          className="w-10 h-10"
+                        >
+                          {page}
+                        </Button>
+                      ))}
+                    </div>
+
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </Button>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
