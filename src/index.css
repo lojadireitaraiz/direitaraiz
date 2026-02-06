@@ -162,7 +162,7 @@
   }
 
   .product-card-title {
-    @apply text-sm font-medium text-foreground line-clamp-2;
+    @apply text-sm font-medium text-foreground line-clamp-2 uppercase;
   }
 
   .product-card-prices {
