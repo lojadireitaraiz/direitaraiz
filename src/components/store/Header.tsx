@@ -132,14 +132,25 @@ export function Header() {
         {/* Main Navbar */}
         <nav className="bg-black border-b border-neutral-800 px-4 md:px-10 py-5 md:py-4">
           <div className="flex items-center justify-between max-w-7xl mx-auto w-full">
-            {/* Mobile Menu Button */}
-            <button 
-              className="lg:hidden p-2"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Menu"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+            {/* Mobile Left Actions */}
+            <div className="lg:hidden flex items-center gap-2">
+              <button 
+                className="p-2"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label="Menu"
+              >
+                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+              
+              {/* Mobile Search Button - Left */}
+              <button 
+                className="p-2 hover:bg-neutral-800 rounded-full transition-colors"
+                onClick={() => setSearchOpen(!searchOpen)}
+                aria-label="Pesquisar"
+              >
+                <Search className="w-5 h-5" />
+              </button>
+            </div>
 
             {/* Desktop Navigation - Left */}
             <div className="hidden lg:flex items-center gap-6 flex-1">
@@ -262,14 +273,6 @@ export function Header() {
 
             {/* Right Actions */}
             <div className="flex items-center gap-4 flex-1 justify-end">
-              {/* Mobile Search Button */}
-              <button 
-                className="lg:hidden p-2 hover:bg-neutral-800 rounded-full transition-colors"
-                onClick={() => setSearchOpen(!searchOpen)}
-                aria-label="Pesquisar"
-              >
-                <Search className="w-5 h-5" />
-              </button>
 
               <Link to="/conta" className="hidden md:block p-2 hover:bg-neutral-800 rounded-full transition-colors">
                 <User className="w-5 h-5" />
