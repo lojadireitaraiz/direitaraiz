@@ -154,14 +154,6 @@ export function Header() {
 
             {/* Desktop Navigation - Left */}
             <div className="hidden lg:flex items-center gap-6 flex-1">
-              {/* Search Button - Left */}
-              <button 
-                className="p-2 hover:bg-neutral-800 rounded-full transition-colors"
-                onClick={() => setSearchOpen(!searchOpen)}
-                aria-label="Pesquisar"
-              >
-                <Search className="w-5 h-5" />
-              </button>
 
               {/* CEP Selector with Notification */}
               <div className="relative">
@@ -273,7 +265,14 @@ export function Header() {
 
             {/* Right Actions */}
             <div className="flex items-center gap-4 flex-1 justify-end">
-
+              {/* Desktop Search Button */}
+              <button 
+                className="hidden lg:block p-2 hover:bg-neutral-800 rounded-full transition-colors"
+                onClick={() => setSearchOpen(!searchOpen)}
+                aria-label="Pesquisar"
+              >
+                <Search className="w-5 h-5" />
+              </button>
               <Link to="/conta" className="hidden md:block p-2 hover:bg-neutral-800 rounded-full transition-colors">
                 <User className="w-5 h-5" />
               </Link>
